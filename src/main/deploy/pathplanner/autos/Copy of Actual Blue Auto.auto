@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Left Side Align"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "b3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Right Side Align"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
