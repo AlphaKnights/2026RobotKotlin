@@ -1,6 +1,6 @@
-# GalvaKnights 2025 REEFSCAPE
+# GalvaKnights 2026 REBUILT
 
-GalvaKnights 2025 competition code, rewritten in [Kotlin](https://kotlinlang.org/).
+GalvaKnights 2026 competition code, in [Kotlin](https://kotlinlang.org/).
 
 # Why Kotlin?
 While Kotlin isn't officially supported by FRC, it is quickly growing popularity with many other teams, 
