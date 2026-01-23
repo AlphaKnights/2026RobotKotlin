@@ -26,16 +26,6 @@ object Constants
         const val ALIGN_RIGHT_BUTTON = 10 //joystick
 
         const val BUTTON_BOARD_PORT = 2
-        const val ELEVATOR_UP_BUTTON = 8
-        const val ELEVATOR_DOWN_BUTTON = 10
-
-        const val ELEVATOR_LVL_1_BUTTON = 1
-        const val ELEVATOR_LVL_2_BUTTON = 2
-        const val ELEVATOR_LVL_3_BUTTON = 3
-        const val ELEVATOR_LVL_4_BUTTON = 4
-
-        const val INTAKE_BUTTON = 6
-        const val DELIVERY_BUTTON = 9
     }
 
     object DriveConstants {
@@ -94,36 +84,6 @@ object Constants
         const val TURNING_MOTOR_CURRENT_LIMIT = 40.0
     }
 
-    object ElevatorConstants {
-        const val LEFT_MOTOR_CAN_ID = 4
-        const val RIGHT_MOTOR_CAN_ID = 32
-
-        const val P = 0.08
-        const val I = 0.0
-        const val D = 0.0
-
-        val IDLE_MODE = SparkBaseConfig.IdleMode.kCoast
-
-        const val FORWARD_SOFT_LIMIT = 100.0
-        const val REVERSE_SOFT_LIMIT = -100.0
-
-        const val CURRENT_LIMIT = 40
-
-        const val MAX_ELEVATOR_SPEED = 3.0
-
-        const val LVL_1_HEIGHT = 0.0
-        const val LVL_2_HEIGHT = 47.0
-        const val LVL_3_HEIGHT  = 76.0
-        const val LVL_4_HEIGHT = 50.0
-
-        const val POS_DEADZONE = 0.2
-    }
-
-    enum class ElevatorDirection {
-        UP,
-        DOWN,
-    }
-
     object LimelightConstants {
         const val POLLING_RATE = 20L
         const val TIMEOUT = 500L // milliseconds
@@ -154,17 +114,6 @@ object Constants
     enum class AlignDirection {
         LEFT,
         RIGHT,
-    }
-
-    object UltrasonicConstants {
-        const val CORAL_DISTANCE = 3
-        const val PING_CHANNEL = 8
-        const val ECHO_CHANNEL = 9
-    }
-
-    object LaunchConstants {
-        const val MOTOR_ID = 30
-        const val LAUNCH_SPEED = 0.6
     }
 }
 
