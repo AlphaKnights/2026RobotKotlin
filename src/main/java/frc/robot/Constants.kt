@@ -115,6 +115,31 @@ object Constants
         LEFT,
         RIGHT,
     }
+    object ClimbConstants {
+        const val LeftArmID = 4
+        const val RightArmID = 32
+
+        const val P = 0.08
+        const val I = 0.0
+        const val D = 0.0
+
+        val IDLE_MODE = SparkBaseConfig.IdleMode.kCoast
+
+        const val FORWARD_SOFT_LIMIT = 100.0
+        const val REVERSE_SOFT_LIMIT = -100.0
+
+        const val CURRENT_LIMIT = 40
+
+        const val MAX_ELEVATOR_SPEED = 3.0
+        const val MANUAL_SPEED_FACTOR = 0.1
+
+        const val POS_DEADZONE = 5.0
+
+        const val LVL_1_HEIGHT = 0.0
+        const val LVL_2_HEIGHT = 47.0
+        const val LVL_3_HEIGHT = 76.0
+        const val LVL_4_HEIGHT = 50.0
+    }
 }
 
 
