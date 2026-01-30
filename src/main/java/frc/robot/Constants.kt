@@ -166,6 +166,11 @@ object Constants
         const val MOTOR_ID = 30
         const val LAUNCH_SPEED = 0.6
     }
+
+    object IntakeConstants {
+        const val MOTOR_ID = 30
+    }
+
 }
 
 
