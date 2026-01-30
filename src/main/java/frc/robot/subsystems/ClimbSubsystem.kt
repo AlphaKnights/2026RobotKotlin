@@ -1,8 +1,6 @@
 package frc.robot.subsystems
 
 import com.revrobotics.spark.SparkBase
-import com.revrobotics.spark.SparkLowLevel
-import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig
 import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax
@@ -11,7 +9,7 @@ import frc.robot.Constants.ClimbConstants
 
 
 
-object ClimbSystem {
+object ClimbSubsystem : SubsystemBase() {
     private val LeftArm = PWMSparkMax(ClimbConstants.LeftArmID)
     private val RightArm = PWMSparkMax(ClimbConstants.RightArmID)
     init {
