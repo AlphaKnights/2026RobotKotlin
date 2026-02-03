@@ -23,6 +23,11 @@ object ClimbSubsystem : SubsystemBase() {
             Constants.ClimbConstants.RightArmID,
             SparkLowLevel.MotorType.kBrushless
         )
+
+    private val LeftPIDController = LeftArm.closedLoopController
+    private val RightPIDController = RightArm.closedLoopController
+
+
     init {
         val leftConfig =
             SparkMaxConfig().apply {
@@ -113,5 +118,46 @@ object ClimbSubsystem : SubsystemBase() {
             SparkBase.ResetMode.kResetSafeParameters,
             SparkBase.PersistMode.kPersistParameters,
         )
+
+
+
+
     }
+    /**
+     * Sets the speed of the elevator motors.
+     * @param speed The proportion speed to set the motors to, between -1.0 and 1.0.
+     */
+    fun move(speed: Double) {
+        LeftArm.set(speed)
+        RightArm.set(speed)
+    }
+
+    /**
+     * Sets the elevator motors to a specific position.
+     * @param position The position to set the motors to, in rotations.
+     */
+    fun setPosition(position: Double) {
+        LeftPIDController.setReference(
+            position,
+            SparkBase.ControlType.kPosition,
+        )
+        RightPIDController.setReference(
+            position,
+            SparkBase.ControlType.kPosition,
+        )
+    }
+
+    /**
+     * Gets the current position of the elevator.
+     * @return The current position of the elevator, in rotations.
+     */
+    fun getPosition(): Double = (LeftArm.encoder.position)
+
+    fun stop() {
+        LeftArm.stopMotor()
+        RightArm.stopMotor()
+    }
+
+
+
 }
