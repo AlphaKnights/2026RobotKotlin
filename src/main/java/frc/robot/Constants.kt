@@ -162,9 +162,14 @@ object Constants
         const val ECHO_CHANNEL = 9
     }
 
-    object LaunchConstants {
+    object FlyConstants {
+        const val MOTOR_ID = 31
+        const val FLY_SPEED = 1.0
+    }
+
+    object RollerConstants {
         const val MOTOR_ID = 30
-        const val LAUNCH_SPEED = 0.6
+        const val ROLLER_SPEED = 0.6
     }
 }
 

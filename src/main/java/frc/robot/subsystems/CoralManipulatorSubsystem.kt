@@ -35,10 +35,6 @@ object CoralManipulatorSubsystem : SubsystemBase() {
         launchMotor.set(Constants.LaunchConstants.LAUNCH_SPEED + launch)
     }
 
-
-
-
-
     fun stop() {
         launchMotor.stopMotor()
     }
