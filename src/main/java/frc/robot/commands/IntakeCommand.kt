@@ -7,8 +7,7 @@ import frc.robot.subsystems.IntakeSubsystem
 class IntakeCommand : Command(){
 
     init {
-        addRequirements(IntakeSubsystem);
-
+        addRequirements(IntakeSubsystem)
     }
 
     override fun initialize() {
@@ -17,8 +16,7 @@ class IntakeCommand : Command(){
 
 
     override fun execute() {
-        IntakeSubsystem.forward(Constants.LaunchConstants.LAUNCH_SPEED)
-
+        IntakeSubsystem.forward(Constants.IntakeConstants.INTAKE_SPEED)
 
 
     }
@@ -29,7 +27,6 @@ class IntakeCommand : Command(){
 
     override fun end(interrupted: Boolean) {
         IntakeSubsystem.stop()
-        super.end(interrupted)
 
     }
 
