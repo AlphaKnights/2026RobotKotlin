@@ -1,10 +1,10 @@
 package frc.robot.commands
 
 import edu.wpi.first.wpilibj2.command.Command
-
-class ClimbCommand: Command() {
+import frc.robot.subsystems.ClimbSubsystem
+class UpClimbCommand(private val UpAmount: Double): Command() {
     init {
-
+        addRequirements(ClimbSubsystem)
     }
 
     override fun initialize() {
@@ -12,7 +12,7 @@ class ClimbCommand: Command() {
     }
 
     override fun execute() {
-
+        ClimbSubsystem.setPosition(UpAmount)
     }
 
     override fun isFinished(): Boolean {

@@ -139,6 +139,8 @@ object Constants
         const val LVL_2_HEIGHT = 47.0
         const val LVL_3_HEIGHT = 76.0
         const val LVL_4_HEIGHT = 50.0
+
+        const val DownClimbAmount = 1.1
     }
 }
 
