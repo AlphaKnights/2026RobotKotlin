@@ -3,6 +3,7 @@ import kotlin.math.*
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.event.EventLoop
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
@@ -12,7 +13,7 @@ import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
-
+import frc.robot.XBoxController
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the [Robot]
@@ -26,7 +27,9 @@ import frc.robot.subsystems.LimelightSubsystem
  */
 object RobotContainer
 {
-    private val joystickController = JoystickController()
+    //private val joystickController = JoystickController()
+    private val xBoxController = XBoxController()
+
 
     private val buttonBoard = CommandJoystick(Constants.OperatorConstants.BUTTON_BOARD_PORT)
 
@@ -44,30 +47,32 @@ object RobotContainer
         configureBindings()
     }
 
+
     private fun configureBindings() {
         // Drive control
-
         //x is forward
         DriveSubsystem.defaultCommand = DriveCommand(
-            x = { if (kotlin.math.abs(joystickController.x()) > 0.2) {joystickController.x()} else 0.0},
-            y = { if (kotlin.math.abs(joystickController.y()) > 0.2) {joystickController.y()} else 0.0},
-            rot = { if (kotlin.math.abs(joystickController.rot()) > 0.2) {joystickController.rot()} else 0.0}
+            x = { if (kotlin.math.abs(xBoxController.x()) > 0.2) {xBoxController.x()} else 0.0},
+            y = { if (kotlin.math.abs(xBoxController.y()) > 0.2) { xBoxController.y()} else 0.0},
+            rot = { if (kotlin.math.abs(xBoxController.rot()) > 0.2) { xBoxController.rot()} else 0.0}
         )
 
         // Reset heading
-        joystickController.heading()
+        xBoxController.heading()
             .whileTrue(
                 ResetHeadingCommand()
             )
         // Auto Align
-        joystickController.alignL().whileTrue(
+        xBoxController.alignL().whileTrue(
             AutoAlignManualCommand(
                 Constants.AlignDirection.LEFT,
             )
         )
-        joystickController.alignR().whileTrue(AutoAlignManualCommand(
+        xBoxController.alignR().whileTrue(AutoAlignManualCommand(
             Constants.AlignDirection.RIGHT,
         ))
+
+
     }
 
     fun getAutonomousCommand(): Command {

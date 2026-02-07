@@ -19,9 +19,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.Robot
+import frc.robot.XBoxController
 
 object DriveSubsystem : SubsystemBase() 
 {
+
+    private val xBoxController = XBoxController()
+
     private var frontLeft: TalonSwerveModule = TalonSwerveModule(
         Constants.DriveConstants.FRONT_LEFT_DRIVING_ID,
         Constants.DriveConstants.FRONT_LEFT_TURNING_ID,
@@ -47,7 +51,7 @@ object DriveSubsystem : SubsystemBase()
         Constants.DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET
     )
 
-    private var gyro: Pigeon2 = Pigeon2(9)
+    private var gyro: Pigeon2 = Pigeon2(20)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     private var odometry: SwerveDriveOdometry
@@ -105,8 +109,8 @@ object DriveSubsystem : SubsystemBase()
             )
         }
 
-        //println(gyro.getAngle())
-
+        println("angle:"+gyro.getYaw())
+        println(xBoxController.getRawAxis(0))
     }
 
     fun getPose(): Pose2d {

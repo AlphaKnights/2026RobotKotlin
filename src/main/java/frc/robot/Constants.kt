@@ -17,7 +17,7 @@ object Constants
 {
     object OperatorConstants
     {
-        const val DRIVER_CONTROLLER_PORT = 1
+        const val DRIVER_CONTROLLER_PORT = 0
         const val DRIVE_DEADBAND = 0.4
 
         const val RESET_HEADING_BUTTON = 11
@@ -46,23 +46,30 @@ object Constants
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.764892578125)
         val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.579833984375)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.23)
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.367919921875)
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.53)
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.317919921875)
 
-        const val FRONT_LEFT_DRIVING_ID = 5
-        const val REAR_LEFT_DRIVING_ID = 3
-        const val FRONT_RIGHT_DRIVING_ID = 7
-        const val REAR_RIGHT_DRIVING_ID = 19
 
-        const val FRONT_LEFT_TURNING_ID = 6
-        const val REAR_LEFT_TURNING_ID = 4
-        const val FRONT_RIGHT_TURNING_ID = 8
-        const val REAR_RIGHT_TURNING_ID = 2
+     //   back right - > front left
+     //   back left - >front right
+     //   front left -> back right
+     // front right -> back left
 
-        const val FRONT_LEFT_CANCODER_ID = 11
-        const val REAR_LEFT_CANCODER_ID = 10
-        const val FRONT_RIGHT_CANCODER_ID = 12
-        const val REAR_RIGHT_CANCODER_ID = 9
+
+        const val FRONT_LEFT_DRIVING_ID = 4 //8->4
+        const val REAR_LEFT_DRIVING_ID = 19  //5->19
+        const val FRONT_RIGHT_DRIVING_ID = 5 //19->5
+        const val REAR_RIGHT_DRIVING_ID = 8  //4->8
+
+        const val FRONT_LEFT_TURNING_ID = 3 //2->3
+        const val REAR_LEFT_TURNING_ID = 6   //7->6
+        const val FRONT_RIGHT_TURNING_ID = 7 //6->7
+        const val REAR_RIGHT_TURNING_ID = 2  //3->2
+
+        const val FRONT_LEFT_CANCODER_ID = 9   //11->9
+        const val REAR_LEFT_CANCODER_ID = 10   //12->10
+        const val FRONT_RIGHT_CANCODER_ID = 12  //10->12
+        const val REAR_RIGHT_CANCODER_ID = 11    //9->11
 
     }
 

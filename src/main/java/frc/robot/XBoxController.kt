@@ -1,42 +1,50 @@
 package frc.robot
 
 import edu.wpi.first.math.MathUtil.applyDeadband
-import edu.wpi.first.wpilibj.Joystick
-import edu.wpi.first.wpilibj2.command.button.JoystickButton
+import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 
-class JoystickController : Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
+class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
     fun x(): Double {
         return (-applyDeadband(
-            getRawAxis(0),
+            getRawAxis(5),      //right y
             Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * (-getRawAxis(3) + 1) / 2
+        ) * speedScale()
                 )
     }
 
     fun y(): Double {
         return (-applyDeadband(
-            getRawAxis(1),
+            getRawAxis(4),    //right x
             Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * (-getRawAxis(3) + 1) / 2
+        ) * speedScale()
                 )
     }
 
     fun rot(): Double {
         return (-applyDeadband(
-            getRawAxis(4),
+            getRawAxis(0),   //left x
             Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * (-getRawAxis(3) + 1) / 2
+        ) * speedScale()
                 )
     }
+    fun speedScale(): Double{
+        return ((-getRightTriggerAxis()+1)/2)
+    }
+
 
     fun heading() : Trigger {
-        return JoystickButton(this, Constants.OperatorConstants.RESET_HEADING_BUTTON)
+        return Trigger { getYButton() }
     }
     fun alignL() : Trigger {
-        return JoystickButton(this, Constants.OperatorConstants.ALIGN_LEFT_BUTTON)
+        return Trigger { getXButton()}
     }
     fun alignR() : Trigger {
-        return JoystickButton(this, Constants.OperatorConstants.ALIGN_RIGHT_BUTTON)
+        return Trigger { getBButton()}
     }
+
+
+
+
+
 }
