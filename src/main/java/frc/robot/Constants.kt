@@ -52,17 +52,17 @@ object Constants
         const val FRONT_LEFT_DRIVING_ID = 5
         const val REAR_LEFT_DRIVING_ID = 3
         const val FRONT_RIGHT_DRIVING_ID = 7
-        const val REAR_RIGHT_DRIVING_ID = 1
+        const val REAR_RIGHT_DRIVING_ID = 19
 
         const val FRONT_LEFT_TURNING_ID = 6
         const val REAR_LEFT_TURNING_ID = 4
         const val FRONT_RIGHT_TURNING_ID = 8
         const val REAR_RIGHT_TURNING_ID = 2
 
-        const val FRONT_LEFT_CANCODER_ID = 3
-        const val REAR_LEFT_CANCODER_ID = 2
-        const val FRONT_RIGHT_CANCODER_ID = 4
-        const val REAR_RIGHT_CANCODER_ID = 1
+        const val FRONT_LEFT_CANCODER_ID = 11
+        const val REAR_LEFT_CANCODER_ID = 10
+        const val FRONT_RIGHT_CANCODER_ID = 12
+        const val REAR_RIGHT_CANCODER_ID = 9
 
     }
 

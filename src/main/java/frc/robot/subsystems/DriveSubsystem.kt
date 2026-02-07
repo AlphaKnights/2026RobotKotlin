@@ -47,8 +47,8 @@ object DriveSubsystem : SubsystemBase()
         Constants.DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET
     )
 
-    //private var gyro: Pigeon2 = Pigeon2(9)
-    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
+    private var gyro: Pigeon2 = Pigeon2(9)
+//    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     private var odometry: SwerveDriveOdometry
 
@@ -56,12 +56,12 @@ object DriveSubsystem : SubsystemBase()
 
     init {
         //gyro.reset()
-        gyro.enableBoardlevelYawReset(false)
+//        gyro.enableBoardlevelYawReset(false)
         gyro.reset()
 
         odometry = SwerveDriveOdometry(
             Constants.DriveConstants.DRIVE_KINEMATICS,
-            Rotation2d.fromDegrees(gyro.getAngle()),   //gyro.rotation3d.x
+            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),   //gyro.rotation3d.x
             arrayOf(
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -95,7 +95,7 @@ object DriveSubsystem : SubsystemBase()
         // This method will be called once per scheduler run
         if (Robot.isAutonomous()) {
             odometry.update(
-                Rotation2d.fromDegrees(gyro.getAngle()),
+                Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),
                 arrayOf(
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -130,7 +130,7 @@ object DriveSubsystem : SubsystemBase()
 
     fun resetOdometry(pose: Pose2d) {
         odometry.resetPosition(
-            Rotation2d.fromDegrees(gyro.getAngle()), //gyro.getRotation2d(),
+            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()), //gyro.getRotation2d(),
             arrayOf(
                 frontLeft.getPosition(),
                 frontRight.getPosition(),
@@ -153,7 +153,7 @@ object DriveSubsystem : SubsystemBase()
         var swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds)
 
         if (fieldRelative){
-            swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(gyro.getAngle()))) //gyro.getRotation2d()
+            swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()))) //gyro.getRotation2d()
         }
         
         frontLeft.setDesiredState(swerveModuleStates[0])

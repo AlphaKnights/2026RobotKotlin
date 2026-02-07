@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 class JoystickController : Joystick(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
     fun x(): Double {
         return (-applyDeadband(
-            getRawAxis(1),
+            getRawAxis(0),
             Constants.OperatorConstants.DRIVE_DEADBAND
         ) * (-getRawAxis(3) + 1) / 2
                 )
@@ -16,7 +16,7 @@ class JoystickController : Joystick(Constants.OperatorConstants.DRIVER_CONTROLLE
 
     fun y(): Double {
         return (-applyDeadband(
-            getRawAxis(0),
+            getRawAxis(1),
             Constants.OperatorConstants.DRIVE_DEADBAND
         ) * (-getRawAxis(3) + 1) / 2
                 )
@@ -24,7 +24,7 @@ class JoystickController : Joystick(Constants.OperatorConstants.DRIVER_CONTROLLE
 
     fun rot(): Double {
         return (-applyDeadband(
-            getRawAxis(2),
+            getRawAxis(4),
             Constants.OperatorConstants.DRIVE_DEADBAND
         ) * (-getRawAxis(3) + 1) / 2
                 )
