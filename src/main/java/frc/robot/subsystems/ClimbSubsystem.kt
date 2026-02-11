@@ -1,5 +1,8 @@
 package frc.robot.subsystems
 
+import com.revrobotics.PersistMode
+import com.revrobotics.ResetMode
+import com.revrobotics.spark.FeedbackSensor
 import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.SparkBase
@@ -56,7 +59,7 @@ object ClimbSubsystem : SubsystemBase() {
 
                 closedLoop.apply {
                     feedbackSensor(
-                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
+                        FeedbackSensor.kPrimaryEncoder, //ClosedLoopConfig.Feedback.Sensor
                     )
                     pid(
                         ClimbConstants.P,
@@ -95,7 +98,7 @@ object ClimbSubsystem : SubsystemBase() {
 
                 closedLoop.apply {
                     feedbackSensor(
-                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
+                        FeedbackSensor.kPrimaryEncoder,
                     )
                     pid(
                         ClimbConstants.P,
@@ -109,14 +112,14 @@ object ClimbSubsystem : SubsystemBase() {
 
         LeftArm.configure(
             leftConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
         )
 
         RightArm.configure(
             rightConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
         )
 
 
@@ -137,11 +140,11 @@ object ClimbSubsystem : SubsystemBase() {
      * @param position The position to set the motors to, in rotations.
      */
     fun setPosition(position: Double) {
-        LeftPIDController.setReference(
+        LeftPIDController.setSetpoint(
             position,
             SparkBase.ControlType.kPosition,
         )
-        RightPIDController.setReference(
+        RightPIDController.setSetpoint(
             position,
             SparkBase.ControlType.kPosition,
         )
