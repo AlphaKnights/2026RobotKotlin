@@ -39,4 +39,7 @@ class JoystickController : Joystick(Constants.OperatorConstants.DRIVER_CONTROLLE
     fun alignR() : Trigger {
         return JoystickButton(this, Constants.OperatorConstants.ALIGN_RIGHT_BUTTON)
     }
+    fun alignAngle(): Trigger {
+        return JoystickButton(this, Constants.OperatorConstants.ANGLE_BUTTON)
+    }
 }

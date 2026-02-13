@@ -2,10 +2,7 @@ package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
 import frc.robot.Constants.AimingConstants
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sign
-import kotlin.math.sqrt
+import kotlin.math.*
 
 object AimingCalc {
     fun canShoot(curPose: Pose3d): Int {
@@ -19,34 +16,49 @@ object AimingCalc {
 
         var distanceGood: Boolean = (AimingConstants.DISTANCE-AimingConstants.GOOD_DISTANCE_TOLERANCE <= distanceTotal
                 && distanceTotal <= AimingConstants.DISTANCE+AimingConstants.GOOD_DISTANCE_TOLERANCE)
-        var distanceMiddling: Boolean = (AimingConstants.DISTANCE-AimingConstants.MIDDLING_DISTANCE_TOLERANCE <= distanceTotal
+        var distanceMiddlingLow: Boolean = (AimingConstants.DISTANCE-AimingConstants.MIDDLING_DISTANCE_TOLERANCE <= distanceTotal
+                && distanceTotal <= AimingConstants.DISTANCE &&
+                !distanceGood)
+        var distanceMiddlingHigh: Boolean = (AimingConstants.DISTANCE <= distanceTotal
                 && distanceTotal <= AimingConstants.DISTANCE+AimingConstants.MIDDLING_DISTANCE_TOLERANCE &&
                 !distanceGood)
+        var distanceBadHigh: Boolean = (distanceTotal > AimingConstants.DISTANCE+AimingConstants.MIDDLING_DISTANCE_TOLERANCE)
 
-        if (distanceGood) {
+        if (distanceBadHigh) {
             return 1
-        } else if (distanceMiddling) {
+        } else if (distanceMiddlingHigh) {
             return 2
-        } else {
+        } else if (distanceGood) {
             return 3
+        } else if (distanceMiddlingLow) {
+            return 4
         }
+        return 5
     }
     fun getAimingAngleChange(curPose: Pose3d, vx: Double, vy: Double): Double {
         // in meters and radians
         var x: Double = -curPose.getX()
-        var y: Double = curPose.getY()
+        var y: Double = curPose.getZ()
+        var angle: Double = curPose.rotation.getY()
 
         var distanceX: Double = AimingConstants.HUB_X-x
         var distanceY: Double = AimingConstants.HUB_Y-y
 
 
         // (-dx/dt(-rx)+dy/dt(-ry))/(hx-rx)^2
-        // (rx-px-(ry-py))/(hx-rx)^2
         var termOne: Double = (vx-vy)/(distanceX.pow(2))
 
         // 1/(1+((hy-ry)/(hx-rx))^2)
         var termTwo: Double = 1/(1+(distanceY/distanceX).pow(2))
 
-        return sign(distanceX)*termOne*termTwo
+        // atan2(hy-ry,hx-rx)-angle
+        var termThree: Double = atan2(distanceY, distanceX)-angle
+        var angularDistance = 1.0
+        if (abs(termThree) <= AimingConstants.SLOW_DISTANCE) {
+            angularDistance = max(AimingConstants.MIN_SPEED, abs(termThree)/AimingConstants.SLOW_DISTANCE)
+        }
+        angularDistance = sqrt(angularDistance)
+
+        return angularDistance*AimingConstants.MAX_SPEED+sign(x)*termOne*termTwo
     }
 }
