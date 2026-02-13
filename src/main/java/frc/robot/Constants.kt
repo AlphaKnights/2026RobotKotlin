@@ -115,6 +115,14 @@ object Constants
         LEFT,
         RIGHT,
     }
+    object AimingConstants {
+        const val DISTANCE = 1.0
+        const val GOOD_DISTANCE_TOLERANCE = 0.5
+        const val MIDDLING_DISTANCE_TOLERANCE = 1.0
+
+        const val HUB_X = 5.0
+        const val HUB_Y = 5.0
+    }
 }
 
 
