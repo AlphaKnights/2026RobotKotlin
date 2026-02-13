@@ -10,8 +10,8 @@ import kotlin.math.sqrt
 object AimingCalc {
     fun canShoot(curPose: Pose3d): Int {
         // in meters
-        var x: Double = -curPose.x
-        var y: Double = curPose.z
+        var x: Double = -curPose.getX()
+        var y: Double = curPose.getZ()
 
         var distanceX: Double = abs(x-AimingConstants.HUB_X)
         var distanceY: Double = abs(y-AimingConstants.HUB_Y)
@@ -33,8 +33,8 @@ object AimingCalc {
     }
     fun getAimingAngleChange(curPose: Pose3d, vx: Double, vy: Double): Double {
         // in meters and radians
-        var x: Double = -curPose.x
-        var y: Double = curPose.z
+        var x: Double = -curPose.getX()
+        var y: Double = curPose.getY()
 
         var distanceX: Double = AimingConstants.HUB_X-x
         var distanceY: Double = AimingConstants.HUB_Y-y
