@@ -10,6 +10,7 @@ import frc.robot.commands.DriveCommand
 import frc.robot.commands.ResetHeadingCommand
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
+import frc.robot.commands.coralmanipulator.DeliveryCommand
 import frc.robot.commands.coralmanipulator.IntakeCommand
 import frc.robot.commands.coralmanipulator.LaunchCommand
 import frc.robot.commands.elevator.ElevatorManualCommand
@@ -44,13 +45,8 @@ object RobotContainer
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
 
-                "Lvl 1" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_1_HEIGHT),
-                "Lvl 2" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_2_HEIGHT),
-                "Lvl 3" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_3_HEIGHT),
-                "Lvl 4" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_4_HEIGHT),
 
-                "Intake" to IntakeCommand(),
-                "Delivery" to LaunchCommand(),
+                "Delivery" to DeliveryCommand(),
             )
         )
 
@@ -126,10 +122,10 @@ object RobotContainer
                 )
             )
 
-        // Coral Manipulator
+        // Fuel launcher
         buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
             .onTrue(
-                LaunchCommand()
+                DeliveryCommand()
             )
         buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON)
             .onTrue(
