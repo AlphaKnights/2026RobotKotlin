@@ -43,14 +43,8 @@ object RobotContainer
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-
-                "Lvl 1" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_1_HEIGHT),
-                "Lvl 2" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_2_HEIGHT),
-                "Lvl 3" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_3_HEIGHT),
-                "Lvl 4" to ElevatorPosAutoCommand(Constants.ElevatorConstants.LVL_4_HEIGHT),
-
                 "Intake" to IntakeCommand(),
-                "Delivery" to LaunchCommand(),
+
             )
         )
 
@@ -82,59 +76,20 @@ object RobotContainer
             Constants.AlignDirection.RIGHT,
         ))
 
-        // Manual elevator control
-        buttonBoard.button(Constants.OperatorConstants.ELEVATOR_UP_BUTTON)
-            .whileTrue(
-                ElevatorManualCommand(
-                    Constants.ElevatorDirection.UP
-                )
+        //intake by Prabgun+Veer
+
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_BUTTON,
+            ).onTrue(
+                IntakeCommand(),
             )
 
-        buttonBoard.button(Constants.OperatorConstants.ELEVATOR_DOWN_BUTTON)
-            .whileTrue(
-                ElevatorManualCommand(
-                    Constants.ElevatorDirection.DOWN
-                )
-            )
 
-        // Elevator positioning
-        buttonBoard.button(Constants.OperatorConstants.ELEVATOR_LVL_1_BUTTON)
-            .onTrue(
-                ElevatorPosCommand(
-                    Constants.ElevatorConstants.LVL_1_HEIGHT
-                )
-            )
 
-        buttonBoard.button(Constants.OperatorConstants.ELEVATOR_LVL_2_BUTTON)
-            .onTrue(
-                ElevatorPosCommand(
-                    Constants.ElevatorConstants.LVL_2_HEIGHT
-                )
-            )
 
-        buttonBoard.button(Constants.OperatorConstants.ELEVATOR_LVL_3_BUTTON)
-            .onTrue(
-                ElevatorPosCommand(
-                    Constants.ElevatorConstants.LVL_3_HEIGHT
-                )
-            )
 
-        buttonBoard.button(Constants.OperatorConstants.ELEVATOR_LVL_4_BUTTON)
-            .onTrue(
-                ElevatorPosCommand(
-                    Constants.ElevatorConstants.LVL_4_HEIGHT
-                )
-            )
-
-        // Coral Manipulator
-        buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
-            .onTrue(
-                LaunchCommand()
-            )
-        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON)
-            .onTrue(
-                IntakeCommand()
-            )
     }
 
     fun getAutonomousCommand(): Command {
