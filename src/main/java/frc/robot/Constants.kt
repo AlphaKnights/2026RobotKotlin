@@ -29,8 +29,8 @@ object Constants
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 12
-        const val MAX_ANGULAR_SPEED = 20
+        const val MAX_METERS_PER_SECOND = 2
+        const val MAX_ANGULAR_SPEED = 6
 
         private val TRACK_WIDTH = Units.inchesToMeters(26.5)
         private val WHEEL_BASE = Units.inchesToMeters(26.5)
@@ -45,9 +45,9 @@ object Constants
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.0)
-        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.615)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.48)
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33)
+        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.31)
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.14) //+ is clockwise
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33)//- counter-clockwise
 
 
      //   back right - > front left
@@ -58,12 +58,12 @@ object Constants
 
         const val FRONT_LEFT_DRIVING_ID = 4 //8->4
         const val REAR_LEFT_DRIVING_ID = 19  //5->19
-        const val FRONT_RIGHT_DRIVING_ID = 5 //19->5
+        const val FRONT_RIGHT_DRIVING_ID = 7 //19->5
         const val REAR_RIGHT_DRIVING_ID = 8  //4->8
 
         const val FRONT_LEFT_TURNING_ID = 3 //2->3
         const val REAR_LEFT_TURNING_ID = 6   //7->6
-        const val FRONT_RIGHT_TURNING_ID = 7 //6->7
+        const val FRONT_RIGHT_TURNING_ID = 5 //6->7
         const val REAR_RIGHT_TURNING_ID = 2  //3->2
 
         const val FRONT_LEFT_CANCODER_ID = 9   //11->9
@@ -74,7 +74,7 @@ object Constants
     }
 
     object ModuleConstants {
-        const val DRIVE_RATIO = 17.326202353
+        const val DRIVE_RATIO = 5.36
 
         const val DRIVING_P = 0.8
         const val DRIVING_I = 0.0

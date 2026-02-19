@@ -29,7 +29,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
                 )
     }
     fun speedScale(): Double{
-        return ((-getRightTriggerAxis()+1)/2)
+        return ((-getRightTriggerAxis()+1))
     }
 
 
