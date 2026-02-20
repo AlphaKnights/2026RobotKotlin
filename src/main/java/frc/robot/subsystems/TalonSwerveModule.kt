@@ -41,6 +41,9 @@ class TalonSwerveModule(
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit =
                         ModuleConstants.DRIVING_MOTOR_CURRENT_LIMIT
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit =
+                        ModuleConstants.DRIVING_STATOR_CURRENT_LIMIT
                 }
 
                 Slot0.apply {
@@ -76,6 +79,9 @@ class TalonSwerveModule(
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit =
                         ModuleConstants.TURNING_MOTOR_CURRENT_LIMIT
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit =
+                        ModuleConstants.TURNING_STATOR_CURRENT_LIMIT
                 }
 
                 Feedback.apply {

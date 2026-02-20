@@ -18,7 +18,7 @@ object Constants
     object OperatorConstants
     {
         const val DRIVER_CONTROLLER_PORT = 0
-        const val DRIVE_DEADBAND = 0.4
+        const val DRIVE_DEADBAND = 0.01
 
         const val RESET_HEADING_BUTTON = 11
 
@@ -29,11 +29,11 @@ object Constants
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 2
+        const val MAX_METERS_PER_SECOND = 10
         const val MAX_ANGULAR_SPEED = 6
 
-        private val TRACK_WIDTH = Units.inchesToMeters(26.5)
-        private val WHEEL_BASE = Units.inchesToMeters(26.5)
+        private val TRACK_WIDTH = Units.inchesToMeters(25.5)
+        private val WHEEL_BASE = Units.inchesToMeters(25.5)
 
         private val MODULE_POSITIONS = arrayOf(
             Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
@@ -89,6 +89,8 @@ object Constants
 
         const val DRIVING_MOTOR_CURRENT_LIMIT = 40.0
         const val TURNING_MOTOR_CURRENT_LIMIT = 40.0
+        const val DRIVING_STATOR_CURRENT_LIMIT = 40.0
+        const val TURNING_STATOR_CURRENT_LIMIT = 40.0
     }
 
     object LimelightConstants {

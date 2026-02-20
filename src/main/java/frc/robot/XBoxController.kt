@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
     fun x(): Double {
         return (-applyDeadband(
-            getRawAxis(5),      //right y
+            getRawAxis(1),      //right y
             Constants.OperatorConstants.DRIVE_DEADBAND
         ) * speedScale()
                 )
@@ -15,7 +15,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     fun y(): Double {
         return (-applyDeadband(
-            getRawAxis(4),    //right x
+            getRawAxis(0),    //right x
             Constants.OperatorConstants.DRIVE_DEADBAND
         ) * speedScale()
                 )
@@ -23,7 +23,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     fun rot(): Double {
         return (-applyDeadband(
-            getRawAxis(0),   //left x
+            getRawAxis(4),   //left x
             Constants.OperatorConstants.DRIVE_DEADBAND
         ) * speedScale()
                 )
