@@ -1,18 +1,16 @@
 package frc.robot.subsystems
 
-import com.revrobotics.PersistMode
-import com.revrobotics.ResetMode
-import com.revrobotics.spark.FeedbackSensor
-import com.revrobotics.spark.config.SparkBaseConfig
-import com.revrobotics.spark.SparkMax
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs
+import com.ctre.phoenix6.configs.MotorOutputConfigs
+import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.signals.NeutralModeValue
+import com.pathplanner.lib.config.RobotConfig
 import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkLowLevel
-import com.revrobotics.spark.config.ClosedLoopConfig
-import com.revrobotics.spark.config.SparkMaxConfig
+import com.revrobotics.spark.SparkMax
+import edu.wpi.first.units.Units.Amps
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
-import frc.robot.Constants.ClimbConstants
-
 
 
 object ClimbSubsystem : SubsystemBase() {
@@ -21,110 +19,25 @@ object ClimbSubsystem : SubsystemBase() {
             Constants.ClimbConstants.LeftArmID,
             SparkLowLevel.MotorType.kBrushless
         )
-    private val RightArm =
-        SparkMax(
-            Constants.ClimbConstants.RightArmID,
-            SparkLowLevel.MotorType.kBrushless
-        )
+
 
     private val LeftPIDController = LeftArm.closedLoopController
-    private val RightPIDController = RightArm.closedLoopController
 
+    private val config: RobotConfig = RobotConfig.fromGUISettings()
 
     init {
-        val leftConfig =
-            SparkMaxConfig().apply {
-                inverted(true)
-                idleMode(ClimbConstants.IDLE_MODE)
-                smartCurrentLimit(
-                    ClimbConstants.CURRENT_LIMIT,
-                )
-
-                softLimit.apply {
-                    forwardSoftLimitEnabled(true)
-                    reverseSoftLimitEnabled(true)
-
-                    forwardSoftLimit(
-                        ClimbConstants.FORWARD_SOFT_LIMIT,
-                    )
-                    reverseSoftLimit(
-                        ClimbConstants.REVERSE_SOFT_LIMIT,
-                    )
-                }
-
-                encoder.apply {
-                    positionConversionFactor(1.0)
-                    velocityConversionFactor(1.0)
-                }
-
-                closedLoop.apply {
-                    feedbackSensor(
-                        FeedbackSensor.kPrimaryEncoder, //ClosedLoopConfig.Feedback.Sensor
-                    )
-                    pid(
-                        ClimbConstants.P,
-                        ClimbConstants.I,
-                        ClimbConstants.D,
-                    )
-                    outputRange(-1.0, 1.0)
-                    positionWrappingEnabled(false)
-                }
-            }
-
-        val rightConfig =
-            SparkMaxConfig().apply {
-                inverted(false)
-                idleMode(ClimbConstants.IDLE_MODE)
-                smartCurrentLimit(
-                    ClimbConstants.CURRENT_LIMIT,
-                )
-
-                softLimit.apply {
-                    forwardSoftLimitEnabled(true)
-                    reverseSoftLimitEnabled(true)
-
-                    forwardSoftLimit(
-                        ClimbConstants.FORWARD_SOFT_LIMIT,
-                    )
-                    reverseSoftLimit(
-                        ClimbConstants.REVERSE_SOFT_LIMIT,
-                    )
-                }
-
-                encoder.apply {
-                    positionConversionFactor(1.0)
-                    velocityConversionFactor(1.0)
-                }
-
-                closedLoop.apply {
-                    feedbackSensor(
-                        FeedbackSensor.kPrimaryEncoder,
-                    )
-                    pid(
-                        ClimbConstants.P,
-                        ClimbConstants.I,
-                        ClimbConstants.D,
-                    )
-                    outputRange(-1.0, 1.0)
-                    positionWrappingEnabled(false)
-                }
-            }
-
-        LeftArm.configure(
-            leftConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters,
-        )
-
-        RightArm.configure(
-            rightConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters,
-        )
-
-
-
-
+        val commonConfigs = TalonFXConfiguration()
+            .withMotorOutput(
+                MotorOutputConfigs()
+                    .withNeutralMode(NeutralModeValue.Brake)
+            )
+            .withCurrentLimits(
+                CurrentLimitsConfigs()
+                    .withStatorCurrentLimit(Amps.of(Constants.ClimbConstants.BOB))
+                    .withStatorCurrentLimitEnable(true)
+            )
+        val talonFXConfigurator: Unit = m_talonFX.getConfigurator()
+        val motorConfigs = MotorOutputConfigs()
     }
     /**
      * Sets the speed of the elevator motors.
@@ -132,7 +45,7 @@ object ClimbSubsystem : SubsystemBase() {
      */
     fun move(speed: Double) {
         LeftArm.set(speed)
-        RightArm.set(speed)
+
     }
 
     /**
@@ -141,10 +54,6 @@ object ClimbSubsystem : SubsystemBase() {
      */
     fun setPosition(position: Double) {
         LeftPIDController.setSetpoint(
-            position,
-            SparkBase.ControlType.kPosition,
-        )
-        RightPIDController.setSetpoint(
             position,
             SparkBase.ControlType.kPosition,
         )
@@ -158,7 +67,6 @@ object ClimbSubsystem : SubsystemBase() {
 
     fun stop() {
         LeftArm.stopMotor()
-        RightArm.stopMotor()
     }
 
 

@@ -141,6 +141,7 @@ object Constants
         const val LVL_4_HEIGHT = 50.0
 
         const val DownClimbAmount = 1.1
+        const val BOB = 120.0
     }
 }
 
