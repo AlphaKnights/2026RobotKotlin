@@ -111,8 +111,8 @@ class TalonSwerveModule(
                 }
             }
 
-        driveMotor.configurator.apply(driveMotorConfig)
-        turnMotor.configurator.apply(turnMotorConfig)
+        driveMotor.getConfigurator().apply(driveMotorConfig)
+        turnMotor.getConfigurator().apply(turnMotorConfig)
 
         driveMotor.setPosition(0.0)
     }

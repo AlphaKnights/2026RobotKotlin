@@ -29,7 +29,7 @@ object Constants
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 12
+        const val MAX_METERS_PER_SECOND = 10
         const val MAX_ANGULAR_SPEED = 20
 
         private val TRACK_WIDTH = Units.inchesToMeters(26.5)
@@ -76,9 +76,9 @@ object Constants
     object ModuleConstants {
         const val DRIVE_RATIO = 17.326202353
 
-        const val DRIVING_P = 0.8
-        const val DRIVING_I = 0.0
-        const val DRIVING_D = 0.0
+        const val DRIVING_P = 0.5
+        const val DRIVING_I = 0.5
+        const val DRIVING_D = 0.5
         const val DRIVING_FF = 1.0
         const val DRIVING_V = 0.3
         const val DRIVING_A = 1.5
