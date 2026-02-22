@@ -2,6 +2,7 @@ package frc.robot.subsystems
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.controls.PositionDutyCycle
 import com.ctre.phoenix6.hardware.DeviceIdentifier
 import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
@@ -20,19 +21,21 @@ import frc.robot.Constants.ModuleConstants
 
 
 object ClimbSubsystem : SubsystemBase() {
-    private val LeftArm =
+    private val ClimbArm =
         TalonFX(
-            ClimbConstants.LeftArmID,
+            ClimbConstants.ClimbArmID,
         )
 
 
-
     init {
-        val leftConfig =
+        // val ClimbPIDController =
+
+
+        val ClimbConfig =
             TalonFXConfiguration().apply {
                 CurrentLimits.apply {
                     SupplyCurrentLimitEnable = true
-                    SupplyCurrentLimit = ClimbConstants.MOTOR_CURRENT_LIMIT
+                    SupplyCurrentLimit = ClimbConstants.CLIMB_CURRENT_LIMIT
                 }
 
                 SoftwareLimitSwitch.apply {
@@ -49,7 +52,8 @@ object ClimbSubsystem : SubsystemBase() {
                     kD = ClimbConstants.D
                 }
 
-
+                ResetMode.kResetSafeParameters
+                PersistMode.kPersistParameters
 
                 /*encoder.apply {
                     positionConversionFactor(1.0)
@@ -67,27 +71,19 @@ object ClimbSubsystem : SubsystemBase() {
                     )
                     outputRange(-1.0, 1.0)
                     positionWrappingEnabled(false)*/
-                }
             }
 
-
-        LeftArm.conf(
-            leftConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters,
-        )
-
-
-
-
-
+        ClimbArm.getConfigurator().apply(ClimbConfig)
     }
+
+
     /**
      * Sets the speed of the elevator motors.
      * @param speed The proportion speed to set the motors to, between -1.0 and 1.0.
      */
     fun move(speed: Double) {
-        LeftArm.set(speed)
+        ClimbArm.set(speed)
+
     }
 
     /**
@@ -95,22 +91,26 @@ object ClimbSubsystem : SubsystemBase() {
      * @param position The position to set the motors to, in rotations.
      */
     fun setPosition(position: Double) {
-        LeftPIDController.setSetpoint(
-            position,
-            SparkBase.ControlType.kPosition,
-        )
+        var m_request = PositionDutyCycle(0.0).withSlot(0);
+
+        ClimbArm.setControl(m_request.withPosition(position))
+//        ClimbPIDController.setSetpoint(
+//            position,
+//            SparkBase.ControlType.kPosition,
+//        )
+//    }
+
+        /**
+         * Gets the current position of the elevator.
+         * @return The current position of the elevator, in rotations.
+         */
+        fun getPosition(): Double {
+            return ClimbArm.getPosition().getValueAsDouble()
+        }
+        fun stop() {
+            ClimbArm.stopMotor()
+        }
+
     }
-
-    /**
-     * Gets the current position of the elevator.
-     * @return The current position of the elevator, in rotations.
-     */
-    fun getPosition(): Double = (LeftArm.encoder.position)
-
-    fun stop() {
-        LeftArm.stopMotor()
-    }
-
-
-
 }
+

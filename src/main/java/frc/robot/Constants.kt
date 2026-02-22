@@ -116,8 +116,7 @@ object Constants
         RIGHT,
     }
     object ClimbConstants {
-        const val LeftArmID = 4
-        const val RightArmID = 32
+        const val ClimbArmID = 4
 
         const val P = 0.08
         const val I = 0.0
@@ -141,6 +140,7 @@ object Constants
         const val LVL_4_HEIGHT = 50.0
 
         const val DownClimbAmount = 1.1
+        const val CLIMB_CURRENT_LIMIT = 2.2
     }
 }
 
