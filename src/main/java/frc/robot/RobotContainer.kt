@@ -68,6 +68,23 @@ object RobotContainer
         joystickController.alignR().whileTrue(AutoAlignManualCommand(
             Constants.AlignDirection.RIGHT,
         ))
+
+
+            buttonBoard
+                .button(
+                    Constants.ClimbConstants.CLIMB_UP_BUTTON,
+                ).whileTrue(
+                    ElevatorManualCommand(
+                        Constants.ElevatorDirection.UP,
+                    ),
+                )
+
+
+
+
+
+
+
     }
 
     fun getAutonomousCommand(): Command {

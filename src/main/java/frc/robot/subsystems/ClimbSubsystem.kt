@@ -91,7 +91,7 @@ object ClimbSubsystem : SubsystemBase() {
      * @param position The position to set the motors to, in rotations.
      */
     fun setPosition(position: Double) {
-        var m_request = PositionDutyCycle(0.0).withSlot(0);
+        var m_request = PositionDutyCycle(0.0).withSlot(0)
 
         ClimbArm.setControl(m_request.withPosition(position))
 //        ClimbPIDController.setSetpoint(
@@ -104,13 +104,14 @@ object ClimbSubsystem : SubsystemBase() {
          * Gets the current position of the elevator.
          * @return The current position of the elevator, in rotations.
          */
-        fun getPosition(): Double {
-            return ClimbArm.getPosition().getValueAsDouble()
-        }
-        fun stop() {
-            ClimbArm.stopMotor()
-        }
 
+
+    }
+    fun getPosition(): Double {
+        return ClimbArm.getPosition().getValueAsDouble()
+    }
+    fun stop() {
+        ClimbArm.stopMotor()
     }
 }
 

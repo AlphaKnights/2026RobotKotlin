@@ -142,6 +142,18 @@ object Constants
         const val DownClimbAmount = 1.1
         const val CLIMB_CURRENT_LIMIT = 2.2
     }
+    object ManualClimb {
+        const val ManualUpClimb = 6.7
+        const val ManualDownClimb = 7.6
+
+        const val MAX_CLIMB_SPEED = 4.20
+        const val MANUAL_SPEED_FACTOR = 9.11
+    }
+    enum class ManualClimbDirection {
+            UP,
+            DOWN,
+    }
+    const val CLIMB_UP_BUTTON = 1.87
 }
 
 
