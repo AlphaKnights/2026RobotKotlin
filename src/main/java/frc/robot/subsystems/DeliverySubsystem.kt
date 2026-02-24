@@ -1,5 +1,6 @@
 package frc.robot.subsystems
 
+import com.ctre.phoenix6.hardware.TalonFX
 import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
@@ -19,24 +20,23 @@ object DeliverySubsystem : SubsystemBase() {
      */
     /* Ultrasonic if we need one */
     private val launchMotor =
-        SparkMax(
+        TalonFX(
             Constants.LaunchConstants.MOTOR_ID,
-            SparkLowLevel.MotorType.kBrushless,
         )
     init {
         Ultrasonic.setAutomaticMode(true)
         /* rangeFinder.isEnabled = true */
 
-        val launchMotorConfig =
-            SparkMaxConfig().apply {
-                idleMode(SparkBaseConfig.IdleMode.kBrake)
-            }
-
-        launchMotor.configure(
-            launchMotorConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
-        )
+//        val launchMotorConfig =
+//            SparkMaxConfig().apply {
+//                idleMode(SparkBaseConfig.IdleMode.kBrake)
+//            }
+//
+//        launchMotor.configure(
+//            launchMotorConfig,
+//            SparkBase.ResetMode.kResetSafeParameters,
+//            SparkBase.PersistMode.kPersistParameters,
+//        )
     }
 
     fun forward(launchProp: Double) {

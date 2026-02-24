@@ -8,6 +8,8 @@ import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig
 import com.revrobotics.spark.config.SparkMaxConfig
+import com.revrobotics.PersistMode
+import com.revrobotics.ResetMode
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants.ElevatorConstants
 
@@ -53,9 +55,9 @@ object ElevatorSubsystem : SubsystemBase() {
                 }
 
                 closedLoop.apply {
-                    feedbackSensor(
-                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
-                    )
+//                    feedbackSensor(
+//                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
+//                    )
                     pid(
                         ElevatorConstants.P,
                         ElevatorConstants.I,
@@ -92,9 +94,9 @@ object ElevatorSubsystem : SubsystemBase() {
                 }
 
                 closedLoop.apply {
-                    feedbackSensor(
-                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
-                    )
+//                    feedbackSensor(
+//                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
+//                    )
                     pid(
                         ElevatorConstants.P,
                         ElevatorConstants.I,
@@ -107,14 +109,14 @@ object ElevatorSubsystem : SubsystemBase() {
 
         leftMotor.configure(
             leftConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
         )
 
         rightMotor.configure(
             rightConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
         )
     }
 
@@ -132,14 +134,14 @@ object ElevatorSubsystem : SubsystemBase() {
      * @param position The position to set the motors to, in rotations.
      */
     fun setPosition(position: Double) {
-        leftPIDController.setReference(
-            position,
-            SparkBase.ControlType.kPosition,
-        )
-        rightPIDController.setReference(
-            position,
-            SparkBase.ControlType.kPosition,
-        )
+//        leftPIDController.setReference(
+//            position,
+//            SparkBase.ControlType.kPosition,
+//        )
+//        rightPIDController.setReference(
+//            position,
+//            SparkBase.ControlType.kPosition,
+//        )
     }
 
     /**
