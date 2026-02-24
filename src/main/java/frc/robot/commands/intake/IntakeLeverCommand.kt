@@ -1,11 +1,11 @@
-package frc.robot.commands
+package frc.robot.commands.intake
 
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.Constants
 import frc.robot.subsystems.IntakeSubsystem
 
-class IntakeCommand : Command(){
-
+class IntakeLeverCommand(
+    private val targetPosition: Double
+) : Command(){
     init {
         addRequirements(IntakeSubsystem)
     }
@@ -14,11 +14,8 @@ class IntakeCommand : Command(){
         super.initialize()
     }
 
-
     override fun execute() {
-        IntakeSubsystem.forward(Constants.IntakeConstants.INTAKE_SPEED)
-
-
+        IntakeSubsystem.setPosition(targetPosition)
     }
 
     override fun isFinished(): Boolean {
@@ -26,8 +23,8 @@ class IntakeCommand : Command(){
     }
 
     override fun end(interrupted: Boolean) {
-        IntakeSubsystem.stop()
+        IntakeSubsystem.stopIntake()
 
     }
 
-    }
+}

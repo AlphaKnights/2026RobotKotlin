@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.CoralManipulatorSubsystem
 
-class IntakeCommand : Command() {
+class IntakeCommand(bool: Boolean) : Command() {
     private val timer = Timer()
 
     init {

@@ -3,18 +3,15 @@ import kotlin.math.*
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
-import edu.wpi.first.wpilibj.event.EventLoop
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.DriveCommand
+import frc.robot.commands.intake.IntakeLeverCommand
 import frc.robot.commands.ResetHeadingCommand
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.coralmanipulator.IntakeCommand
-import frc.robot.commands.coralmanipulator.LaunchCommand
-import frc.robot.commands.elevator.ElevatorManualCommand
-import frc.robot.commands.elevator.ElevatorPosAutoCommand
-import frc.robot.commands.elevator.ElevatorPosCommand
+import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 
@@ -43,7 +40,7 @@ object RobotContainer
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-                "Intake" to IntakeCommand(),
+                "Intake" to IntakeCommand(true),
 
             )
         )
@@ -76,14 +73,58 @@ object RobotContainer
             Constants.AlignDirection.RIGHT,
         ))
 
-        //intake by Prabgun+Veer
 
+
+        //intake by Prabgun+Veer+Noah
 
         buttonBoard
             .button(
                 Constants.OperatorConstants.INTAKE_BUTTON,
             ).onTrue(
-                IntakeCommand(),
+                IntakeCommand(true),
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_REVERSE_BUTTON,
+            ).onTrue(
+                IntakeCommand(true),
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON
+            ).onTrue(
+                IntakeLeverCommand(
+                    Constants.IntakeConstants.LEVER_IN_POSITION
+                )
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON
+            ).onTrue(
+                IntakeLeverCommand(
+                    Constants.IntakeConstants.LEVER_OUT_POSITION
+                )
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON
+            ).onTrue(
+                IntakeLeverManualCommand(
+                    Constants.IntakeDirection.IN
+                )
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON
+            ).onTrue(
+                IntakeLeverManualCommand(
+                    Constants.IntakeDirection.OUT
+                )
             )
 
 
