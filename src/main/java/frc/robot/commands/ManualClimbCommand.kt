@@ -7,7 +7,7 @@ import frc.robot.subsystems.ClimbSubsystem
 class ManualClimbCommand(
     private val direction: Constants.ManualClimbDirection,
     ) : Command(){
-    init { //intalizes the subsystem
+    init { //initializes the subsystem
         addRequirements(ClimbSubsystem)
     }
 

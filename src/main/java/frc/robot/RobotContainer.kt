@@ -70,14 +70,13 @@ object RobotContainer
         ))
 
 
-            buttonBoard
-                .button(
-                    Constants.ClimbConstants.CLIMB_UP_BUTTON,
+        /*buttonBoard.button(
+                    Constants.ClimbConstants.CLIMB_UP_BUTTON
                 ).whileTrue(
                     ElevatorManualCommand(
-                        Constants.ElevatorDirection.UP,
-                    ),
-                )
+                        Constants.ElevatorDirection.UP
+                    )
+                )*/
 
 
 
