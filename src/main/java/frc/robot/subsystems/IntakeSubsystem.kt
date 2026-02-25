@@ -114,7 +114,7 @@ object IntakeSubsystem : SubsystemBase() {
         )
     }
 
-    fun getPosition(): Double = leverMotor.encoder.getPosition()
+    fun getPosition(): Double = rightleverMotor.encoder.getPosition()
 
     fun stopIntake() {
         intakeMotor.stopMotor()
