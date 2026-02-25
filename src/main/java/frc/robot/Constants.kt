@@ -170,7 +170,8 @@ object Constants
 
     object IntakeConstants {
         const val INTAKE_MOTOR_ID = 30
-        const val LEVER_MOTOR_ID = 31
+        const val RIGHT_LEVER_MOTOR_ID = 31
+        const val LEFT_LEVER_MOTOR_ID = 1
         const val INTAKE_SPEED = 0.5
 
         // Limits should be in rotations

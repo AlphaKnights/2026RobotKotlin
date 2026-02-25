@@ -17,21 +17,30 @@ object IntakeSubsystem : SubsystemBase() {
             SparkLowLevel.MotorType.kBrushless,
         )
 
-    private val leverMotor =
+    private val rightleverMotor =
         SparkMax(
-            Constants.IntakeConstants.LEVER_MOTOR_ID,
+            Constants.IntakeConstants.RIGHT_LEVER_MOTOR_ID,
             SparkLowLevel.MotorType.kBrushless,
         )
+
+    private val leftLeverMotor =
+        SparkMax(
+            Constants.IntakeConstants.LEFT_LEVER_MOTOR_ID,
+            SparkLowLevel.MotorType.kBrushless,
+        )
+
+
+
 
     val pidController = intakeMotor.closedLoopController
 
     init {
-        val intakeMotorConfig =
+        val intakeMotorConfig=
             SparkMaxConfig().apply {
                 idleMode(SparkBaseConfig.IdleMode.kBrake)
             }
 
-        val leverMotorConfig =
+        val globalConfig =
             SparkMaxConfig().apply {
                 idleMode(SparkBaseConfig.IdleMode.kBrake)
                 softLimit.apply {
@@ -65,11 +74,26 @@ object IntakeSubsystem : SubsystemBase() {
             SparkBase.ResetMode.kResetSafeParameters,
             SparkBase.PersistMode.kPersistParameters,
         )
-        leverMotor.configure(
-            leverMotorConfig,
+
+        val leftConfig = SparkMaxConfig().apply {
+            follow(rightleverMotor)
+            apply(globalConfig)
+        }
+        val rightConfig = SparkMaxConfig().apply {
+            apply(globalConfig)
+        }
+        rightleverMotor.configure( //the right one is leading
+            rightConfig,
             SparkBase.ResetMode.kResetSafeParameters,
             SparkBase.PersistMode.kPersistParameters,
         )
+
+        leftLeverMotor.configure(
+            leftConfig,
+            SparkBase.ResetMode.kResetSafeParameters,
+            SparkBase.PersistMode.kPersistParameters,
+        )
+
     }
 
     fun runIntake(speed: Double) {
