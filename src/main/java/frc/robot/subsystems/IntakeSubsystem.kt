@@ -1,5 +1,8 @@
 package frc.robot.subsystems
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
@@ -11,11 +14,7 @@ import frc.robot.Constants
 
 
 object IntakeSubsystem : SubsystemBase() {
-    private val intakeMotor =
-        SparkMax(
-            Constants.IntakeConstants.INTAKE_MOTOR_ID,
-            SparkLowLevel.MotorType.kBrushless,
-        )
+    private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID)
 
     private val rightleverMotor =
         SparkMax(
@@ -29,15 +28,20 @@ object IntakeSubsystem : SubsystemBase() {
             SparkLowLevel.MotorType.kBrushless,
         )
 
-
-
-
-    val pidController = intakeMotor.closedLoopController
+    val rightPidController = rightleverMotor.closedLoopController
+    val leftPidController = leftLeverMotor.closedLoopController
 
     init {
         val intakeMotorConfig=
-            SparkMaxConfig().apply {
-                idleMode(SparkBaseConfig.IdleMode.kBrake)
+            TalonFXConfiguration().apply {
+                CurrentLimits.apply {
+                    SupplyCurrentLimitEnable = true
+                    SupplyCurrentLimit = Constants.IntakeConstants.INTAKE_CURRENT_LIMIT
+                }
+
+                MotorOutput.apply{
+                    NeutralMode = NeutralModeValue.Brake
+                }
             }
 
         val globalConfig =
@@ -69,11 +73,7 @@ object IntakeSubsystem : SubsystemBase() {
                     positionWrappingEnabled(false)
                 }
             }
-        intakeMotor.configure(
-            intakeMotorConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
-        )
+        intakeMotor.getConfigurator().apply(intakeMotorConfig)
 
         val leftConfig = SparkMaxConfig().apply {
             follow(rightleverMotor)
@@ -101,14 +101,22 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun setPosition(position: Double) {
-        pidController.setReference(
+        rightPidController.setReference(
             position,
             SparkBase.ControlType.kPosition,
             )
+        leftPidController.setReference(
+            position,
+            SparkBase.ControlType.kPosition,
+        )
     }
 
     fun moveLever(speed: Double) {
-        pidController.setReference(
+        rightPidController.setReference(
+            speed,
+            SparkBase.ControlType.kVelocity // maybe change this, units are rpm right now
+        )
+        leftPidController.setReference(
             speed,
             SparkBase.ControlType.kVelocity // maybe change this, units are rpm right now
         )

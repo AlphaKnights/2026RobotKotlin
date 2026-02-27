@@ -187,6 +187,8 @@ object Constants
 
         const val LEVER_SPEED = 1.0 // in rpm
 
+        const val INTAKE_CURRENT_LIMIT = 40.0
+
     }
 
     enum class IntakeDirection {

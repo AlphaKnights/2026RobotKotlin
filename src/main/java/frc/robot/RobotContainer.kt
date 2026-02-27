@@ -10,7 +10,7 @@ import frc.robot.commands.intake.IntakeLeverCommand
 import frc.robot.commands.ResetHeadingCommand
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
-import frc.robot.commands.coralmanipulator.IntakeCommand
+import frc.robot.commands.intake.IntakeCommand
 import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
@@ -40,8 +40,10 @@ object RobotContainer
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-                "Intake" to IntakeCommand(true),
 
+                "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
+                "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
+                "Intake" to IntakeCommand(false)
             )
         )
 
@@ -77,19 +79,7 @@ object RobotContainer
 
         //intake by Prabgun+Veer+Noah
 
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_BUTTON,
-            ).onTrue(
-                IntakeCommand(true),
-            )
 
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_REVERSE_BUTTON,
-            ).onTrue(
-                IntakeCommand(true),
-            )
 
         buttonBoard
             .button(
@@ -112,7 +102,7 @@ object RobotContainer
         buttonBoard
             .button(
                 Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON
-            ).onTrue(
+            ).whileTrue(
                 IntakeLeverManualCommand(
                     Constants.IntakeDirection.IN
                 )
@@ -121,16 +111,13 @@ object RobotContainer
         buttonBoard
             .button(
                 Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON
-            ).onTrue(
+            ).whileTrue(
                 IntakeLeverManualCommand(
                     Constants.IntakeDirection.OUT
                 )
             )
 
-
-
-
-
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(IntakeCommand(false))
     }
 
     fun getAutonomousCommand(): Command {
