@@ -97,7 +97,7 @@ object DriveSubsystem : SubsystemBase()
     override fun periodic()
     {
         // This method will be called once per scheduler run
-        if (Robot.isAutonomous()) {
+//        if (Robot.isAutonomous()) {
             odometry.update(
                 Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),
                 arrayOf(
@@ -107,7 +107,8 @@ object DriveSubsystem : SubsystemBase()
                     rearRight.getPosition(),
                 )
             )
-        }
+//        }
+        println(getPose())
 
         println("angle:"+gyro.getYaw())
         println(xBoxController.getRawAxis(0))

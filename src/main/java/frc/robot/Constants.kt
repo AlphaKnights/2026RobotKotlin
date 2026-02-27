@@ -29,7 +29,7 @@ object Constants
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 10
+        const val MAX_METERS_PER_SECOND = 2
         const val MAX_ANGULAR_SPEED = 6
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -45,8 +45,8 @@ object Constants
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.0)
-        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.31)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.14) //+ is clockwise
+        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.317)
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.119) //+ is clockwise
         val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33)//- counter-clockwise
 
 
@@ -89,8 +89,8 @@ object Constants
 
         const val DRIVING_MOTOR_CURRENT_LIMIT = 40.0
         const val TURNING_MOTOR_CURRENT_LIMIT = 40.0
-        const val DRIVING_STATOR_CURRENT_LIMIT = 40.0
-        const val TURNING_STATOR_CURRENT_LIMIT = 40.0
+        const val DRIVING_STATOR_CURRENT_LIMIT = 30.0
+        const val TURNING_STATOR_CURRENT_LIMIT = 30.0
     }
 
     object LimelightConstants {
