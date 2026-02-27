@@ -170,6 +170,8 @@ object Constants
     object RollerConstants {
         const val MOTOR_ID = 30
         const val ROLLER_SPEED = 0.6
+        const val ROLLER_MOTOR_CURRENT_LIMITS = 40.0
+        const val BUTTON = 3
     }
 }
 

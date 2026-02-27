@@ -1,50 +1,30 @@
 package frc.robot.subsystems
 
-import com.revrobotics.PersistMode
-import com.revrobotics.ResetMode
-import com.revrobotics.spark.SparkBase
-import com.revrobotics.spark.SparkLowLevel
-import com.revrobotics.spark.SparkMax
-import com.revrobotics.spark.config.SparkBaseConfig
-import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.wpilibj.Ultrasonic
+import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.Constants
+import frc.robot.Constants.RollerConstants
 
 object StorageSubsystem : SubsystemBase() {
-    private val rollerMotor = SparkMax(Constants.RollerConstants.MOTOR_ID, SparkLowLevel.MotorType.kBrushless)
-    private val flyMotor = SparkMax(Constants.FlyConstants.MOTOR_ID, SparkLowLevel.MotorType.kBrushless)
+    private val rollerMotor = TalonFX(RollerConstants.MOTOR_ID)
     init {
 
-
-        val rollerMotorConfig = SparkMaxConfig().apply{
-            idleMode(SparkBaseConfig.IdleMode.kBrake)
+        val rollerMotorConfig = TalonFXConfiguration().apply {
+            CurrentLimits.apply {
+                SupplyCurrentLimitEnable = true
+                SupplyCurrentLimit = RollerConstants.ROLLER_MOTOR_CURRENT_LIMITS
+            }
         }
 
-
-        rollerMotor.configure(
-            rollerMotorConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters,
-        )
-
-
-
+        rollerMotor.getConfigurator().apply(rollerMotorConfig)
     }
 
-    fun roll(Rollerspeed: Double) {
-        rollerMotor.set(Rollerspeed)
-    }
-
-    fun flywheel(Flywheelspeed: Double) {
-        flyMotor.set(Flywheelspeed)
+    fun roll(rollerSpeed: Double) {
+        rollerMotor.set(rollerSpeed)
     }
 
     fun rollerstop() {
         rollerMotor.stopMotor()
     }
 
-    fun flywheelstop(){
-        flyMotor.stopMotor()
-    }
 }
