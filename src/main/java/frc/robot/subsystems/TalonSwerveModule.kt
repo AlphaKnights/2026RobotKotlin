@@ -155,7 +155,7 @@ class TalonSwerveModule(
 
         driveMotor.setControl(
             VelocityVoltage(
-                correctedState.speedMetersPerSecond,
+                correctedState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE, // convert to rotations
             ),
         )
         turnMotor.setControl(

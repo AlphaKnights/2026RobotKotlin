@@ -76,6 +76,8 @@ object Constants
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
 
+        const val WHEEL_CIRCUMFERENCE = 0.5 // meters
+
         const val DRIVING_P = 0.8
         const val DRIVING_I = 0.0
         const val DRIVING_D = 0.0
