@@ -125,21 +125,23 @@ class TalonSwerveModule(
 
     fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
-            driveMotor.position.valueAsDouble,
+            //driveMotor.rotor
+            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.getPosition().valueAsDouble,
             Rotation2d.fromRotations(
-                turnMotor.position.valueAsDouble,
+                turnMotor.getPosition().valueAsDouble,
             ) +
                 offset,
         )
 
     fun getState(): SwerveModuleState =
         SwerveModuleState(
-            driveMotor.velocity.valueAsDouble,
+            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.getVelocity().valueAsDouble,
             Rotation2d.fromRotations(
-                turnMotor.position.valueAsDouble,
+                turnMotor.getPosition().valueAsDouble,
             ) +
                 offset,
         )
+
 
     fun setDesiredState(desiredState: SwerveModuleState) {
         val correctedState =
@@ -155,7 +157,7 @@ class TalonSwerveModule(
 
         driveMotor.setControl(
             VelocityVoltage(
-                correctedState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE, // convert to rotations
+                correctedState.speedMetersPerSecond/ModuleConstants.WHEEL_CIRCUMFERENCE,
             ),
         )
         turnMotor.setControl(

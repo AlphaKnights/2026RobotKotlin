@@ -12,6 +12,9 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
+import kotlin.math.PI
+
+
 
 object Constants
 {
@@ -19,6 +22,7 @@ object Constants
     {
         const val DRIVER_CONTROLLER_PORT = 0
         const val DRIVE_DEADBAND = 0.01
+        const val LERP_VAL = 0.004
 
         const val RESET_HEADING_BUTTON = 11
 
@@ -29,7 +33,7 @@ object Constants
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 2
+        const val MAX_METERS_PER_SECOND = 3
         const val MAX_ANGULAR_SPEED = 6
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -75,6 +79,7 @@ object Constants
 
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
+        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0)*PI
 
         const val WHEEL_CIRCUMFERENCE = 0.5 // meters
 
@@ -82,17 +87,17 @@ object Constants
         const val DRIVING_I = 0.0
         const val DRIVING_D = 0.0
         const val DRIVING_FF = 1.0
-        const val DRIVING_V = 0.3
+        const val DRIVING_V = 0.12//0.12*DRIVE_RATIO
         const val DRIVING_A = 1.5
         const val TURNING_P = 40.0
         const val TURNING_I = 0.0
         const val TURNING_D = 0.0
         const val TURNING_FF = 0.0
 
-        const val DRIVING_MOTOR_CURRENT_LIMIT = 40.0
-        const val TURNING_MOTOR_CURRENT_LIMIT = 40.0
-        const val DRIVING_STATOR_CURRENT_LIMIT = 30.0
-        const val TURNING_STATOR_CURRENT_LIMIT = 30.0
+        const val DRIVING_MOTOR_CURRENT_LIMIT = 30.0
+        const val TURNING_MOTOR_CURRENT_LIMIT = 30.0
+        const val DRIVING_STATOR_CURRENT_LIMIT = 50.0
+        const val TURNING_STATOR_CURRENT_LIMIT = 50.0
     }
 
     object LimelightConstants {

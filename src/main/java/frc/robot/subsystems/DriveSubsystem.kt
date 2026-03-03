@@ -1,27 +1,26 @@
 package frc.robot.subsystems
 
-import com.ctre.phoenix6.CANBus
+import com.ctre.phoenix6.hardware.CANcoder
+import com.ctre.phoenix6.hardware.Pigeon2
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
-import edu.wpi.first.wpilibj2.command.SubsystemBase
-
-import frc.robot.Constants
-import com.studica.frc.AHRS
-import com.ctre.phoenix6.hardware.Pigeon2
-
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
-import frc.robot.Robot
+import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants
 import frc.robot.XBoxController
 
-object DriveSubsystem : SubsystemBase() 
+
+object DriveSubsystem : SubsystemBase()
 {
 
     private val xBoxController = XBoxController()
@@ -50,13 +49,28 @@ object DriveSubsystem : SubsystemBase()
         Constants.DriveConstants.REAR_RIGHT_CANCODER_ID,
         Constants.DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET
     )
-
+    private var FrontRightEncoder = CANcoder(Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID)
     private var gyro: Pigeon2 = Pigeon2(20)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     private var odometry: SwerveDriveOdometry
 
     private val config: RobotConfig = RobotConfig.fromGUISettings()
+
+
+
+   // private val states: Array<SwerveModuleState> = arrayOf(
+      //  new Mod,
+        //frontLeft,
+        //rearLeft,
+    //    rearRight,
+ //   )
+    var publisher: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault()
+        .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish()
+
+
+
+
 
     init {
         //gyro.reset()
@@ -107,7 +121,15 @@ object DriveSubsystem : SubsystemBase()
                     rearRight.getPosition(),
                 )
             )
+           // publisher.set(states);
+
 //        }
+
+        println("Front Right:"+ FrontRightEncoder.getVelocity())
+        println("Front Right Speed: "+frontRight.getState().speedMetersPerSecond)
+        println("Front Left Speed: "+frontLeft.getState().speedMetersPerSecond)
+        println("Back Right Speed: "+rearRight.getState().speedMetersPerSecond)
+        println("Back Left Speed: "+rearLeft.getState().speedMetersPerSecond)
         println(getPose())
 
         println("angle:"+gyro.getYaw())
