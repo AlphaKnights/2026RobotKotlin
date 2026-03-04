@@ -22,7 +22,7 @@ object Constants
     {
         const val DRIVER_CONTROLLER_PORT = 0
         const val DRIVE_DEADBAND = 0.01
-        const val LERP_VAL = 0.004
+        const val LERP_VAL = 0.035
 
         const val RESET_HEADING_BUTTON = 11
 
@@ -81,7 +81,7 @@ object Constants
         const val DRIVE_RATIO = 5.36
         val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0)*PI
 
-        const val WHEEL_CIRCUMFERENCE = 0.5 // meters
+        //const val WHEEL_CIRCUMFERENCE = 0.5 // meters
 
         const val DRIVING_P = 0.8
         const val DRIVING_I = 0.0
