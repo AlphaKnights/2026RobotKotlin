@@ -1,27 +1,30 @@
 package frc.robot.subsystems
 
-import com.ctre.phoenix6.CANBus
+import com.ctre.phoenix6.hardware.CANcoder
+import com.ctre.phoenix6.hardware.Pigeon2
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
-import edu.wpi.first.wpilibj2.command.SubsystemBase
-
-import frc.robot.Constants
-import com.studica.frc.AHRS
-import com.ctre.phoenix6.hardware.Pigeon2
-
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
-import frc.robot.Robot
+import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants
+import frc.robot.XBoxController
 
-object DriveSubsystem : SubsystemBase() 
+
+object DriveSubsystem : SubsystemBase()
 {
+
+    private val xBoxController = XBoxController()
+
     private var frontLeft: TalonSwerveModule = TalonSwerveModule(
         Constants.DriveConstants.FRONT_LEFT_DRIVING_ID,
         Constants.DriveConstants.FRONT_LEFT_TURNING_ID,
@@ -46,22 +49,37 @@ object DriveSubsystem : SubsystemBase()
         Constants.DriveConstants.REAR_RIGHT_CANCODER_ID,
         Constants.DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET
     )
-
-    //private var gyro: Pigeon2 = Pigeon2(9)
-    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
+    private var FrontRightEncoder = CANcoder(Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID)
+    private var gyro: Pigeon2 = Pigeon2(20)
+//    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     private var odometry: SwerveDriveOdometry
 
     private val config: RobotConfig = RobotConfig.fromGUISettings()
 
+
+
+   // private val states: Array<SwerveModuleState> = arrayOf(
+      //  new Mod,
+        //frontLeft,
+        //rearLeft,
+    //    rearRight,
+ //   )
+    var publisher: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault()
+        .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish()
+
+
+
+
+
     init {
         //gyro.reset()
-        gyro.enableBoardlevelYawReset(false)
+//        gyro.enableBoardlevelYawReset(false)
         gyro.reset()
 
         odometry = SwerveDriveOdometry(
             Constants.DriveConstants.DRIVE_KINEMATICS,
-            Rotation2d.fromDegrees(gyro.getAngle()),   //gyro.rotation3d.x
+            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),   //gyro.rotation3d.x
             arrayOf(
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -95,7 +113,7 @@ object DriveSubsystem : SubsystemBase()
         // This method will be called once per scheduler run
 //        if (Robot.isAutonomous()) {
             odometry.update(
-                Rotation2d.fromDegrees(gyro.getAngle()),
+                Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),
                 arrayOf(
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -103,10 +121,19 @@ object DriveSubsystem : SubsystemBase()
                     rearRight.getPosition(),
                 )
             )
+           // publisher.set(states);
+
 //        }
 
-        //println(gyro.getAngle())
-
+//        println("Front Right:"+ FrontRightEncoder.getVelocity())
+//        println("Front Right Speed: "+frontRight.getState().speedMetersPerSecond)
+//        println("Front Left Speed: "+frontLeft.getState().speedMetersPerSecond)
+//        println("Back Right Speed: "+rearRight.getState().speedMetersPerSecond)
+//        println("Back Left Speed: "+rearLeft.getState().speedMetersPerSecond)
+//        println("Odometry:"+getPose())
+//
+//        println("angle:"+gyro.getYaw())
+//        println(xBoxController.getRawAxis(0))
     }
 
     fun getPose(): Pose2d {
@@ -130,7 +157,7 @@ object DriveSubsystem : SubsystemBase()
 
     fun resetOdometry(pose: Pose2d) {
         odometry.resetPosition(
-            Rotation2d.fromDegrees(gyro.getAngle()), //gyro.getRotation2d(),
+            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()), //gyro.getRotation2d(),
             arrayOf(
                 frontLeft.getPosition(),
                 frontRight.getPosition(),
@@ -153,7 +180,7 @@ object DriveSubsystem : SubsystemBase()
         var swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds)
 
         if (fieldRelative){
-            swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(gyro.getAngle()))) //gyro.getRotation2d()
+            swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()))) //gyro.getRotation2d()
         }
         
         frontLeft.setDesiredState(swerveModuleStates[0])
