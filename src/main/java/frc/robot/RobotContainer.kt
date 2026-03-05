@@ -51,7 +51,8 @@ object RobotContainer
         DriveSubsystem.defaultCommand = DriveCommand(
             x = { if (kotlin.math.abs(joystickController.x()) > 0.2) {joystickController.x()} else 0.0},
             y = { if (kotlin.math.abs(joystickController.y()) > 0.2) {joystickController.y()} else 0.0},
-            rot = { if (kotlin.math.abs(joystickController.rot()) > 0.2) {joystickController.rot()} else 0.0}
+            rot = { if (kotlin.math.abs(joystickController.rot()) > 0.2) {joystickController.rot()} else 0.0},
+            autoAngle = {joystickController.alignAngle().getAsBoolean()}
         )
 
         // Reset heading

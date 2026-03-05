@@ -14,8 +14,7 @@ class DriveCommand(
     private val x: () -> Double,
     private val y: () -> Double,
     private val rot: () -> Double,
-    private val autoAngle: () -> Boolean,
-    private val curPose: Pose3d,
+    private val autoAngle: () -> Boolean
 ) : Command() {
     init {
         addRequirements(DriveSubsystem)
@@ -43,7 +42,8 @@ class DriveCommand(
                             Constants.DriveConstants.MAX_METERS_PER_SECOND,
                     y() *
                             Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                    AimingCalc.getAimingAngleChange(curPose, x()*Constants.DriveConstants.MAX_METERS_PER_SECOND,
+                    AimingCalc.getAimingAngleChange(DriveSubsystem.getPose(),
+                        x()*Constants.DriveConstants.MAX_METERS_PER_SECOND,
                         y()*Constants.DriveConstants.MAX_METERS_PER_SECOND),
                 ),
                 fieldRelative = true,

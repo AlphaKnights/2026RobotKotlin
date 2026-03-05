@@ -89,8 +89,8 @@ object Constants
     object LimelightConstants {
         const val POLLING_RATE = 20L
         const val TIMEOUT = 500L // milliseconds
-        //        const val IP_ADDR = "10.66.95.11"
-        const val IP_ADDR = "172.29.0.1"
+                const val IP_ADDR = "10.66.95.200"
+//        const val IP_ADDR = "172.29.0.1"
     }
 
     object AlignConstants {

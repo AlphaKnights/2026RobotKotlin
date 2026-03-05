@@ -1,14 +1,14 @@
 package frc.robot.subsystems
 
-import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Pose2d
 import frc.robot.Constants.AimingConstants
 import kotlin.math.*
 
 object AimingCalc {
-    fun canShoot(curPose: Pose3d): Int {
+    fun canShoot(curPose: Pose2d): Int {
         // in meters
         var x: Double = -curPose.getX()
-        var y: Double = curPose.getZ()
+        var y: Double = curPose.getY()
 
         var distanceX: Double = abs(x-AimingConstants.HUB_X)
         var distanceY: Double = abs(y-AimingConstants.HUB_Y)
@@ -35,11 +35,11 @@ object AimingCalc {
         }
         return 5
     }
-    fun getAimingAngleChange(curPose: Pose3d, vx: Double, vy: Double): Double {
+    fun getAimingAngleChange(curPose: Pose2d, vx: Double, vy: Double): Double {
         // in meters and radians
         var x: Double = -curPose.getX()
-        var y: Double = curPose.getZ()
-        var angle: Double = curPose.rotation.getY()
+        var y: Double = curPose.getY()
+        var angle: Double = curPose.getRotation().getRadians()
 
         var distanceX: Double = AimingConstants.HUB_X-x
         var distanceY: Double = AimingConstants.HUB_Y-y
