@@ -49,7 +49,6 @@ object HttpLimelightService : LimelightService {
             result = response.body()
         } catch (e: Exception) {
             println(e)
-            println("shit")
             result = null
         }
         return result

@@ -47,14 +47,15 @@ object RobotContainer
         configureBindings()
     }
 
-
     private fun configureBindings() {
         // Drive control
+
         //x is forward
         DriveSubsystem.defaultCommand = DriveCommand(
             x = {xBoxController.x()},
             y = {xBoxController.y()},
-            rot = {xBoxController.rot()}
+            rot = {xBoxController.rot()},
+            autoAngle = {false}
         )
 
         // Reset heading
@@ -71,8 +72,6 @@ object RobotContainer
         xBoxController.alignR().whileTrue(AutoAlignManualCommand(
             Constants.AlignDirection.RIGHT,
         ))
-
-
     }
 
     fun getAutonomousCommand(): Command {

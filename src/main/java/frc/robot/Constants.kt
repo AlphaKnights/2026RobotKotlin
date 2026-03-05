@@ -30,6 +30,8 @@ object Constants
         const val ALIGN_RIGHT_BUTTON = 10 //joystick
 
         const val BUTTON_BOARD_PORT = 2
+
+        const val ANGLE_BUTTON = 12 //joystick
     }
 
     object DriveConstants {
@@ -130,6 +132,18 @@ object Constants
     enum class AlignDirection {
         LEFT,
         RIGHT,
+    }
+    object AimingConstants {
+        const val DISTANCE = 1.0
+        const val GOOD_DISTANCE_TOLERANCE = 0.5
+        const val MIDDLING_DISTANCE_TOLERANCE = 1.0
+
+        const val HUB_X = 5.0
+        const val HUB_Y = 5.0
+
+        const val MAX_SPEED = 1.0
+        const val SLOW_DISTANCE = 1.0
+        const val MIN_SPEED = 0.2
     }
 }
 
