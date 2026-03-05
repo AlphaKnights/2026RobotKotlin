@@ -52,9 +52,9 @@ object RobotContainer
         // Drive control
         //x is forward
         DriveSubsystem.defaultCommand = DriveCommand(
-            x = { if (kotlin.math.abs(xBoxController.x()) > 0.2) {xBoxController.x()} else 0.0},
-            y = { if (kotlin.math.abs(xBoxController.y()) > 0.2) { xBoxController.y()} else 0.0},
-            rot = { if (kotlin.math.abs(xBoxController.rot()) > 0.2) { xBoxController.rot()} else 0.0}
+            x = {xBoxController.x()},
+            y = {xBoxController.y()},
+            rot = {xBoxController.rot()}
         )
 
         // Reset heading
