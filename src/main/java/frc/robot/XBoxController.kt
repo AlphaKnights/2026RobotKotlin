@@ -51,6 +51,9 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun alignR() : Trigger {
         return Trigger { getBButton()}
     }
+    fun autoAim() : Trigger {
+        return Trigger { getAButton()}
+    }
 
     fun lerp(ref: Double, start: Double) : Double {
         if (ref > start) {
