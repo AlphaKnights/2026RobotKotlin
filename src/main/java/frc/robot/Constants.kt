@@ -32,6 +32,9 @@ object Constants
         const val BUTTON_BOARD_PORT = 2
 
         const val ANGLE_BUTTON = 12 //joystick
+
+        const val INTAKE_BUTTON = 6
+        const val DELIVERY_BUTTON = 9
     }
 
     object DriveConstants {

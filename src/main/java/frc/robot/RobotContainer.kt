@@ -14,6 +14,8 @@ import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import frc.robot.XBoxController
+import frc.robot.commands.DeliveryCommand
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the [Robot]
@@ -41,6 +43,7 @@ object RobotContainer
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
+                "Delivery" to DeliveryCommand(),
             )
         )
 
@@ -73,7 +76,10 @@ object RobotContainer
             Constants.AlignDirection.RIGHT,
         ))
 
-
+        buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
+            .onTrue(
+                DeliveryCommand()
+            )
 
 
     }
