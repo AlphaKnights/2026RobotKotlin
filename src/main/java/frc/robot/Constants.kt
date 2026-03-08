@@ -108,6 +108,18 @@ object Constants
                 const val IP_ADDR = "10.66.95.200"
 //        const val IP_ADDR = "172.29.0.1"
     }
+    object LaunchConstants {
+        const val MOTOR_ID1 = 30
+        const val MOTOR_ID2 = 27
+        const val LAUNCH_SPEED = 0.6
+        const val LAUNCH_P = 0.1
+        const val LAUNCH_I = 0.0
+        const val LAUNCH_D = 0.0
+        const val LAUNCH_FF = 0.0
+        const val LAUNCH_V = 0.0071
+        const val LAUNCH_A = 0.0
+        const val LAUNCH_MOTOR_CURRENT_LIMITS = 40.0
+    }
 
     object AlignConstants {
         const val ALIGN_DEADZONE = 0.03

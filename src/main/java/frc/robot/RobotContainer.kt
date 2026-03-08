@@ -72,6 +72,10 @@ object RobotContainer
         xBoxController.alignR().whileTrue(AutoAlignManualCommand(
             Constants.AlignDirection.RIGHT,
         ))
+
+
+
+
     }
 
     fun getAutonomousCommand(): Command {
