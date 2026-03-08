@@ -105,16 +105,28 @@ object Constants
     object LimelightConstants {
         const val POLLING_RATE = 20L
         const val TIMEOUT = 500L // milliseconds
-                const val IP_ADDR = "10.66.95.200"
+        const val IP_ADDR = "10.66.95.200"
 //        const val IP_ADDR = "172.29.0.1"
     }
 
     object AlignConstants {
         const val ALIGN_DEADZONE = 0.03
-        val ALIGN_ROT_DEADZONE = Units.degreesToRadians(5.0)
+
+        // ALIGN_ROT_DEADZONE: the robot stops rotating once it's within this angle of center.
+        val ALIGN_ROT_DEADZONE: Double = Units.degreesToRadians(5.0)
 
         const val FINE_ALIGN_DEADZONE = 1.0
-        val FINE_ALIGN_ROT_DEADZONE = Units.degreesToRadians(5.0)
+
+        // FINE_ALIGN_ROT_DEADZONE: the robot starts slowing its rotation within this wider zone.
+        // Think of it like speed limit signs approaching a school zone:
+        //
+        //  Full speed  ←─── [> 20°] ───→  Slow down  ←─── [5° to 20°] ───→  Stop  ←─ [< 5°] ─→
+        //
+        // Bug fix: This was 5.0° — identical to ALIGN_ROT_DEADZONE. When the two thresholds
+        // are the same value, the "slow down" zone has zero width: the robot goes from full
+        // speed directly to stopped with no ramp in between. 20° gives a 15° ramp zone.
+        @Suppress("MagicNumber")
+        val FINE_ALIGN_ROT_DEADZONE: Double = Units.degreesToRadians(20.0)
 
         const val MAX_SPEED = 1.0
         const val MAX_ANGULAR_SPEED = 1.0

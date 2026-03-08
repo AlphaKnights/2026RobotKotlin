@@ -11,6 +11,7 @@ import frc.robot.subsystems.AutoAlignCalc
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.math.sqrt
 
 internal class AutoAlignTest {
     @Test
@@ -58,7 +59,8 @@ internal class AutoAlignTest {
                     0.0,
                     Constants.AlignConstants.ALIGN_DEADZONE - 0.01,
                 ),
-                Rotation3d(0.0, 0.0, Constants.AlignConstants.ALIGN_ROT_DEADZONE - 0.01),
+                // rotation.y is yaw — the axis checked by isRotationAligned
+                Rotation3d(0.0, Constants.AlignConstants.ALIGN_ROT_DEADZONE - 0.01, 0.0),
             )
 
         val result = AutoAlignCalc.getAlignSpeeds(0.0, 0.0, pose)
@@ -83,7 +85,7 @@ internal class AutoAlignTest {
                 ),
             )
         val expectedChassisSpeeds =
-            ChassisSpeeds(0.0, -0.0, -0.0)
+            ChassisSpeeds(0.0, -0.0, 0.0)
 
         val result =
             AutoAlignCalc.getAlignSpeeds(
@@ -121,7 +123,7 @@ internal class AutoAlignTest {
                 ),
             )
         val expectedChassisSpeeds =
-            ChassisSpeeds(0.0, -1.0, -0.0)
+            ChassisSpeeds(0.0, -1.0, 0.0)
 
         val result =
             AutoAlignCalc.getAlignSpeeds(
@@ -160,7 +162,7 @@ internal class AutoAlignTest {
             )
         val offsets = doubleArrayOf(0.0, 0.0)
         val expectedChassisSpeeds =
-            ChassisSpeeds(1.0, -0.0, -0.0)
+            ChassisSpeeds(1.0, -0.0, 0.0)
 
         val result =
             AutoAlignCalc.getAlignSpeeds(
@@ -180,5 +182,26 @@ internal class AutoAlignTest {
             expectedChassisSpeeds.omegaRadiansPerSecond,
             result.omegaRadiansPerSecond,
         )
+    }
+
+    @Test
+    fun `getAlignSpeeds rotation slows proportionally inside fine-align zone`() {
+        // At exactly half the FINE_ALIGN_ROT_DEADZONE, omega should be sqrt(0.5) * MAX_ANGULAR_SPEED
+        val halfZone = Constants.AlignConstants.FINE_ALIGN_ROT_DEADZONE / 2.0
+        val pose = Pose3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, halfZone, 0.0))
+        val result = AutoAlignCalc.getAlignSpeeds(0.0, 0.0, pose)
+
+        val expectedOmegaMagnitude = sqrt(0.5) * Constants.AlignConstants.MAX_ANGULAR_SPEED
+        assertEquals(expectedOmegaMagnitude, Math.abs(result.omegaRadiansPerSecond), 0.001)
+    }
+
+    @Test
+    fun `getAlignSpeeds rotation is capped at MAX_ANGULAR_SPEED outside fine-align zone`() {
+        // Beyond FINE_ALIGN_ROT_DEADZONE, omega should be exactly MAX_ANGULAR_SPEED
+        val beyondZone = Constants.AlignConstants.FINE_ALIGN_ROT_DEADZONE * 2.0
+        val pose = Pose3d(Translation3d(0.0, 0.0, 0.0), Rotation3d(0.0, beyondZone, 0.0))
+        val result = AutoAlignCalc.getAlignSpeeds(0.0, 0.0, pose)
+
+        assertEquals(Constants.AlignConstants.MAX_ANGULAR_SPEED, Math.abs(result.omegaRadiansPerSecond), 0.001)
     }
 }

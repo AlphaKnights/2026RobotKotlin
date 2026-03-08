@@ -16,7 +16,6 @@ class AutoAlignAutoCommand(
     private val direction: Constants.AlignDirection,
 ) : Command() {
     private val timer = Timer()
-    private var latestPose: Pose3d? = null
 
     init {
         addRequirements(DriveSubsystem)
@@ -29,75 +28,60 @@ class AutoAlignAutoCommand(
     }
 
     override fun execute() {
-        val curPose: Pose3d? = LimelightSubsystem.tagPose
-        curPose ?: return
-
+        val currentPose = LimelightSubsystem.tagPose
+        if (currentPose == null) {
+            seekTagByRotating()
+            return
+        }
         timer.reset()
+        driveToAlignmentPosition(currentPose)
+    }
 
-        val speeds =
-            AutoAlignCalc.getAlignSpeeds(
-                goalX =
-                    if (direction ==
-                        Constants.AlignDirection.LEFT
-                    ) {
-                        Constants.AlignConstants.LEFT_X_OFFSET
-                    } else {
-                        Constants.AlignConstants.RIGHT_X_OFFSET
-                    },
-                goalZ =
-                    if (direction ==
-                        Constants.AlignDirection.LEFT
-                    ) {
-                        Constants.AlignConstants.LEFT_Z_OFFSET
-                    } else {
-                        Constants.AlignConstants.RIGHT_Z_OFFSET
-                    },
-                curPose = curPose,
+    // If we haven't seen a tag for ALIGN_SEEK_TIMEOUT seconds, slowly rotate to scan
+    // for one. We wait the timeout first so a momentary vision dropout doesn't
+    // immediately trigger a spin.
+    private fun seekTagByRotating() {
+        if (timer.get() > Constants.AlignConstants.ALIGN_SEEK_TIMEOUT) {
+            DriveSubsystem.drive(
+                // Bug fix: was Constants.AlignConstants.MAX_SPEED (meters/second) —
+                // a linear speed constant used as an angular speed. MAX_SPEED and
+                // MAX_ANGULAR_SPEED currently share the value 1.0 so this was invisible,
+                // but they measure different physical quantities. Units matter: if either
+                // constant is ever tuned independently, this would silently produce the
+                // wrong rotation rate.
+                ChassisSpeeds(0.0, 0.0, Constants.AlignConstants.MAX_ANGULAR_SPEED),
+                fieldRelative = false,
             )
+        }
+    }
 
-        if (
-            speeds.vxMetersPerSecond == 0.0 &&
+    private fun driveToAlignmentPosition(currentPose: Pose3d) {
+        val (goalX, goalZ) = goalOffsetForDirection()
+        val speeds = AutoAlignCalc.getAlignSpeeds(goalX, goalZ, currentPose)
+        if (speeds.vxMetersPerSecond == 0.0 &&
             speeds.vyMetersPerSecond == 0.0 &&
             speeds.omegaRadiansPerSecond == 0.0
         ) {
             DriveSubsystem.setX()
-            return
+        } else {
+            DriveSubsystem.drive(speeds, fieldRelative = false)
         }
-
-        DriveSubsystem.drive(
-            speeds,
-            fieldRelative = false,
-        )
-
-        latestPose = curPose
     }
 
-    override fun isFinished(): Boolean {
-        val curPose: Pose3d? = latestPose
-
-        if (curPose == null) {
-            val time = timer.get()
-            if (time >
-                Constants.AlignConstants.ALIGN_TIMEOUT
-            ) {
-                return true
-            }
-
-            if (time >
-                Constants.AlignConstants.ALIGN_SEEK_TIMEOUT
-            ) {
-                DriveSubsystem.drive(
-                    speeds =
-                        ChassisSpeeds(
-                            0.0,
-                            0.0,
-                            Constants.AlignConstants.MAX_SPEED,
-                        ),
-                    fieldRelative = false,
-                )
-            }
-            return false
+    private fun goalOffsetForDirection(): Pair<Double, Double> =
+        when (direction) {
+            Constants.AlignDirection.LEFT ->
+                Pair(Constants.AlignConstants.LEFT_X_OFFSET, Constants.AlignConstants.LEFT_Z_OFFSET)
+            Constants.AlignDirection.RIGHT ->
+                Pair(Constants.AlignConstants.RIGHT_X_OFFSET, Constants.AlignConstants.RIGHT_Z_OFFSET)
         }
-        return LimelightSubsystem.isAligned()
-    }
+
+    // Bug fix: The original isFinished() contained DriveSubsystem.drive() calls.
+    // WPILib's Command framework treats isFinished() as a simple yes/no question:
+    // "Are we done yet?" It must NOT move the robot or produce any other side effects.
+    // The scheduler can call isFinished() at unexpected times, and putting drive logic
+    // here leads to unpredictable robot behavior. All driving now lives in execute().
+    override fun isFinished(): Boolean =
+        timer.get() > Constants.AlignConstants.ALIGN_TIMEOUT ||
+            LimelightSubsystem.isAligned(direction)
 }

@@ -3,7 +3,6 @@
  */
 package frc.robot.commands.autoalign
 
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.AutoAlignCalc
@@ -18,32 +17,14 @@ class AutoAlignManualCommand(
     }
 
     override fun execute() {
-        val curPose: Pose3d =
+        val curPose =
             LimelightSubsystem.tagPose ?: run {
                 DriveSubsystem.setX()
                 return
             }
 
-        val speeds =
-            AutoAlignCalc.getAlignSpeeds(
-                goalX =
-                    if (direction ==
-                        Constants.AlignDirection.LEFT
-                    ) {
-                        Constants.AlignConstants.LEFT_X_OFFSET
-                    } else {
-                        Constants.AlignConstants.RIGHT_X_OFFSET
-                    },
-                goalZ =
-                    if (direction ==
-                        Constants.AlignDirection.LEFT
-                    ) {
-                        Constants.AlignConstants.LEFT_Z_OFFSET
-                    } else {
-                        Constants.AlignConstants.RIGHT_Z_OFFSET
-                    },
-                curPose = curPose,
-            )
+        val (goalX, goalZ) = goalOffsetForDirection()
+        val speeds = AutoAlignCalc.getAlignSpeeds(goalX, goalZ, curPose)
 
         if (
             speeds.vxMetersPerSecond == 0.0 &&
@@ -59,6 +40,14 @@ class AutoAlignManualCommand(
             fieldRelative = false,
         )
     }
+
+    private fun goalOffsetForDirection(): Pair<Double, Double> =
+        when (direction) {
+            Constants.AlignDirection.LEFT ->
+                Pair(Constants.AlignConstants.LEFT_X_OFFSET, Constants.AlignConstants.LEFT_Z_OFFSET)
+            Constants.AlignDirection.RIGHT ->
+                Pair(Constants.AlignConstants.RIGHT_X_OFFSET, Constants.AlignConstants.RIGHT_Z_OFFSET)
+        }
 
     override fun isFinished(): Boolean = false
 }
