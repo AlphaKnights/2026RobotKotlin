@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot
 
 import edu.wpi.first.math.MathUtil.applyDeadband
@@ -10,63 +13,70 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     private var lerpRot = 0.0
 
     fun x(): Double {
-        lerpX = lerp(-applyDeadband(
-            getRawAxis(1),      //right y
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale()
-        , lerpX)
+        lerpX =
+            lerp(
+                -applyDeadband(
+                    // right y
+                    getRawAxis(1),
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpX,
+            )
         return lerpX
     }
 
     fun y(): Double {
-        lerpY = lerp(-applyDeadband(
-            getRawAxis(0),    //right x
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale(),
-            lerpY
-                )
+        lerpY =
+            lerp(
+                -applyDeadband(
+                    // right x
+                    getRawAxis(0),
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpY,
+            )
         return lerpY
     }
 
     fun rot(): Double {
-        lerpRot = lerp(-applyDeadband(
-            getRawAxis(4),   //left x
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale(),
-            lerpRot
-                )
+        lerpRot =
+            lerp(
+                -applyDeadband(
+                    // left x
+                    getRawAxis(4),
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpRot,
+            )
         return lerpRot
     }
-    fun speedScale(): Double{
-        return ((-getRightTriggerAxis()+1))
-    }
 
+    fun speedScale(): Double = ((-getRightTriggerAxis() + 1))
 
-    fun heading() : Trigger {
-        return Trigger { getYButton() }
-    }
-    fun alignL() : Trigger {
-        return Trigger { getXButton()}
-    }
-    fun alignR() : Trigger {
-        return Trigger { getBButton()}
-    }
-    fun autoAim() : Trigger {
-        return Trigger { getAButton()}
-    }
+    fun heading(): Trigger = Trigger { getYButton() }
 
-    fun lerp(ref: Double, start: Double) : Double {
+    fun alignL(): Trigger = Trigger { getXButton() }
+
+    fun alignR(): Trigger = Trigger { getBButton() }
+
+    fun autoAim(): Trigger = Trigger { getAButton() }
+
+    fun lerp(
+        ref: Double,
+        start: Double,
+    ): Double {
         if (ref > start) {
-            return if (start + Constants.OperatorConstants.LERP_VAL > ref) ref
-            else start + Constants.OperatorConstants.LERP_VAL
+            return if (start + Constants.OperatorConstants.LERP_VAL > ref) {
+                ref
+            } else {
+                start + Constants.OperatorConstants.LERP_VAL
+            }
         } else {
-            return if (start - Constants.OperatorConstants.LERP_VAL < ref) ref
-            else start - Constants.OperatorConstants.LERP_VAL
+            return if (start - Constants.OperatorConstants.LERP_VAL < ref) {
+                ref
+            } else {
+                start - Constants.OperatorConstants.LERP_VAL
+            }
         }
-
     }
-
-
-
-
 }

@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot
 
 /*
@@ -7,31 +10,26 @@ package frc.robot
  * `const` definitions. Other constant types should use `val` definitions.
  */
 
-import com.revrobotics.spark.config.SparkBaseConfig
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import kotlin.math.PI
 
-
-
-object Constants
-{
-    object OperatorConstants
-    {
+object Constants {
+    object OperatorConstants {
         const val DRIVER_CONTROLLER_PORT = 0
         const val DRIVE_DEADBAND = 0.01
         const val LERP_VAL = 0.035
 
         const val RESET_HEADING_BUTTON = 11
 
-        const val ALIGN_LEFT_BUTTON = 9 //joystick
-        const val ALIGN_RIGHT_BUTTON = 10 //joystick
+        const val ALIGN_LEFT_BUTTON = 9 // joystick
+        const val ALIGN_RIGHT_BUTTON = 10 // joystick
 
         const val BUTTON_BOARD_PORT = 2
 
-        const val ANGLE_BUTTON = 12 //joystick
+        const val ANGLE_BUTTON = 12 // joystick
     }
 
     object DriveConstants {
@@ -41,55 +39,53 @@ object Constants
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)
 
-        private val MODULE_POSITIONS = arrayOf(
-            Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-            Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0)
-        )
+        private val MODULE_POSITIONS =
+            arrayOf(
+                Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+                Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+            )
 
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.0)
         val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.317)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.119) //+ is clockwise
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33)//- counter-clockwise
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.119) // + is clockwise
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33) // - counter-clockwise
 
+        //   back right - > front left
+        //   back left - >front right
+        //   front left -> back right
+        // front right -> back left
 
-     //   back right - > front left
-     //   back left - >front right
-     //   front left -> back right
-     // front right -> back left
+        const val FRONT_LEFT_DRIVING_ID = 4 // 8->4
+        const val REAR_LEFT_DRIVING_ID = 19 // 5->19
+        const val FRONT_RIGHT_DRIVING_ID = 7 // 19->5
+        const val REAR_RIGHT_DRIVING_ID = 8 // 4->8
 
+        const val FRONT_LEFT_TURNING_ID = 3 // 2->3
+        const val REAR_LEFT_TURNING_ID = 6 // 7->6
+        const val FRONT_RIGHT_TURNING_ID = 5 // 6->7
+        const val REAR_RIGHT_TURNING_ID = 2 // 3->2
 
-        const val FRONT_LEFT_DRIVING_ID = 4 //8->4
-        const val REAR_LEFT_DRIVING_ID = 19  //5->19
-        const val FRONT_RIGHT_DRIVING_ID = 7 //19->5
-        const val REAR_RIGHT_DRIVING_ID = 8  //4->8
-
-        const val FRONT_LEFT_TURNING_ID = 3 //2->3
-        const val REAR_LEFT_TURNING_ID = 6   //7->6
-        const val FRONT_RIGHT_TURNING_ID = 5 //6->7
-        const val REAR_RIGHT_TURNING_ID = 2  //3->2
-
-        const val FRONT_LEFT_CANCODER_ID = 9   //11->9
-        const val REAR_LEFT_CANCODER_ID = 10   //12->10
-        const val FRONT_RIGHT_CANCODER_ID = 12  //10->12
-        const val REAR_RIGHT_CANCODER_ID = 11    //9->11
-
+        const val FRONT_LEFT_CANCODER_ID = 9 // 11->9
+        const val REAR_LEFT_CANCODER_ID = 10 // 12->10
+        const val FRONT_RIGHT_CANCODER_ID = 12 // 10->12
+        const val REAR_RIGHT_CANCODER_ID = 11 // 9->11
     }
 
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
-        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0)*PI
+        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0) * PI
 
-        //const val WHEEL_CIRCUMFERENCE = 0.5 // meters
+        // const val WHEEL_CIRCUMFERENCE = 0.5 // meters
 
         const val DRIVING_P = 0.8
         const val DRIVING_I = 0.0
         const val DRIVING_D = 0.0
         const val DRIVING_FF = 1.0
-        const val DRIVING_V = 0.12//0.12*DRIVE_RATIO
+        const val DRIVING_V = 0.12 // 0.12*DRIVE_RATIO
         const val DRIVING_A = 1.5
         const val TURNING_P = 40.0
         const val TURNING_I = 0.0
@@ -145,6 +141,7 @@ object Constants
         LEFT,
         RIGHT,
     }
+
     object AimingConstants {
         const val DISTANCE = 1.0
         const val GOOD_DISTANCE_TOLERANCE = 0.5
@@ -158,6 +155,3 @@ object Constants
         const val MIN_SPEED = 0.2
     }
 }
-
-
-

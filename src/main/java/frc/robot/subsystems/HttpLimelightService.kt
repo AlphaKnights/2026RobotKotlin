@@ -12,7 +12,8 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
-//for multiple limelights make it a class
+
+// for multiple limelights make it a class
 object HttpLimelightService : LimelightService {
     private val client =
         HttpClient
