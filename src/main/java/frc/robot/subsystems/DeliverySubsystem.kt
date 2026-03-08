@@ -1,14 +1,10 @@
 package frc.robot.subsystems
 
+import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
-import com.revrobotics.spark.SparkBase
-import com.revrobotics.spark.SparkLowLevel
-import com.revrobotics.spark.SparkMax
-import com.revrobotics.spark.config.SparkBaseConfig
-import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.wpilibj.Ultrasonic
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants.LaunchConstants
@@ -22,13 +18,14 @@ object DeliverySubsystem : SubsystemBase() {
         )
      */
     /* Ultrasonic if we need one */
-    private val launchMotor1 =
+    private val CAN = CANBus("Subsystem")
+    private val leftLaunchMotor =
         TalonFX(
-            LaunchConstants.MOTOR_ID1,
+            LaunchConstants.LEFTLAUNCHMOTOR_ID1, CAN
         )
-    private val launchMotor2 =
+    private val rightLaunchMotor =
         TalonFX(
-            LaunchConstants.MOTOR_ID2,
+            LaunchConstants.RIGHTLAUNCHMOTOR_ID2, CAN
         )
     init {
         Ultrasonic.setAutomaticMode(true)
@@ -54,7 +51,7 @@ object DeliverySubsystem : SubsystemBase() {
                 }
             }
 
-        launchMotor1.getConfigurator().apply(launchMotorConfig1)
+        leftLaunchMotor.getConfigurator().apply(launchMotorConfig1)
 
         val launchMotorConfig2 =
             TalonFXConfiguration().apply {
@@ -73,11 +70,11 @@ object DeliverySubsystem : SubsystemBase() {
                 }
 
                 MotorOutput.apply {
-                    InvertedValue.Clockwise_Positive
+                    InvertedValue.CounterClockwise_Positive
                 }
             }
 
-        launchMotor2.getConfigurator().apply(launchMotorConfig2)
+        rightLaunchMotor.getConfigurator().apply(launchMotorConfig2)
         /* rangeFinder.isEnabled = true */
 
 //        val launchMotorConfig =
@@ -93,13 +90,16 @@ object DeliverySubsystem : SubsystemBase() {
     }
 
     fun forward(launchProp: Double) {
-        launchMotor1.setControl(VelocityVoltage(launchProp))
-        launchMotor2.setControl(VelocityVoltage(launchProp))
+        //leftLaunchMotor.setControl(VelocityVoltage(launchProp))
+        //rightLaunchMotor.setControl(VelocityVoltage(launchProp))
+        leftLaunchMotor.set(LaunchConstants.LAUNCH_SPEED)
+        rightLaunchMotor.set(LaunchConstants.LAUNCH_SPEED)
+
     }
 
     fun stop() {
-        launchMotor1.stopMotor()
-        launchMotor2.stopMotor()
+        leftLaunchMotor.stopMotor()
+        rightLaunchMotor.stopMotor()
     }
 
     /*

@@ -82,7 +82,7 @@ object RobotContainer
         ))
 
         buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
-            .onTrue(
+            .whileTrue(
                 DeliveryCommand()
             )
 

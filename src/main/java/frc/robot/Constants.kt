@@ -42,7 +42,7 @@ object Constants
         const val DELIVERY_BUTTON = 10
     }
     object IntakeConstants {
-        const val INTAKE_MOTOR_ID = 32
+        const val INTAKE_MOTOR_ID = 34
         const val RIGHT_LEVER_MOTOR_ID = 31
         const val LEFT_LEVER_MOTOR_ID = 67
         const val INTAKE_SPEED = 0.5
@@ -73,7 +73,7 @@ object Constants
 
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 6
+        const val MAX_METERS_PER_SECOND = 2
         const val MAX_ANGULAR_SPEED = 5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -147,9 +147,9 @@ object Constants
 //        const val IP_ADDR = "172.29.0.1"
     }
     object LaunchConstants {
-        const val MOTOR_ID1 = 30
-        const val MOTOR_ID2 = 27
-        const val LAUNCH_SPEED = 0.6
+        const val LEFTLAUNCHMOTOR_ID1 = 54
+        const val RIGHTLAUNCHMOTOR_ID2 = 28
+        const val LAUNCH_SPEED = 0.3
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0

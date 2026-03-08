@@ -1,5 +1,6 @@
 package frc.robot.subsystems
 
+import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
@@ -17,7 +18,8 @@ import frc.robot.Constants
 
 
 object IntakeSubsystem : SubsystemBase() {
-    private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID)
+    private val CAN = CANBus("Subsystem")
+    private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID, CAN)
 
     private val rightleverMotor =
         SparkMax(
