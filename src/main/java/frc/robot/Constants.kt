@@ -34,12 +34,47 @@ object Constants
         const val ANGLE_BUTTON = 12 //joystick
 
         const val INTAKE_BUTTON = 6
-        const val DELIVERY_BUTTON = 9
+        const val INTAKE_REVERSE_BUTTON = 7
+        const val INTAKE_LEVER_OUT_MANUAL_BUTTON = 8
+        const val INTAKE_LEVER_IN_MANUAL_BUTTON = 9
+        const val INTAKE_LEVER_OUT_AUTO_BUTTON = 5
+        const val INTAKE_LEVER_IN_AUTO_BUTTON = 4
+        const val DELIVERY_BUTTON = 10
+    }
+    object IntakeConstants {
+        const val INTAKE_MOTOR_ID = 32
+        const val RIGHT_LEVER_MOTOR_ID = 31
+        const val LEFT_LEVER_MOTOR_ID = 67
+        const val INTAKE_SPEED = 0.5
+
+        // Limits should be in rotations
+        const val LEVER_LIMIT_FORWARD = 0.0
+        const val LEVER_LIMIT_REVERSE = 0.25
+
+        const val P = 1.0
+        const val I = 1.0
+        const val D = 1.0
+
+        const val LEVER_OUT_POSITION = 0.25
+        const val LEVER_IN_POSITION = 0.0
+
+        const val LEVER_SPEED = 1.0 // in rpm
+
+        const val INTAKE_CURRENT_LIMIT = 40.0
+
     }
 
+    enum class IntakeDirection {
+        IN,
+        OUT,
+    }
+
+
+
+
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 3
-        const val MAX_ANGULAR_SPEED = 6
+        const val MAX_METERS_PER_SECOND = 6
+        const val MAX_ANGULAR_SPEED = 5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)

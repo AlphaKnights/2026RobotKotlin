@@ -3,6 +3,9 @@ package frc.robot.subsystems
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.NeutralModeValue
+import com.revrobotics.PersistMode
+import com.revrobotics.ResetMode
+import com.revrobotics.spark.FeedbackSensor
 import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
@@ -62,7 +65,7 @@ object IntakeSubsystem : SubsystemBase() {
 
                 closedLoop.apply {
                     feedbackSensor(
-                        ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder,
+                        FeedbackSensor.kPrimaryEncoder,
                     )
                     pid(
                         Constants.IntakeConstants.P,
@@ -84,14 +87,14 @@ object IntakeSubsystem : SubsystemBase() {
         }
         rightleverMotor.configure( //the right one is leading
             rightConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
         )
 
         leftLeverMotor.configure(
             leftConfig,
-            SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
         )
 
     }
@@ -101,22 +104,22 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun setPosition(position: Double) {
-        rightPidController.setReference(
+        rightPidController.setSetpoint(
             position,
             SparkBase.ControlType.kPosition,
             )
-        leftPidController.setReference(
+        leftPidController.setSetpoint(
             position,
             SparkBase.ControlType.kPosition,
         )
     }
 
     fun moveLever(speed: Double) {
-        rightPidController.setReference(
+        rightPidController.setSetpoint(
             speed,
             SparkBase.ControlType.kVelocity // maybe change this, units are rpm right now
         )
-        leftPidController.setReference(
+        leftPidController.setSetpoint(
             speed,
             SparkBase.ControlType.kVelocity // maybe change this, units are rpm right now
         )

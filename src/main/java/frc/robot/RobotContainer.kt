@@ -15,6 +15,7 @@ import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import frc.robot.XBoxController
 import frc.robot.commands.DeliveryCommand
+import frc.robot.commands.intake.*
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -44,6 +45,10 @@ object RobotContainer
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
                 "Delivery" to DeliveryCommand(),
+                "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
+                "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
+                "Intake" to IntakeCommand(false)
+
             )
         )
 
@@ -80,6 +85,46 @@ object RobotContainer
             .onTrue(
                 DeliveryCommand()
             )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON
+            ).onTrue(
+                IntakeLeverCommand(
+                    Constants.IntakeConstants.LEVER_IN_POSITION
+                )
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON
+            ).onTrue(
+                IntakeLeverCommand(
+                    Constants.IntakeConstants.LEVER_OUT_POSITION
+                )
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON
+            ).whileTrue(
+                IntakeLeverManualCommand(
+                    Constants.IntakeDirection.IN
+                )
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON
+            ).whileTrue(
+                IntakeLeverManualCommand(
+                    Constants.IntakeDirection.OUT
+                )
+            )
+
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(IntakeCommand(false))
+
+
 
 
     }
