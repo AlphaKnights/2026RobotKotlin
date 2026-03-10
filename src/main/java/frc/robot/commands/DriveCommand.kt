@@ -36,16 +36,11 @@ class DriveCommand(
             )
         } else {
             DriveSubsystem.drive(
-                ChassisSpeeds(
-                    x() *
-                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                    y() *
-                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                    AimingCalc.getAimingAngleChange(
-                        DriveSubsystem.getPose(),
-                        x() * Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                        y() * Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                    ),
+                AimingCalc.getArcDriveSpeeds(
+                    DriveSubsystem.getPose(),
+                    x(), // controller X → tangential movement along arc
+                    DriveSubsystem.getCurrentSpeeds(), // current velocity for rotation feedforward
+                    // y() intentionally omitted — arc system controls radial position
                 ),
                 fieldRelative = true,
             )

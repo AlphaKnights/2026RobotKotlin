@@ -147,10 +147,27 @@ object Constants {
         const val GOOD_DISTANCE_TOLERANCE = 0.5
         const val MIDDLING_DISTANCE_TOLERANCE = 1.0
 
-        const val HUB_X = 5.0
-        const val HUB_Y = 5.0
+        // Hub field positions (meters). Set to real field measurements before competition.
+        // Red hub: robot approaches from y < RED_HUB_Y
+        // Blue hub: robot approaches from y > BLUE_HUB_Y
+        const val RED_HUB_X = 5.0
+        const val RED_HUB_Y = 5.0
+        const val BLUE_HUB_X = 5.0
+        const val BLUE_HUB_Y = 3.0 // placeholder — team must tune
+
+        // Valid shooting-arc sector, in degrees, measured from hub center.
+        //   0° = +X on field,  90° = +Y,  180° = -X,  270° = -Y (toward driver station)
+        // These values apply for red alliance (robot below hub, y < RED_HUB_Y).
+        // For blue alliance the sector is mirrored vertically — team must tune.
+        const val MIN_ANGLE_DEGREES = 200.0
+        const val MAX_ANGLE_DEGREES = 340.0
+
+        // Fallback when DriverStation hasn't reported an alliance yet (e.g. practice mode).
+        // true = red alliance, false = blue alliance.
+        const val DEFAULT_TO_RED_ALLIANCE = true
 
         const val MAX_SPEED = 1.0
+        const val MAX_ANGULAR_SPEED = 1.0
         const val SLOW_DISTANCE = 1.0
         const val MIN_SPEED = 0.2
     }
