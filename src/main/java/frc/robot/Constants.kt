@@ -73,7 +73,7 @@ object Constants
 
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 2
+        const val MAX_METERS_PER_SECOND = 5
         const val MAX_ANGULAR_SPEED = 5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -88,10 +88,10 @@ object Constants
 
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
-        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.0)
-        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.317)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.119) //+ is clockwise
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33)//- counter-clockwise
+        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.83)
+        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.619)
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.817) //+ is clockwise
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.50)//- counter-clockwise
 
 
      //   back right - > front left
@@ -100,20 +100,20 @@ object Constants
      // front right -> back left
 
 
-        const val FRONT_LEFT_DRIVING_ID = 4 //8->4
-        const val REAR_LEFT_DRIVING_ID = 19  //5->19
-        const val FRONT_RIGHT_DRIVING_ID = 7 //19->5
-        const val REAR_RIGHT_DRIVING_ID = 8  //4->8
+        const val FRONT_LEFT_DRIVING_ID = 8 //8->4
+        const val REAR_LEFT_DRIVING_ID = 7 //5->19
+        const val FRONT_RIGHT_DRIVING_ID = 19 //19->5
+        const val REAR_RIGHT_DRIVING_ID = 4  //4->8
 
-        const val FRONT_LEFT_TURNING_ID = 3 //2->3
-        const val REAR_LEFT_TURNING_ID = 6   //7->6
-        const val FRONT_RIGHT_TURNING_ID = 5 //6->7
-        const val REAR_RIGHT_TURNING_ID = 2  //3->2
+        const val FRONT_LEFT_TURNING_ID = 2 //2->3
+        const val REAR_LEFT_TURNING_ID = 5   //7->6
+        const val FRONT_RIGHT_TURNING_ID = 6 //6->7
+        const val REAR_RIGHT_TURNING_ID = 3  //3->2
 
-        const val FRONT_LEFT_CANCODER_ID = 9   //11->9
-        const val REAR_LEFT_CANCODER_ID = 10   //12->10
-        const val FRONT_RIGHT_CANCODER_ID = 12  //10->12
-        const val REAR_RIGHT_CANCODER_ID = 11    //9->11
+        const val FRONT_LEFT_CANCODER_ID = 11   //11->9
+        const val REAR_LEFT_CANCODER_ID = 12   //12->10
+        const val FRONT_RIGHT_CANCODER_ID = 10  //10->12
+        const val REAR_RIGHT_CANCODER_ID = 9    //9->11
 
     }
 
@@ -149,15 +149,23 @@ object Constants
     object LaunchConstants {
         const val LEFTLAUNCHMOTOR_ID1 = 54
         const val RIGHTLAUNCHMOTOR_ID2 = 28
-        const val LAUNCH_SPEED = 0.3
+        const val LAUNCH_SPEED = 1.0
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0
         const val LAUNCH_FF = 0.0
         const val LAUNCH_V = 0.0071
         const val LAUNCH_A = 0.0
-        const val LAUNCH_MOTOR_CURRENT_LIMITS = 40.0
+        const val LAUNCH_MOTOR_CURRENT_LIMITS = 60.0
     }
+    object RollerConstants {
+        const val MOTOR_ID = 23
+        const val ROLLER_SPEED = 0.6
+        const val ROLLER_MOTOR_CURRENT_LIMITS = 40.0
+        const val BUTTON = 3
+    }
+
+
 
     object AlignConstants {
         const val ALIGN_DEADZONE = 0.03
