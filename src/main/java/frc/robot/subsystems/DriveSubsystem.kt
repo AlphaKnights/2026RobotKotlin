@@ -2,6 +2,8 @@ package frc.robot.subsystems
 
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.Pigeon2
+import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.swerve.SwerveModule
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
@@ -12,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
@@ -24,6 +27,10 @@ object DriveSubsystem : SubsystemBase()
 {
 
     private val xBoxController = XBoxController()
+
+
+
+
 
     private var frontLeft: TalonSwerveModule = TalonSwerveModule(
         Constants.DriveConstants.FRONT_LEFT_DRIVING_ID,
@@ -50,6 +57,10 @@ object DriveSubsystem : SubsystemBase()
         Constants.DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET
     )
     private var FrontRightEncoder = CANcoder(Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID)
+    private var fL : TalonFX = TalonFX(Constants.DriveConstants.FRONT_LEFT_DRIVING_ID)
+    private var fR : TalonFX = TalonFX(Constants.DriveConstants.FRONT_RIGHT_DRIVING_ID)
+    private var bR : TalonFX = TalonFX(Constants.DriveConstants.REAR_RIGHT_DRIVING_ID)
+    private var bL : TalonFX = TalonFX(Constants.DriveConstants.REAR_LEFT_DRIVING_ID)
     private var gyro: Pigeon2 = Pigeon2(20)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
@@ -59,16 +70,16 @@ object DriveSubsystem : SubsystemBase()
 
 
 
-   // private val states: Array<SwerveModuleState> = arrayOf(
-      //  new Mod,
-        //frontLeft,
-        //rearLeft,
-    //    rearRight,
- //   )
-    var publisher: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault()
+    private val states: Array<SwerveModuleState> = arrayOf(
+        SwerveModuleState(),
+        SwerveModuleState(),
+        SwerveModuleState(),
+        SwerveModuleState(),
+    )
+    var swervePublisher: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault()
         .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish()
-
-
+    var currentPublisher: DoublePublisher = NetworkTableInstance.getDefault()
+        .getDoubleTopic("Drive/StatorCurrent").publish()
 
 
 
@@ -112,6 +123,7 @@ object DriveSubsystem : SubsystemBase()
     {
         // This method will be called once per scheduler run
 //        if (Robot.isAutonomous()) {
+
             odometry.update(
                 Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),
                 arrayOf(
@@ -121,7 +133,11 @@ object DriveSubsystem : SubsystemBase()
                     rearRight.getPosition(),
                 )
             )
-           // publisher.set(states);
+        swervePublisher.set(states);
+        currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
+        currentPublisher.set(fR.getStatorCurrent().getValueAsDouble())
+
+
 
 //        }
 

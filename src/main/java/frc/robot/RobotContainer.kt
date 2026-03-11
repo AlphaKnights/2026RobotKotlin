@@ -15,6 +15,7 @@ import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import frc.robot.XBoxController
 import frc.robot.commands.DeliveryCommand
+import frc.robot.commands.StorageCommand
 import frc.robot.commands.intake.*
 
 /**
@@ -80,6 +81,8 @@ object RobotContainer
         xBoxController.alignR().whileTrue(AutoAlignManualCommand(
             Constants.AlignDirection.RIGHT,
         ))
+
+        buttonBoard.button(Constants.RollerConstants.BUTTON).whileTrue(StorageCommand())
 
         buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
             .whileTrue(
