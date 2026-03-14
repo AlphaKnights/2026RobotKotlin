@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants.RollerConstants
 
 object StorageSubsystem : SubsystemBase() {
-    private val CAN = CANBus("Subsystem")
-    private val rollerMotor = TalonFX(RollerConstants.MOTOR_ID, CAN)
+    private val CAN = CANBus("didy")
+    private val rollerMotor = TalonFX(RollerConstants.ROLLER_MOTOR_ID, CAN)
     init {
 
         val rollerMotorConfig = TalonFXConfiguration().apply {

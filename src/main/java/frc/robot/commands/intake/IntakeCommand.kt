@@ -16,6 +16,7 @@ class IntakeCommand(
     }
 
     override fun execute() {
+        IntakeSubsystem.limitOutput()
         val intakeSpeed =
             if (isReversed) {
                 -Constants.IntakeConstants.INTAKE_SPEED

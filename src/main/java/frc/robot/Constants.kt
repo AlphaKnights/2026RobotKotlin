@@ -7,14 +7,11 @@ package frc.robot
  * `const` definitions. Other constant types should use `val` definitions.
  */
 
-import com.revrobotics.spark.config.SparkBaseConfig
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import kotlin.math.PI
-
-
 
 object Constants
 {
@@ -33,32 +30,32 @@ object Constants
 
         const val ANGLE_BUTTON = 12 //joystick
 
-        const val INTAKE_BUTTON = 6
-        const val INTAKE_REVERSE_BUTTON = 7
-        const val INTAKE_LEVER_OUT_MANUAL_BUTTON = 8
+        const val INTAKE_BUTTON = 11
+        const val INTAKE_REVERSE_BUTTON = 4
+        const val INTAKE_LEVER_OUT_MANUAL_BUTTON = 12
         const val INTAKE_LEVER_IN_MANUAL_BUTTON = 9
-        const val INTAKE_LEVER_OUT_AUTO_BUTTON = 5
-        const val INTAKE_LEVER_IN_AUTO_BUTTON = 4
+        const val INTAKE_LEVER_OUT_AUTO_BUTTON = 2
+        const val INTAKE_LEVER_IN_AUTO_BUTTON = 1
         const val DELIVERY_BUTTON = 10
     }
     object IntakeConstants {
         const val INTAKE_MOTOR_ID = 34
         const val RIGHT_LEVER_MOTOR_ID = 31
-        const val LEFT_LEVER_MOTOR_ID = 67
+        const val LEFT_LEVER_MOTOR_ID = 62
         const val INTAKE_SPEED = 0.5
 
         // Limits should be in rotations
         const val LEVER_LIMIT_FORWARD = 0.0
         const val LEVER_LIMIT_REVERSE = 0.25
 
-        const val P = 1.0
-        const val I = 1.0
-        const val D = 1.0
+        const val P = 0.08
+        const val I = 0.0
+        const val D = 0.0
 
         const val LEVER_OUT_POSITION = 0.25
         const val LEVER_IN_POSITION = 0.0
 
-        const val LEVER_SPEED = 1.0 // in rpm
+        const val LEVER_SPEED = 0.2 // in rpm
 
         const val INTAKE_CURRENT_LIMIT = 40.0
 
@@ -68,9 +65,6 @@ object Constants
         IN,
         OUT,
     }
-
-
-
 
     object DriveConstants {
         const val MAX_METERS_PER_SECOND = 5
@@ -85,7 +79,6 @@ object Constants
             Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
             Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0)
         )
-
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.83)
@@ -147,9 +140,9 @@ object Constants
 //        const val IP_ADDR = "172.29.0.1"
     }
     object LaunchConstants {
-        const val LEFTLAUNCHMOTOR_ID1 = 54
-        const val RIGHTLAUNCHMOTOR_ID2 = 28
-        const val LAUNCH_SPEED = 1.0
+        const val LEFT_LAUNCHMOTOR_ID = 54
+        const val RIGHT_LAUNCHMOTOR_ID = 28
+        const val LAUNCH_SPEED = 0.85
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0
@@ -159,7 +152,7 @@ object Constants
         const val LAUNCH_MOTOR_CURRENT_LIMITS = 60.0
     }
     object RollerConstants {
-        const val MOTOR_ID = 23
+        const val ROLLER_MOTOR_ID = 23
         const val ROLLER_SPEED = 0.6
         const val ROLLER_MOTOR_CURRENT_LIMITS = 40.0
         const val BUTTON = 3

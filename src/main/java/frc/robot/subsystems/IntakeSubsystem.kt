@@ -2,7 +2,12 @@ package frc.robot.subsystems
 
 import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.configs.TalonFXConfigurator
+import com.ctre.phoenix6.controls.Follower
+import com.ctre.phoenix6.controls.PositionDutyCycle
 import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.signals.InvertedValue
+import com.ctre.phoenix6.signals.MotorAlignmentValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
@@ -13,28 +18,28 @@ import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig
 import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.config.SparkMaxConfig
+import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 
 
 object IntakeSubsystem : SubsystemBase() {
-    private val CAN = CANBus("Subsystem")
+    private val CAN = CANBus("didy")
     private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID, CAN)
 
     private val rightleverMotor =
-        SparkMax(
+        TalonFX(
             Constants.IntakeConstants.RIGHT_LEVER_MOTOR_ID,
-            SparkLowLevel.MotorType.kBrushless,
         )
 
     private val leftLeverMotor =
-        SparkMax(
+        TalonFX(
             Constants.IntakeConstants.LEFT_LEVER_MOTOR_ID,
-            SparkLowLevel.MotorType.kBrushless,
         )
 
-    val rightPidController = rightleverMotor.closedLoopController
-    val leftPidController = leftLeverMotor.closedLoopController
+    //val limitUp: DigitalInput = DigitalInput(2)
+    //val limitDown: DigitalInput = DigitalInput(3)
+
 
     init {
         val intakeMotorConfig=
@@ -50,91 +55,100 @@ object IntakeSubsystem : SubsystemBase() {
             }
 
         val globalConfig =
-            SparkMaxConfig().apply {
-                idleMode(SparkBaseConfig.IdleMode.kBrake)
-                softLimit.apply {
-                    forwardSoftLimitEnabled(true)
-                    reverseSoftLimitEnabled(true)
-
-                    forwardSoftLimit(Constants.IntakeConstants.LEVER_LIMIT_FORWARD)
-                    reverseSoftLimit(Constants.IntakeConstants.LEVER_LIMIT_REVERSE)
+            TalonFXConfiguration().apply {
+                CurrentLimits.apply {
+                    SupplyCurrentLimitEnable = true
+                    SupplyCurrentLimit = Constants.IntakeConstants.INTAKE_CURRENT_LIMIT
                 }
 
-                encoder.apply {
-                    positionConversionFactor(1.0) // rotations
-                    velocityConversionFactor(1.0) // rotations
+                SoftwareLimitSwitch.apply {
+                    ForwardSoftLimitEnable
+                    ReverseSoftLimitEnable
+
+                    ForwardSoftLimitThreshold = Constants.IntakeConstants.LEVER_LIMIT_FORWARD
+                    ReverseSoftLimitThreshold = Constants.IntakeConstants.LEVER_LIMIT_REVERSE
+                }
+
+                Slot0.apply {
+                    kI = Constants.IntakeConstants.I
+                    kP = Constants.IntakeConstants.P
+                    kD = Constants.IntakeConstants.D
+                }
+
+                MotorOutput.apply {
+                    InvertedValue.CounterClockwise_Positive
+                }
+
+                ResetMode.kResetSafeParameters
+                PersistMode.kPersistParameters
+
+                /*encoder.apply {
+                    positionConversionFactor(1.0)
+                    velocityConversionFactor(1.0)
                 }
 
                 closedLoop.apply {
                     feedbackSensor(
-                        FeedbackSensor.kPrimaryEncoder,
+                        FeedbackSensor.kPrimaryEncoder, //ClosedLoopConfig.Feedback.Sensor
                     )
                     pid(
-                        Constants.IntakeConstants.P,
-                        Constants.IntakeConstants.I,
-                        Constants.IntakeConstants.D,
+                        ClimbConstants.P,
+                        ClimbConstants.I,
+                        ClimbConstants.D,
                     )
                     outputRange(-1.0, 1.0)
-                    positionWrappingEnabled(false)
-                }
+                    positionWrappingEnabled(false)*/
             }
         intakeMotor.getConfigurator().apply(intakeMotorConfig)
+        leftLeverMotor.getConfigurator().apply(globalConfig)
+        rightleverMotor.getConfigurator().apply(globalConfig)
 
-        val leftConfig = SparkMaxConfig().apply {
-            follow(rightleverMotor)
-            apply(globalConfig)
-        }
-        val rightConfig = SparkMaxConfig().apply {
-            apply(globalConfig)
-        }
-        rightleverMotor.configure( //the right one is leading
-            rightConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters,
-        )
 
-        leftLeverMotor.configure(
-            leftConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters,
-        )
+
 
     }
 
     fun runIntake(speed: Double) {
-        intakeMotor.set(speed)
+        intakeMotor.set(-speed)
     }
 
     fun setPosition(position: Double) {
-        rightPidController.setSetpoint(
-            position,
-            SparkBase.ControlType.kPosition,
-            )
-        leftPidController.setSetpoint(
-            position,
-            SparkBase.ControlType.kPosition,
-        )
+        var m_request = PositionDutyCycle(0.0).withSlot(0)
+
+        rightleverMotor.setControl(m_request.withPosition(position))
+        leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Aligned))
+
+
+
     }
 
     fun moveLever(speed: Double) {
-        rightPidController.setSetpoint(
-            speed,
-            SparkBase.ControlType.kVelocity // maybe change this, units are rpm right now
-        )
-        leftPidController.setSetpoint(
-            speed,
-            SparkBase.ControlType.kVelocity // maybe change this, units are rpm right now
-        )
+        rightleverMotor.set(speed)
+        leftLeverMotor.set(speed)
     }
 
-    fun getPosition(): Double = rightleverMotor.encoder.getPosition()
+    fun getPosition(): Double {
+        return rightleverMotor.getPosition().getValueAsDouble()
+    }
+
 
     fun stopIntake() {
         intakeMotor.stopMotor()
     }
 
+    fun stopIntakeLever() {
+        rightleverMotor.stopMotor()
+        leftLeverMotor.stopMotor()
+    }
+    fun limitSwitchPressed(): Boolean {
+        //return (limitUp.get() || limitDown.get())
+        return false
+    }
+    fun limitOutput(){
+        //print("Limit Up Pressed: "+limitUp.get())
+        //print("Limit Down Pressed: "+limitDown.get())
 
-
+    }
 }
 
 

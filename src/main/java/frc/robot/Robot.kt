@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.subsystems.AimingCalc
+import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 
 /**
@@ -35,7 +37,7 @@ object Robot : TimedRobot() {
         // Kotlin initializer block, which effectually serves as the constructor code.
         // https://kotlinlang.org/docs/classes.html#constructors
         // This work can also be done in the inherited `robotInit()` method. But as of the 2025 season the
-        // `robotInit` method's Javadoc encourages using the constructor and the official templates
+        // `robotInit` m b ethod's Javadoc encourages using the constructor and the official templates
         // moved initialization code out `robotInit` and into the constructor. We follow suit in Kotlin.
 
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics.
@@ -94,6 +96,10 @@ object Robot : TimedRobot() {
         SmartDashboard.putNumber(
             "limelight yaw",
             LimelightSubsystem.tagPose?.rotation?.y ?: -1.0,
+        )
+        SmartDashboard.putNumber(
+            "Shooting Distance",
+            AimingCalc.canShoot(DriveSubsystem.getPose())
         )
     }
 

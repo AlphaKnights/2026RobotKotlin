@@ -48,8 +48,8 @@ object RobotContainer
                 "Delivery" to DeliveryCommand(),
                 "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
                 "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
-                "Intake" to IntakeCommand(false)
-
+                "Intake" to IntakeCommand(false),
+                "Indexer" to StorageCommand()
             )
         )
 
@@ -82,7 +82,10 @@ object RobotContainer
             Constants.AlignDirection.RIGHT,
         ))
 
-        buttonBoard.button(Constants.RollerConstants.BUTTON).whileTrue(StorageCommand())
+        buttonBoard.button(Constants.RollerConstants.BUTTON)
+            .whileTrue(
+                StorageCommand()
+            )
 
         buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
             .whileTrue(
@@ -125,11 +128,14 @@ object RobotContainer
                 )
             )
 
-        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(IntakeCommand(false))
-
-
-
-
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON)
+            .whileTrue(IntakeCommand(
+                false)
+            )
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON)
+            .whileTrue(IntakeCommand(
+                true)
+            )
     }
 
     fun getAutonomousCommand(): Command {

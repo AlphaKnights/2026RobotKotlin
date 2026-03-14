@@ -5,7 +5,7 @@ import frc.robot.Constants.AimingConstants
 import kotlin.math.*
 
 object AimingCalc {
-    fun canShoot(curPose: Pose2d): Int {
+    fun canShoot(curPose: Pose2d): Double {
         // in meters
         var x: Double = -curPose.getX()
         var y: Double = curPose.getY()
@@ -25,15 +25,15 @@ object AimingCalc {
         var distanceBadHigh: Boolean = (distanceTotal > AimingConstants.DISTANCE+AimingConstants.MIDDLING_DISTANCE_TOLERANCE)
 
         if (distanceBadHigh) {
-            return 1
+            return 1.0
         } else if (distanceMiddlingHigh) {
-            return 2
+            return 2.0
         } else if (distanceGood) {
-            return 3
+            return 3.0
         } else if (distanceMiddlingLow) {
-            return 4
+            return 4.0
         }
-        return 5
+        return 5.0
     }
     fun getAimingAngleChange(curPose: Pose2d, vx: Double, vy: Double): Double {
         // in meters and radians

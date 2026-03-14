@@ -28,10 +28,6 @@ object DriveSubsystem : SubsystemBase()
 
     private val xBoxController = XBoxController()
 
-
-
-
-
     private var frontLeft: TalonSwerveModule = TalonSwerveModule(
         Constants.DriveConstants.FRONT_LEFT_DRIVING_ID,
         Constants.DriveConstants.FRONT_LEFT_TURNING_ID,
@@ -58,9 +54,7 @@ object DriveSubsystem : SubsystemBase()
     )
     private var FrontRightEncoder = CANcoder(Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID)
     private var fL : TalonFX = TalonFX(Constants.DriveConstants.FRONT_LEFT_DRIVING_ID)
-    private var fR : TalonFX = TalonFX(Constants.DriveConstants.FRONT_RIGHT_DRIVING_ID)
-    private var bR : TalonFX = TalonFX(Constants.DriveConstants.REAR_RIGHT_DRIVING_ID)
-    private var bL : TalonFX = TalonFX(Constants.DriveConstants.REAR_LEFT_DRIVING_ID)
+
     private var gyro: Pigeon2 = Pigeon2(20)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
@@ -71,16 +65,16 @@ object DriveSubsystem : SubsystemBase()
 
 
     private val states: Array<SwerveModuleState> = arrayOf(
-        SwerveModuleState(),
-        SwerveModuleState(),
-        SwerveModuleState(),
-        SwerveModuleState(),
+        frontLeft.getState(),
+        frontRight.getState(),
+        rearLeft.getState(),
+        rearRight.getState(),
     )
     var swervePublisher: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault()
         .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish()
     var currentPublisher: DoublePublisher = NetworkTableInstance.getDefault()
         .getDoubleTopic("Drive/StatorCurrent").publish()
-
+    var counter = 0
 
 
     init {
@@ -121,6 +115,7 @@ object DriveSubsystem : SubsystemBase()
 
     override fun periodic()
     {
+        counter++
         // This method will be called once per scheduler run
 //        if (Robot.isAutonomous()) {
 
@@ -133,10 +128,11 @@ object DriveSubsystem : SubsystemBase()
                     rearRight.getPosition(),
                 )
             )
-        swervePublisher.set(states);
-        currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
-        currentPublisher.set(fR.getStatorCurrent().getValueAsDouble())
-
+      //  if(counter % 5 ==0) {
+            // swervePublisher.set(states);
+            //currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
+            //currentPublisher.set(fR.getStatorCurrent().getValueAsDouble())
+    //    }
 
 
 //        }

@@ -2,7 +2,6 @@ package frc.robot.subsystems
 
 import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.wpilibj.Ultrasonic
@@ -18,14 +17,14 @@ object DeliverySubsystem : SubsystemBase() {
         )
      */
     /* Ultrasonic if we need one */
-    private val CAN = CANBus("Subsystem")
+    private val CAN = CANBus("didy")
     private val leftLaunchMotor =
         TalonFX(
-            LaunchConstants.LEFTLAUNCHMOTOR_ID1, CAN
+            LaunchConstants.LEFT_LAUNCHMOTOR_ID, CAN
         )
     private val rightLaunchMotor =
         TalonFX(
-            LaunchConstants.RIGHTLAUNCHMOTOR_ID2, CAN
+            LaunchConstants.RIGHT_LAUNCHMOTOR_ID, CAN
         )
     init {
         Ultrasonic.setAutomaticMode(true)
@@ -47,7 +46,7 @@ object DeliverySubsystem : SubsystemBase() {
                 }
 
                 MotorOutput.apply {
-                    InvertedValue.CounterClockwise_Positive
+                    InvertedValue.Clockwise_Positive
                 }
             }
 
@@ -93,7 +92,7 @@ object DeliverySubsystem : SubsystemBase() {
         //leftLaunchMotor.setControl(VelocityVoltage(launchProp))
         //rightLaunchMotor.setControl(VelocityVoltage(launchProp))
         leftLaunchMotor.set(LaunchConstants.LAUNCH_SPEED)
-        rightLaunchMotor.set(LaunchConstants.LAUNCH_SPEED)
+        rightLaunchMotor.set(-LaunchConstants.LAUNCH_SPEED)
 
     }
 

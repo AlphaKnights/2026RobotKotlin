@@ -1,5 +1,6 @@
 package frc.robot.commands.intake
 
+import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.IntakeSubsystem
 import frc.robot.Constants
@@ -7,6 +8,8 @@ import frc.robot.Constants
 class IntakeLeverManualCommand(
     private val direction: Constants.IntakeDirection,
 ) : Command(){
+
+
     init {
         addRequirements(IntakeSubsystem)
     }
@@ -26,11 +29,11 @@ class IntakeLeverManualCommand(
     }
 
     override fun isFinished(): Boolean {
-        return false
+        return IntakeSubsystem.limitSwitchPressed()
     }
 
     override fun end(interrupted: Boolean) {
-        IntakeSubsystem.stopIntake()
+        IntakeSubsystem.stopIntakeLever()
 
     }
 
