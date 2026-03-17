@@ -30,11 +30,13 @@ object IntakeSubsystem : SubsystemBase() {
     private val rightleverMotor =
         TalonFX(
             Constants.IntakeConstants.RIGHT_LEVER_MOTOR_ID,
+            CAN,
         )
 
     private val leftLeverMotor =
         TalonFX(
             Constants.IntakeConstants.LEFT_LEVER_MOTOR_ID,
+            CAN,
         )
 
     //val limitUp: DigitalInput = DigitalInput(2)
@@ -77,6 +79,7 @@ object IntakeSubsystem : SubsystemBase() {
 
                 MotorOutput.apply {
                     InvertedValue.CounterClockwise_Positive
+
                 }
 
                 ResetMode.kResetSafeParameters
@@ -99,9 +102,9 @@ object IntakeSubsystem : SubsystemBase() {
                     outputRange(-1.0, 1.0)
                     positionWrappingEnabled(false)*/
             }
-        intakeMotor.getConfigurator().apply(intakeMotorConfig)
-        leftLeverMotor.getConfigurator().apply(globalConfig)
-        rightleverMotor.getConfigurator().apply(globalConfig)
+        intakeMotor.configurator.apply(intakeMotorConfig)
+        leftLeverMotor.configurator.apply(globalConfig)
+        rightleverMotor.configurator.apply(globalConfig)
 
 
 
@@ -123,12 +126,12 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun moveLever(speed: Double) {
-        rightleverMotor.set(speed)
+        rightleverMotor.set(-speed)
         leftLeverMotor.set(speed)
     }
 
     fun getPosition(): Double {
-        return rightleverMotor.getPosition().getValueAsDouble()
+        return rightleverMotor.position.valueAsDouble
     }
 
 

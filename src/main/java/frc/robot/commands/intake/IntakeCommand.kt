@@ -11,10 +11,6 @@ class IntakeCommand(
         addRequirements(IntakeSubsystem)
     }
 
-    override fun initialize() {
-        super.initialize()
-    }
-
     override fun execute() {
         IntakeSubsystem.limitOutput()
         val intakeSpeed =

@@ -126,18 +126,18 @@ class TalonSwerveModule(
     fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
             //driveMotor.rotor
-            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.getPosition().valueAsDouble,
+            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.position.valueAsDouble,
             Rotation2d.fromRotations(
-                turnMotor.getPosition().valueAsDouble,
+                turnMotor.position.valueAsDouble,
             ) +
                 offset,
         )
 
     fun getState(): SwerveModuleState =
         SwerveModuleState(
-            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.getVelocity().valueAsDouble,
+            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.velocity.valueAsDouble,
             Rotation2d.fromRotations(
-                turnMotor.getPosition().valueAsDouble,
+                turnMotor.position.valueAsDouble,
             ) +
                 offset,
         )

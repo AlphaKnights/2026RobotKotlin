@@ -12,10 +12,6 @@ class IntakeLeverCommand(
         addRequirements(IntakeSubsystem)
     }
 
-    override fun initialize() {
-        super.initialize()
-    }
-
     override fun execute() {
         IntakeSubsystem.setPosition(targetPosition)
     }

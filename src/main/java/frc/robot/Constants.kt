@@ -13,10 +13,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import kotlin.math.PI
 
-object Constants
-{
-    object OperatorConstants
-    {
+object Constants {
+    object OperatorConstants {
         const val DRIVER_CONTROLLER_PORT = 0
         const val DRIVE_DEADBAND = 0.01
         const val LERP_VAL = 0.035
@@ -38,10 +36,11 @@ object Constants
         const val INTAKE_LEVER_IN_AUTO_BUTTON = 1
         const val DELIVERY_BUTTON = 10
     }
+
     object IntakeConstants {
         const val INTAKE_MOTOR_ID = 34
         const val RIGHT_LEVER_MOTOR_ID = 31
-        const val LEFT_LEVER_MOTOR_ID = 62
+        const val LEFT_LEVER_MOTOR_ID = 30
         const val INTAKE_SPEED = 0.5
 
         // Limits should be in rotations
@@ -73,12 +72,13 @@ object Constants
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)
 
-        private val MODULE_POSITIONS = arrayOf(
-            Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-            Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0)
-        )
+        private val MODULE_POSITIONS =
+            arrayOf(
+                Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+                Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+            )
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.83)
@@ -87,10 +87,10 @@ object Constants
         val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.50)//- counter-clockwise
 
 
-     //   back right - > front left
-     //   back left - >front right
-     //   front left -> back right
-     // front right -> back left
+        //   back right - > front left
+        //   back left - >front right
+        //   front left -> back right
+        // front right -> back left
 
 
         const val FRONT_LEFT_DRIVING_ID = 8 //8->4
@@ -112,7 +112,7 @@ object Constants
 
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
-        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0)*PI
+        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0) * PI
 
         //const val WHEEL_CIRCUMFERENCE = 0.5 // meters
 
@@ -136,13 +136,14 @@ object Constants
     object LimelightConstants {
         const val POLLING_RATE = 20L
         const val TIMEOUT = 500L // milliseconds
-                const val IP_ADDR = "10.66.95.200"
+        const val IP_ADDR = "10.66.95.200"
 //        const val IP_ADDR = "172.29.0.1"
     }
+
     object LaunchConstants {
         const val LEFT_LAUNCHMOTOR_ID = 54
         const val RIGHT_LAUNCHMOTOR_ID = 28
-        const val LAUNCH_SPEED = 0.85
+        const val LAUNCH_SPEED = 0.75
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0
@@ -151,13 +152,13 @@ object Constants
         const val LAUNCH_A = 0.0
         const val LAUNCH_MOTOR_CURRENT_LIMITS = 60.0
     }
+
     object RollerConstants {
         const val ROLLER_MOTOR_ID = 23
-        const val ROLLER_SPEED = 0.6
+        const val ROLLER_SPEED = 0.8
         const val ROLLER_MOTOR_CURRENT_LIMITS = 40.0
         const val BUTTON = 3
     }
-
 
 
     object AlignConstants {
@@ -184,6 +185,7 @@ object Constants
         LEFT,
         RIGHT,
     }
+
     object AimingConstants {
         const val DISTANCE = 1.0
         const val GOOD_DISTANCE_TOLERANCE = 0.5

@@ -50,7 +50,7 @@ object DeliverySubsystem : SubsystemBase() {
                 }
             }
 
-        leftLaunchMotor.getConfigurator().apply(launchMotorConfig1)
+        leftLaunchMotor.configurator.apply(launchMotorConfig1)
 
         val launchMotorConfig2 =
             TalonFXConfiguration().apply {
@@ -73,7 +73,7 @@ object DeliverySubsystem : SubsystemBase() {
                 }
             }
 
-        rightLaunchMotor.getConfigurator().apply(launchMotorConfig2)
+        rightLaunchMotor.configurator.apply(launchMotorConfig2)
         /* rangeFinder.isEnabled = true */
 
 //        val launchMotorConfig =

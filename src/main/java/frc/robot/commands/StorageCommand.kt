@@ -13,11 +13,6 @@ class StorageCommand : Command() {
 
     }
 
-    override fun initialize() {
-        super.initialize()
-
-    }
-
     override fun execute() {
         StorageSubsystem.roll(Constants.RollerConstants.ROLLER_SPEED)
     }

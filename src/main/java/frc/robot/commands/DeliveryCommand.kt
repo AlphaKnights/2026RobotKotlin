@@ -13,10 +13,6 @@ class DeliveryCommand : Command() {
 
     }
 
-    override fun initialize() {
-        super.initialize()
-    }
-
     override fun execute() {
         DeliverySubsystem.forward(Constants.LaunchConstants.LAUNCH_SPEED)
 

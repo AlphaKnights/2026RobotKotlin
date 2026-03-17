@@ -84,7 +84,7 @@ object DriveSubsystem : SubsystemBase()
 
         odometry = SwerveDriveOdometry(
             Constants.DriveConstants.DRIVE_KINEMATICS,
-            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),   //gyro.rotation3d.x
+            Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),   //gyro.rotation3d.x
             arrayOf(
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -120,7 +120,7 @@ object DriveSubsystem : SubsystemBase()
 //        if (Robot.isAutonomous()) {
 
             odometry.update(
-                Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()),
+                Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
                 arrayOf(
                     frontLeft.getPosition(),
                     frontRight.getPosition(),
@@ -169,7 +169,7 @@ object DriveSubsystem : SubsystemBase()
 
     fun resetOdometry(pose: Pose2d) {
         odometry.resetPosition(
-            Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()), //gyro.getRotation2d(),
+            Rotation2d.fromDegrees(gyro.yaw.valueAsDouble), //gyro.getRotation2d(),
             arrayOf(
                 frontLeft.getPosition(),
                 frontRight.getPosition(),
@@ -192,7 +192,7 @@ object DriveSubsystem : SubsystemBase()
         var swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds)
 
         if (fieldRelative){
-            swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble()))) //gyro.getRotation2d()
+            swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, Rotation2d.fromDegrees(gyro.yaw.valueAsDouble))) //gyro.getRotation2d()
         }
         
         frontLeft.setDesiredState(swerveModuleStates[0])

@@ -14,9 +14,6 @@ class IntakeLeverManualCommand(
         addRequirements(IntakeSubsystem)
     }
 
-    override fun initialize() {
-        super.initialize()
-    }
     override fun execute() {
         val speed =
             when (direction) {

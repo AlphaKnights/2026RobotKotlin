@@ -38,21 +38,21 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return lerpRot
     }
     fun speedScale(): Double{
-        return ((-getRightTriggerAxis()+1))
+        return ((-rightTriggerAxis +1))
     }
 
 
     fun heading() : Trigger {
-        return Trigger { getYButton() }
+        return Trigger { yButton }
     }
     fun alignL() : Trigger {
-        return Trigger { getXButton()}
+        return Trigger { xButton }
     }
     fun alignR() : Trigger {
-        return Trigger { getBButton()}
+        return Trigger { bButton }
     }
     fun autoAim() : Trigger {
-        return Trigger { getAButton()}
+        return Trigger { aButton }
     }
 
     fun lerp(ref: Double, start: Double) : Double {

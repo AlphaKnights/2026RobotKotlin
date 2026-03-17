@@ -7,8 +7,8 @@ import kotlin.math.*
 object AimingCalc {
     fun canShoot(curPose: Pose2d): Double {
         // in meters
-        var x: Double = -curPose.getX()
-        var y: Double = curPose.getY()
+        var x: Double = -curPose.x
+        var y: Double = curPose.y
 
         var distanceX: Double = abs(x-AimingConstants.HUB_X)
         var distanceY: Double = abs(y-AimingConstants.HUB_Y)
@@ -37,9 +37,9 @@ object AimingCalc {
     }
     fun getAimingAngleChange(curPose: Pose2d, vx: Double, vy: Double): Double {
         // in meters and radians
-        var x: Double = -curPose.getX()
-        var y: Double = curPose.getY()
-        var angle: Double = curPose.getRotation().getRadians()
+        var x: Double = -curPose.x
+        var y: Double = curPose.y
+        var angle: Double = curPose.rotation.radians
 
         var distanceX: Double = AimingConstants.HUB_X-x
         var distanceY: Double = AimingConstants.HUB_Y-y

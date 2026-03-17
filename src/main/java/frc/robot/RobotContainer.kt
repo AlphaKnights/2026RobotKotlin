@@ -64,7 +64,7 @@ object RobotContainer
             x = {xBoxController.x()},
             y = {xBoxController.y()},
             rot = {xBoxController.rot()},
-            autoAngle = { xBoxController.autoAim().getAsBoolean()}
+            autoAngle = { xBoxController.autoAim().asBoolean }
         )
 
         // Reset heading

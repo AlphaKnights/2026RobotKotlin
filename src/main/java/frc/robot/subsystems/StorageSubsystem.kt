@@ -18,7 +18,7 @@ object StorageSubsystem : SubsystemBase() {
             }
         }
 
-        rollerMotor.getConfigurator().apply(rollerMotorConfig)
+        rollerMotor.configurator.apply(rollerMotorConfig)
     }
 
     fun roll(rollerSpeed: Double) {
