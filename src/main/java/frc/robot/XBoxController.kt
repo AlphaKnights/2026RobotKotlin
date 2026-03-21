@@ -10,11 +10,14 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     private var lerpRot = 0.0
 
     fun x(): Double {
-        lerpX = lerp(-applyDeadband(
-            getRawAxis(1),      //right y
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale()
-        , lerpX)
+        lerpX =
+            lerp(
+                -applyDeadband(
+                    getRawAxis(1), // right y
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpX,
+            )
         return lerpX
     }
 
@@ -38,9 +41,12 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return lerpRot
     }
     fun speedScale(): Double{
-        return ((-rightTriggerAxis +1))
+        return ((-getRightTriggerAxis() +1))
     }
 
+    fun deliveryScale(): Double {
+        return getLeftTriggerAxis()
+    }
 
     fun heading() : Trigger {
         return Trigger { yButton }

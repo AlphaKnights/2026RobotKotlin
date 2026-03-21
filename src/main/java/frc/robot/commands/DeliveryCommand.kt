@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.DeliverySubsystem
 
-class DeliveryCommand : Command() {
+class DeliveryCommand(deliverySpeed: Double) : Command() {
+
+    val speed = deliverySpeed
 
     init {
         // each subsystem used by the command must be passed into the addRequirements() method
@@ -14,7 +16,7 @@ class DeliveryCommand : Command() {
     }
 
     override fun execute() {
-        DeliverySubsystem.forward(Constants.LaunchConstants.LAUNCH_SPEED)
+        DeliverySubsystem.forward(speed)
 
     }
 

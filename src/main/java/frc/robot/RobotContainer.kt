@@ -45,11 +45,11 @@ object RobotContainer
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-                "Delivery" to DeliveryCommand(),
+                "Delivery" to DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
                 "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
                 "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
                 "Intake" to IntakeCommand(false),
-                "Indexer" to StorageCommand()
+                "Indexer" to StorageCommand(false)
             )
         )
 
@@ -84,12 +84,23 @@ object RobotContainer
 
         buttonBoard.button(Constants.RollerConstants.BUTTON)
             .whileTrue(
-                StorageCommand()
+                StorageCommand(false)
+            )
+        buttonBoard.button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON)
+            .whileTrue(
+                StorageCommand(true)
             )
 
         buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON)
             .whileTrue(
-                DeliveryCommand()
+                DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED)
+            )
+        if (xBoxController.deliveryScale() >= 0.5) {
+            DeliveryCommand(xBoxController.deliveryScale())
+        }
+        buttonBoard.button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON)
+            .whileTrue(
+                DeliveryCommand(0.5)
             )
 
         buttonBoard

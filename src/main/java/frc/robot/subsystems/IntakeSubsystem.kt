@@ -61,6 +61,8 @@ object IntakeSubsystem : SubsystemBase() {
                 CurrentLimits.apply {
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit = Constants.IntakeConstants.INTAKE_CURRENT_LIMIT
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit = Constants.IntakeConstants.INTAKE_STATOR_LIMIT
                 }
 
                 SoftwareLimitSwitch.apply {
@@ -118,16 +120,16 @@ object IntakeSubsystem : SubsystemBase() {
     fun setPosition(position: Double) {
         var m_request = PositionDutyCycle(0.0).withSlot(0)
 
-        rightleverMotor.setControl(m_request.withPosition(position))
-        leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Aligned))
+        rightleverMotor.setControl(m_request.withPosition(-position))
+        leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Opposed))
 
 
 
     }
 
     fun moveLever(speed: Double) {
-        rightleverMotor.set(-speed)
-        leftLeverMotor.set(speed)
+        rightleverMotor.set(speed)
+        leftLeverMotor.set(-speed)
     }
 
     fun getPosition(): Double {
