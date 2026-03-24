@@ -49,6 +49,8 @@ object IntakeSubsystem : SubsystemBase() {
                 CurrentLimits.apply {
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit = Constants.IntakeConstants.INTAKE_CURRENT_LIMIT
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit = Constants.IntakeConstants.INTAKE_STATOR_LIMIT
                 }
 
                 MotorOutput.apply{

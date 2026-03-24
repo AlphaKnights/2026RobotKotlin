@@ -181,7 +181,7 @@ object DriveSubsystem : SubsystemBase()
     }
 
     fun shouldFlipPath(): Boolean {
-        return (DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+        return false // (DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
     }
 
     fun drive(

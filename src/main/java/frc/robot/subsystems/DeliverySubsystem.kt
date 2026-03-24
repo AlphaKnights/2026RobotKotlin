@@ -57,6 +57,8 @@ object DeliverySubsystem : SubsystemBase() {
                 CurrentLimits.apply {
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit = LaunchConstants.LAUNCH_MOTOR_CURRENT_LIMITS
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit = LaunchConstants.LAUNCH_MOTOR_STATOR_LIMITS
                 }
 
                 Slot0.apply {

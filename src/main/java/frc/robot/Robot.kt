@@ -107,7 +107,7 @@ object Robot : TimedRobot() {
     override fun autonomousInit() {
         // We store the command as a Robot property in the rare event that the selector on the dashboard
         // is modified while the command is running since we need to access it again in teleopInit()
-//        RobotContainer.getAutonomousCommand().schedule()
+        CommandScheduler.getInstance().schedule(RobotContainer.getAutonomousCommand())
     }
 
     override fun testInit() {

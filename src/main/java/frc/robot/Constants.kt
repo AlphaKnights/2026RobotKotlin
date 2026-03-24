@@ -43,7 +43,7 @@ object Constants {
         const val INTAKE_MOTOR_ID = 34
         const val RIGHT_LEVER_MOTOR_ID = 31
         const val LEFT_LEVER_MOTOR_ID = 30
-        const val INTAKE_SPEED = 0.5
+        const val INTAKE_SPEED = 0.4
 
         // Limits should be in rotations
         const val LEVER_LIMIT_FORWARD = 0.0
@@ -58,8 +58,8 @@ object Constants {
 
         const val LEVER_SPEED = 0.2 // in rpm
 
-        const val INTAKE_CURRENT_LIMIT = 40.0
-        const val INTAKE_STATOR_LIMIT = 60.0
+        const val INTAKE_CURRENT_LIMIT = 20.0
+        const val INTAKE_STATOR_LIMIT = 40.0
 
     }
 
@@ -69,7 +69,7 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 5
+        const val MAX_METERS_PER_SECOND = 5.9
         const val MAX_ANGULAR_SPEED = 5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -123,17 +123,17 @@ object Constants {
         const val DRIVING_I = 0.0
         const val DRIVING_D = 0.0
         const val DRIVING_FF = 1.0
-        const val DRIVING_V = 0.12//0.12*DRIVE_RATIO
+        const val DRIVING_V = 0.12 //0.12*DRIVE_RATIO
         const val DRIVING_A = 1.5
         const val TURNING_P = 40.0
         const val TURNING_I = 0.0
         const val TURNING_D = 0.0
         const val TURNING_FF = 0.0
 
-        const val DRIVING_MOTOR_CURRENT_LIMIT = 30.0
-        const val TURNING_MOTOR_CURRENT_LIMIT = 30.0
-        const val DRIVING_STATOR_CURRENT_LIMIT = 50.0
-        const val TURNING_STATOR_CURRENT_LIMIT = 50.0
+        const val DRIVING_MOTOR_CURRENT_LIMIT = 60.0
+        const val TURNING_MOTOR_CURRENT_LIMIT = 60.0
+        const val DRIVING_STATOR_CURRENT_LIMIT = 120.0
+        const val TURNING_STATOR_CURRENT_LIMIT = 120.0
     }
 
     object LimelightConstants {
@@ -153,13 +153,17 @@ object Constants {
         const val LAUNCH_FF = 0.0
         const val LAUNCH_V = 0.0071
         const val LAUNCH_A = 0.0
-        const val LAUNCH_MOTOR_CURRENT_LIMITS = 60.0
+        const val LAUNCH_MOTOR_CURRENT_LIMITS = 40.0
+        const val LAUNCH_MOTOR_STATOR_LIMITS = 80.0
     }
 
     object RollerConstants {
         const val ROLLER_MOTOR_ID = 23
-        const val ROLLER_SPEED = 0.8
-        const val ROLLER_MOTOR_CURRENT_LIMITS = 40.0
+
+        const val ROLLER_MOTOR_ID_2 = 0
+        const val ROLLER_SPEED = 0.6
+        const val ROLLER_MOTOR_CURRENT_LIMITS = 20.0
+        const val ROLLER_MOTOR_STATOR_LIMITS = 40.0
         const val BUTTON = 11
     }
 
