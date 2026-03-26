@@ -5,44 +5,72 @@ import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 
 class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
+    private var lerpX = 0.0
+    private var lerpY = 0.0
+    private var lerpRot = 0.0
+
     fun x(): Double {
-        return (-applyDeadband(
-            getRawAxis(5),      //right y
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale()
-                )
+        lerpX =
+            lerp(
+                -applyDeadband(
+                    getRawAxis(1), // right y
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpX,
+            )
+        return lerpX
     }
 
     fun y(): Double {
-        return (-applyDeadband(
-            getRawAxis(4),    //right x
+        lerpY = lerp(-applyDeadband(
+            getRawAxis(0),    //right x
             Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale()
+        ) * speedScale(),
+            lerpY
                 )
+        return lerpY
     }
 
     fun rot(): Double {
-        return (-applyDeadband(
-            getRawAxis(0),   //left x
+        lerpRot = lerp(-applyDeadband(
+            getRawAxis(4),   //left x
             Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale()
+        ) * speedScale(),
+            lerpRot
                 )
+        return lerpRot
     }
     fun speedScale(): Double{
-        return ((-getRightTriggerAxis()+1)/2)
+        return ((-getRightTriggerAxis() +1))
     }
 
+    fun deliveryScale(): Double {
+        return getLeftTriggerAxis()
+    }
 
     fun heading() : Trigger {
-        return Trigger { getYButton() }
+        return Trigger { yButton }
     }
     fun alignL() : Trigger {
-        return Trigger { getXButton()}
+        return Trigger { xButton }
     }
     fun alignR() : Trigger {
-        return Trigger { getBButton()}
+        return Trigger { bButton }
+    }
+    fun autoAim() : Trigger {
+        return Trigger { aButton }
     }
 
+    fun lerp(ref: Double, start: Double) : Double {
+        if (ref > start) {
+            return if (start + Constants.OperatorConstants.LERP_VAL > ref) ref
+            else start + Constants.OperatorConstants.LERP_VAL
+        } else {
+            return if (start - Constants.OperatorConstants.LERP_VAL < ref) ref
+            else start - Constants.OperatorConstants.LERP_VAL
+        }
+
+    }
 
 
 

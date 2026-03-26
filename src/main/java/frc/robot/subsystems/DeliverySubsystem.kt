@@ -1,0 +1,111 @@
+package frc.robot.subsystems
+
+import com.ctre.phoenix6.CANBus
+import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.signals.InvertedValue
+import edu.wpi.first.wpilibj.Ultrasonic
+import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants.LaunchConstants
+
+object DeliverySubsystem : SubsystemBase() {
+    /*
+    private val rangeFinder =
+        Ultrasonic(
+            Constants.UltrasonicConstants.PING_CHANNEL,
+            Constants.UltrasonicConstants.ECHO_CHANNEL,
+        )
+     */
+    /* Ultrasonic if we need one */
+    private val CAN = CANBus("didy")
+    private val leftLaunchMotor =
+        TalonFX(
+            LaunchConstants.LEFT_LAUNCHMOTOR_ID, CAN
+        )
+    private val rightLaunchMotor =
+        TalonFX(
+            LaunchConstants.RIGHT_LAUNCHMOTOR_ID, CAN
+        )
+    init {
+        Ultrasonic.setAutomaticMode(true)
+
+        val launchMotorConfig1 =
+            TalonFXConfiguration().apply {
+                CurrentLimits.apply {
+                    SupplyCurrentLimitEnable = true
+                    SupplyCurrentLimit = LaunchConstants.LAUNCH_MOTOR_CURRENT_LIMITS
+                }
+
+                Slot0.apply {
+                    kP = LaunchConstants.LAUNCH_P
+                    kI = LaunchConstants.LAUNCH_I
+                    kD = LaunchConstants.LAUNCH_D
+                    kS = LaunchConstants.LAUNCH_FF
+                    kV = LaunchConstants.LAUNCH_V
+                    kA = LaunchConstants.LAUNCH_A
+                }
+
+                MotorOutput.apply {
+                    InvertedValue.Clockwise_Positive
+                }
+            }
+
+        leftLaunchMotor.configurator.apply(launchMotorConfig1)
+
+        val launchMotorConfig2 =
+            TalonFXConfiguration().apply {
+                CurrentLimits.apply {
+                    SupplyCurrentLimitEnable = true
+                    SupplyCurrentLimit = LaunchConstants.LAUNCH_MOTOR_CURRENT_LIMITS
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit = LaunchConstants.LAUNCH_MOTOR_STATOR_LIMITS
+                }
+
+                Slot0.apply {
+                    kP = LaunchConstants.LAUNCH_P
+                    kI = LaunchConstants.LAUNCH_I
+                    kD = LaunchConstants.LAUNCH_D
+                    kS = LaunchConstants.LAUNCH_FF
+                    kV = LaunchConstants.LAUNCH_V
+                    kA = LaunchConstants.LAUNCH_A
+                }
+
+                MotorOutput.apply {
+                    InvertedValue.CounterClockwise_Positive
+                }
+            }
+
+        rightLaunchMotor.configurator.apply(launchMotorConfig2)
+        /* rangeFinder.isEnabled = true */
+
+//        val launchMotorConfig =
+//            SparkMaxConfig().apply {
+//                idleMode(SparkBaseConfig.IdleMode.kBrake)
+//            }
+//
+//        launchMotor.configure(
+//            launchMotorConfig,
+//            SparkBase.ResetMode.kResetSafeParameters,
+//            SparkBase.PersistMode.kPersistParameters,
+//        )
+    }
+
+    fun forward(launchProp: Double) {
+        //leftLaunchMotor.setControl(VelocityVoltage(launchProp))
+        //rightLaunchMotor.setControl(VelocityVoltage(launchProp))
+        leftLaunchMotor.set(LaunchConstants.LAUNCH_SPEED)
+        rightLaunchMotor.set(-LaunchConstants.LAUNCH_SPEED)
+
+    }
+
+    fun stop() {
+        leftLaunchMotor.stopMotor()
+        rightLaunchMotor.stopMotor()
+    }
+
+    /*
+    fun fuelInside(): Boolean =
+    rangeFinder.rangeInches <
+    Constants.UltrasonicConstants.CORAL_DISTANCE
+    */
+}

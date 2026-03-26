@@ -7,18 +7,17 @@ package frc.robot
  * `const` definitions. Other constant types should use `val` definitions.
  */
 
-import com.revrobotics.spark.config.SparkBaseConfig
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
+import kotlin.math.PI
 
-object Constants
-{
-    object OperatorConstants
-    {
+object Constants {
+    object OperatorConstants {
         const val DRIVER_CONTROLLER_PORT = 0
-        const val DRIVE_DEADBAND = 0.4
+        const val DRIVE_DEADBAND = 0.01
+        const val LERP_VAL = 0.035
 
         const val RESET_HEADING_BUTTON = 11
 
@@ -26,77 +25,148 @@ object Constants
         const val ALIGN_RIGHT_BUTTON = 10 //joystick
 
         const val BUTTON_BOARD_PORT = 2
+
+        const val ANGLE_BUTTON = 12 //joystick
+
+        const val INTAKE_BUTTON = 10
+        const val INTAKE_REVERSE_BUTTON = 2
+        const val INTAKE_LEVER_OUT_MANUAL_BUTTON = 5
+        const val INTAKE_LEVER_IN_MANUAL_BUTTON = 4
+        const val INTAKE_LEVER_OUT_AUTO_BUTTON = 8
+        const val INTAKE_LEVER_IN_AUTO_BUTTON = 9
+        const val DELIVERY_BUTTON = 12
+        const val DELIVERY_REVERSE_BUTTON = 1
+        const val INDEXER_REVERSE_BUTTON = 3
+    }
+
+    object IntakeConstants {
+        const val INTAKE_MOTOR_ID = 34
+        const val RIGHT_LEVER_MOTOR_ID = 31
+        const val LEFT_LEVER_MOTOR_ID = 30
+        const val INTAKE_SPEED = 0.4
+
+        // Limits should be in rotations
+        const val LEVER_LIMIT_FORWARD = 0.0
+        const val LEVER_LIMIT_REVERSE = 0.25
+
+        const val P = 0.1
+        const val I = 0.0
+        const val D = 0.0
+
+        const val LEVER_OUT_POSITION = 51.5/3
+        const val LEVER_IN_POSITION = 0.0
+
+        const val LEVER_SPEED = 0.2 // in rpm
+
+        const val INTAKE_CURRENT_LIMIT = 20.0
+        const val INTAKE_STATOR_LIMIT = 40.0
+
+    }
+
+    enum class IntakeDirection {
+        IN,
+        OUT,
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 10
-        const val MAX_ANGULAR_SPEED = 20
+        const val MAX_METERS_PER_SECOND = 5.9
+        const val MAX_ANGULAR_SPEED = 5
 
-        private val TRACK_WIDTH = Units.inchesToMeters(26.5)
-        private val WHEEL_BASE = Units.inchesToMeters(26.5)
+        private val TRACK_WIDTH = Units.inchesToMeters(25.5)
+        private val WHEEL_BASE = Units.inchesToMeters(25.5)
 
-        private val MODULE_POSITIONS = arrayOf(
-            Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-            Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-            Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0)
-        )
-
+        private val MODULE_POSITIONS =
+            arrayOf(
+                Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+                Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
+                Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+            )
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
-        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.0)
-        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.615)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.48)
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.33)
+        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.83)
+        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.619)
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.817) //+ is clockwise
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.50)//- counter-clockwise
 
 
-     //   back right - > front left
-     //   back left - >front right
-     //   front left -> back right
-     // front right -> back left
+        //   back right - > front left
+        //   back left - >front right
+        //   front left -> back right
+        // front right -> back left
 
 
-        const val FRONT_LEFT_DRIVING_ID = 4 //8->4
-        const val REAR_LEFT_DRIVING_ID = 19  //5->19
-        const val FRONT_RIGHT_DRIVING_ID = 5 //19->5
-        const val REAR_RIGHT_DRIVING_ID = 8  //4->8
+        const val FRONT_LEFT_DRIVING_ID = 8 //8->4
+        const val REAR_LEFT_DRIVING_ID = 7 //5->19
+        const val FRONT_RIGHT_DRIVING_ID = 19 //19->5
+        const val REAR_RIGHT_DRIVING_ID = 4  //4->8
 
-        const val FRONT_LEFT_TURNING_ID = 3 //2->3
-        const val REAR_LEFT_TURNING_ID = 6   //7->6
-        const val FRONT_RIGHT_TURNING_ID = 7 //6->7
-        const val REAR_RIGHT_TURNING_ID = 2  //3->2
+        const val FRONT_LEFT_TURNING_ID = 2 //2->3
+        const val REAR_LEFT_TURNING_ID = 5   //7->6
+        const val FRONT_RIGHT_TURNING_ID = 6 //6->7
+        const val REAR_RIGHT_TURNING_ID = 3  //3->2
 
-        const val FRONT_LEFT_CANCODER_ID = 9   //11->9
-        const val REAR_LEFT_CANCODER_ID = 10   //12->10
-        const val FRONT_RIGHT_CANCODER_ID = 12  //10->12
-        const val REAR_RIGHT_CANCODER_ID = 11    //9->11
+        const val FRONT_LEFT_CANCODER_ID = 11   //11->9
+        const val REAR_LEFT_CANCODER_ID = 12   //12->10
+        const val FRONT_RIGHT_CANCODER_ID = 10  //10->12
+        const val REAR_RIGHT_CANCODER_ID = 9    //9->11
 
     }
 
     object ModuleConstants {
-        const val DRIVE_RATIO = 17.326202353
+        const val DRIVE_RATIO = 5.36
+        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0) * PI
 
-        const val DRIVING_P = 0.5
-        const val DRIVING_I = 0.5
-        const val DRIVING_D = 0.5
+        //const val WHEEL_CIRCUMFERENCE = 0.5 // meters
+
+        const val DRIVING_P = 0.8
+        const val DRIVING_I = 0.0
+        const val DRIVING_D = 0.0
         const val DRIVING_FF = 1.0
-        const val DRIVING_V = 0.3
+        const val DRIVING_V = 0.12 //0.12*DRIVE_RATIO
         const val DRIVING_A = 1.5
         const val TURNING_P = 40.0
         const val TURNING_I = 0.0
         const val TURNING_D = 0.0
         const val TURNING_FF = 0.0
 
-        const val DRIVING_MOTOR_CURRENT_LIMIT = 40.0
-        const val TURNING_MOTOR_CURRENT_LIMIT = 40.0
+        const val DRIVING_MOTOR_CURRENT_LIMIT = 60.0
+        const val TURNING_MOTOR_CURRENT_LIMIT = 60.0
+        const val DRIVING_STATOR_CURRENT_LIMIT = 120.0
+        const val TURNING_STATOR_CURRENT_LIMIT = 120.0
     }
 
     object LimelightConstants {
         const val POLLING_RATE = 20L
         const val TIMEOUT = 500L // milliseconds
-        //        const val IP_ADDR = "10.66.95.11"
-        const val IP_ADDR = "172.29.0.1"
+        const val IP_ADDR = "10.66.95.200"
+//        const val IP_ADDR = "172.29.0.1"
     }
+
+    object LaunchConstants {
+        const val LEFT_LAUNCHMOTOR_ID = 54
+        const val RIGHT_LAUNCHMOTOR_ID = 28
+        const val LAUNCH_SPEED = 0.75
+        const val LAUNCH_P = 0.1
+        const val LAUNCH_I = 0.0
+        const val LAUNCH_D = 0.0
+        const val LAUNCH_FF = 0.0
+        const val LAUNCH_V = 0.0071
+        const val LAUNCH_A = 0.0
+        const val LAUNCH_MOTOR_CURRENT_LIMITS = 40.0
+        const val LAUNCH_MOTOR_STATOR_LIMITS = 80.0
+    }
+
+    object RollerConstants {
+        const val ROLLER_MOTOR_ID = 23
+
+        const val ROLLER_MOTOR_ID_2 = 0
+        const val ROLLER_SPEED = 0.6
+        const val ROLLER_MOTOR_CURRENT_LIMITS = 20.0
+        const val ROLLER_MOTOR_STATOR_LIMITS = 40.0
+        const val BUTTON = 11
+    }
+
 
     object AlignConstants {
         const val ALIGN_DEADZONE = 0.03
@@ -121,6 +191,19 @@ object Constants
     enum class AlignDirection {
         LEFT,
         RIGHT,
+    }
+
+    object AimingConstants {
+        const val DISTANCE = 1.0
+        const val GOOD_DISTANCE_TOLERANCE = 0.5
+        const val MIDDLING_DISTANCE_TOLERANCE = 1.0
+
+        const val HUB_X = 5.0
+        const val HUB_Y = 5.0
+
+        const val MAX_SPEED = 1.0
+        const val SLOW_DISTANCE = 1.0
+        const val MIN_SPEED = 0.2
     }
 }
 

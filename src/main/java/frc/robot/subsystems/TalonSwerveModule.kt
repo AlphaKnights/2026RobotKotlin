@@ -41,6 +41,9 @@ class TalonSwerveModule(
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit =
                         ModuleConstants.DRIVING_MOTOR_CURRENT_LIMIT
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit =
+                        ModuleConstants.DRIVING_STATOR_CURRENT_LIMIT
                 }
 
                 Slot0.apply {
@@ -76,6 +79,9 @@ class TalonSwerveModule(
                     SupplyCurrentLimitEnable = true
                     SupplyCurrentLimit =
                         ModuleConstants.TURNING_MOTOR_CURRENT_LIMIT
+                    StatorCurrentLimitEnable = true
+                    StatorCurrentLimit =
+                        ModuleConstants.TURNING_STATOR_CURRENT_LIMIT
                 }
 
                 Feedback.apply {
@@ -119,7 +125,8 @@ class TalonSwerveModule(
 
     fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
-            driveMotor.position.valueAsDouble,
+            //driveMotor.rotor
+            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.position.valueAsDouble,
             Rotation2d.fromRotations(
                 turnMotor.position.valueAsDouble,
             ) +
@@ -128,12 +135,13 @@ class TalonSwerveModule(
 
     fun getState(): SwerveModuleState =
         SwerveModuleState(
-            driveMotor.velocity.valueAsDouble,
+            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.velocity.valueAsDouble,
             Rotation2d.fromRotations(
                 turnMotor.position.valueAsDouble,
             ) +
                 offset,
         )
+
 
     fun setDesiredState(desiredState: SwerveModuleState) {
         val correctedState =
@@ -149,7 +157,7 @@ class TalonSwerveModule(
 
         driveMotor.setControl(
             VelocityVoltage(
-                correctedState.speedMetersPerSecond,
+                correctedState.speedMetersPerSecond/ModuleConstants.WHEEL_CIRCUMFERENCE,
             ),
         )
         turnMotor.setControl(
