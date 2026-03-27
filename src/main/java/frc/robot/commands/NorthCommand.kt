@@ -8,7 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.DriveSubsystem
 
-class NorthCommand : Command() {
+class NorthCommand(
+    private val x: () -> Double,
+    private val y: () -> Double,
+) : Command() {
+
     init {
         addRequirements(DriveSubsystem)
     }
@@ -33,8 +37,10 @@ class NorthCommand : Command() {
 
         DriveSubsystem.drive(
             ChassisSpeeds(
-                0.0,
-                0.0,
+                x() *
+                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
+                y() *
+                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
                 rotSpeed,
             ),
             fieldRelative = true,
