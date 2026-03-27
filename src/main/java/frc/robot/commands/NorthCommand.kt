@@ -1,35 +1,45 @@
 package frc.robot.commands
 
+import edu.wpi.first.math.MathUtil.clamp
+import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand
 import frc.robot.Constants
 import frc.robot.subsystems.DriveSubsystem
 
-class NorthCommand: Command() {
+class NorthCommand : Command() {
     init {
         addRequirements(DriveSubsystem)
     }
 
     override fun execute() {
         super.execute()
+        // take current rotation in radians and make a new PID Controller
+        val curpose = DriveSubsystem.getPose().rotation.radians
+        val controller = PIDController(1.0, 0.0, 1.0)
+
+        // set PID deadzones and angle wrapping
+        controller.setTolerance(Rotation2d.fromDegrees(1.0).radians)
+        controller.enableContinuousInput(0.0, 2 * Math.PI)
+
+        // calculate rotational speed using PID controller, making sure max speed is respected
+        val rotSpeed =
+            clamp(
+                controller.calculate(curpose, 0.0),
+                0.0,
+                1.0,
+            ) * Constants.DriveConstants.MAX_ANGULAR_SPEED
 
         DriveSubsystem.drive(
             ChassisSpeeds(
                 0.0,
                 0.0,
-                -DriveSubsystem.getPose().rotation.radians,
+                rotSpeed,
             ),
-            fieldRelative = false,
+            fieldRelative = true,
         )
     }
 
-    override fun isFinished(): Boolean {
-        return false
-    }
-
-    override fun end(interrupted: Boolean) {
-
-    }
+    override fun isFinished(): Boolean = false
 }
