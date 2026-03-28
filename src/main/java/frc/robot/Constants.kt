@@ -10,6 +10,7 @@ package frc.robot
  * `const` definitions. Other constant types should use `val` definitions.
  */
 
+import com.pathplanner.lib.path.PathConstraints
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
@@ -33,8 +34,16 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 3
-        const val MAX_ANGULAR_SPEED = 6
+        const val MAX_METERS_PER_SECOND = 3.0
+        const val MAX_ANGULAR_SPEED = 6.0
+
+        val PATH_CONSTRAINTS =
+            PathConstraints(
+                MAX_METERS_PER_SECOND,
+                10.0,
+                MAX_ANGULAR_SPEED,
+                4 * Math.PI,
+                )
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)
