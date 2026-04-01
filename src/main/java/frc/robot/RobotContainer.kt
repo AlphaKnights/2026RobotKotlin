@@ -2,6 +2,7 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.XBoxController
 import frc.robot.commands.AutoDeliveryCommand
@@ -13,9 +14,14 @@ import frc.robot.commands.StorageCommand
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
+import frc.robot.subsystems.ArcSlidingCalc
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import kotlin.math.*
+import frc.robot.subsystems.DriveToArcPoseGenerator
+import frc.robot.commands.DriveSetPointCommand
+import frc.robot.commands.ResetOdometry
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -83,81 +89,116 @@ object RobotContainer {
             ),
         )
 
-//        buttonBoard
-//            .button(Constants.RollerConstants.BUTTON)
-//            .whileTrue(
-//                StorageCommand(false),
-//            )
-//        buttonBoard
-//            .button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON)
-//            .whileTrue(
-//                StorageCommand(true),
-//            )
-//
-//        buttonBoard
-//            .button(Constants.OperatorConstants.DELIVERY_BUTTON)
-//            .whileTrue(
-//                DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
-//            )
-//        if (xBoxController.deliveryScale() >= 0.5) {
-//            DeliveryCommand(xBoxController.deliveryScale())
-//        }
-//        buttonBoard
-//            .button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON)
-//            .whileTrue(
-//                DeliveryCommand(0.5),
-//            )
-//
-//        buttonBoard
-//            .button(
-//                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON,
-//            ).onTrue(
-//                IntakeLeverCommand(
-//                    Constants.IntakeConstants.LEVER_IN_POSITION,
-//                ),
-//            )
-//
-//        buttonBoard
-//            .button(
-//                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON,
-//            ).onTrue(
-//                IntakeLeverCommand(
-//                    Constants.IntakeConstants.LEVER_OUT_POSITION,
-//                ),
-//            )
-//
-//        buttonBoard
-//            .button(
-//                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON,
-//            ).whileTrue(
-//                IntakeLeverManualCommand(
-//                    Constants.IntakeDirection.IN,
-//                ),
-//            )
-//
-//        buttonBoard
-//            .button(
-//                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON,
-//            ).whileTrue(
-//                IntakeLeverManualCommand(
-//                    Constants.IntakeDirection.OUT,
-//                ),
-//            )
-//
-//        buttonBoard
-//            .button(Constants.OperatorConstants.INTAKE_BUTTON)
-//            .whileTrue(
-//                IntakeCommand(
-//                    false,
-//                ),
-//            )
-//        buttonBoard
-//            .button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON)
-//            .whileTrue(
-//                IntakeCommand(
-//                    true,
-//                ),
-//            )
+        xBoxController.resetOdometry()
+            .whileTrue(
+                ResetOdometry()
+            )
+
+        xBoxController
+            .driveToArc().onTrue(
+                DriveSetPointCommand(
+                    { DriveToArcPoseGenerator.generatePath().x } ,
+                    { DriveToArcPoseGenerator.generatePath().y },
+                    { -DriveToArcPoseGenerator.generatePath().rotation.radians }
+                )
+            )
+
+        xBoxController
+            .slideLeft().whileTrue(
+                DriveCommand(
+                    {ArcSlidingCalc.getXChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
+                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
+                    {Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
+                    {false}
+                )
+            )
+
+        xBoxController
+            .slideRight().whileTrue(
+                DriveCommand(
+                    { ArcSlidingCalc.getXChange(-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
+                    {ArcSlidingCalc.getYChange(-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
+                    {-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
+                    {true}
+                )
+            )
+
+        // Button Board
+        buttonBoard
+            .button(Constants.RollerConstants.BUTTON)
+            .whileTrue(
+                StorageCommand(false),
+            )
+        buttonBoard
+            .button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON)
+            .whileTrue(
+                StorageCommand(true),
+            )
+
+        buttonBoard
+            .button(Constants.OperatorConstants.DELIVERY_BUTTON)
+            .whileTrue(
+                DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
+            )
+        if (xBoxController.deliveryScale() >= 0.5) {
+            DeliveryCommand(xBoxController.deliveryScale())
+        }
+        buttonBoard
+            .button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON)
+            .whileTrue(
+                DeliveryCommand(0.5),
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON,
+            ).onTrue(
+                IntakeLeverCommand(
+                    Constants.IntakeConstants.LEVER_IN_POSITION,
+                ),
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON,
+            ).onTrue(
+                IntakeLeverCommand(
+                    Constants.IntakeConstants.LEVER_OUT_POSITION,
+                ),
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON,
+            ).whileTrue(
+                IntakeLeverManualCommand(
+                    Constants.IntakeDirection.IN,
+                ),
+            )
+
+        buttonBoard
+            .button(
+                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON,
+            ).whileTrue(
+                IntakeLeverManualCommand(
+                    Constants.IntakeDirection.OUT,
+                ),
+            )
+
+        buttonBoard
+            .button(Constants.OperatorConstants.INTAKE_BUTTON)
+            .whileTrue(
+                IntakeCommand(
+                    false,
+                ),
+            )
+        buttonBoard
+            .button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON)
+            .whileTrue(
+                IntakeCommand(
+                    true,
+                ),
+            )
     }
 
     fun getAutonomousCommand(): Command {

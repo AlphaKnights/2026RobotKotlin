@@ -71,6 +71,7 @@ object Constants {
     object DriveConstants {
         const val MAX_METERS_PER_SECOND = 5.9
         const val MAX_ANGULAR_SPEED = 5
+        const val MAX_SLIDING_SPEED_PERCENTAGE = 1.0
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)
@@ -146,7 +147,7 @@ object Constants {
     object LaunchConstants {
         const val LEFT_LAUNCHMOTOR_ID = 54
         const val RIGHT_LAUNCHMOTOR_ID = 28
-        const val LAUNCH_SPEED = 0.75
+        const val LAUNCH_SPEED = 0.65
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0
@@ -161,7 +162,7 @@ object Constants {
         const val ROLLER_MOTOR_ID = 23
 
         const val ROLLER_MOTOR_ID_2 = 0
-        const val ROLLER_SPEED = 0.6
+        const val ROLLER_SPEED = 0.5
         const val ROLLER_MOTOR_CURRENT_LIMITS = 20.0
         const val ROLLER_MOTOR_STATOR_LIMITS = 40.0
         const val BUTTON = 11
@@ -198,12 +199,42 @@ object Constants {
         const val GOOD_DISTANCE_TOLERANCE = 0.5
         const val MIDDLING_DISTANCE_TOLERANCE = 1.0
 
-        const val HUB_X = 5.0
-        const val HUB_Y = 5.0
+        // Hub field positions (meters). Set to real field measurements before competition.
+        // Red hub: robot approaches from y < RED_HUB_Y
+        // Blue hub: robot approaches from y > BLUE_HUB_Y
+        const val RED_HUB_X = 0.5
+        const val RED_HUB_Y = 0.5
+        const val BLUE_HUB_X = 0.0
+        const val BLUE_HUB_Y = 0.0 // placeholder — team must tune
+
+        // Valid shooting-arc sector, in degrees, measured from hub center.
+        //   0° = +X on field,  90° = +Y,  180° = -X,  270° = -Y (toward driver station)
+        // These values apply for red alliance (robot below hub, y < RED_HUB_Y).
+        // For blue alliance the sector is mirrored vertically — team must tune.
+        const val MIN_ANGLE_DEGREES = 0.0
+        const val MAX_ANGLE_DEGREES = 180.0
+
+        // Fallback when DriverStation hasn't reported an alliance yet (e.g. practice mode).
+        // true = red alliance, false = blue alliance.
+        const val DEFAULT_TO_RED_ALLIANCE = true
 
         const val MAX_SPEED = 1.0
+        const val MAX_ANGULAR_SPEED = 1.0
         const val SLOW_DISTANCE = 1.0
         const val MIN_SPEED = 0.2
+
+        const val DIST_DEADZONE = 0.1 //m
+        const val ANGLE_DEADZONE = 1.0 //degrees
+    }
+
+    object PathPlannerConstants {
+        const val TRANSLATION_P = 5.0
+        const val TRANSLATION_I = 0.0
+        const val TRANSLATION_D = 0.0
+
+        const val ROTATION_P = 17.0
+        const val ROTATION_I = 0.0
+        const val ROTATION_D = 0.0
     }
 }
 

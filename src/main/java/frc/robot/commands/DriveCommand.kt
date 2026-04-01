@@ -4,7 +4,6 @@
 package frc.robot.commands
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.AimingCalc
@@ -14,7 +13,7 @@ class DriveCommand(
     private val x: () -> Double,
     private val y: () -> Double,
     private val rot: () -> Double,
-    private val autoAngle: () -> Boolean
+    private val autoAngle: () -> Boolean,
 ) : Command() {
     init {
         addRequirements(DriveSubsystem)
@@ -42,13 +41,27 @@ class DriveCommand(
                             Constants.DriveConstants.MAX_METERS_PER_SECOND,
                     y() *
                             Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                    AimingCalc.getAimingAngleChange(DriveSubsystem.getPose(),
-                        x()*Constants.DriveConstants.MAX_METERS_PER_SECOND,
-                        y()*Constants.DriveConstants.MAX_METERS_PER_SECOND),
+                    AimingCalc.getAimingAngleChange(
+                        DriveSubsystem.getPose(),
+                        DriveSubsystem.getCurrentSpeeds().vxMetersPerSecond,
+                        DriveSubsystem.getCurrentSpeeds().vyMetersPerSecond
+                    ),
                 ),
                 fieldRelative = true,
             )
+
         }
+//        } else {
+//            DriveSubsystem.drive(
+//                AimingCalc.getArcDriveSpeeds(
+//                    DriveSubsystem.getPose(),
+//                    x(), // controller X → tangential movement along arc
+//                    DriveSubsystem.getCurrentSpeeds(), // current velocity for rotation feedforward
+//                    // y() intentionally omitted — arc system controls radial position
+//                ),
+//                fieldRelative = true,
+//            )
+//        }
     }
 
     override fun end(interrupted: Boolean) {

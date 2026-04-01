@@ -72,6 +72,23 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     }
 
+    fun resetOdometry(): Trigger {
+        return Trigger { rightStickButton }
+    }
+
+    fun driveToArc(): Trigger {
+        return Trigger { startButton }
+    }
+
+    fun slideLeft(): Trigger {
+        return Trigger { leftBumperButton }
+    }
+
+
+    fun slideRight(): Trigger {
+        return Trigger { rightBumperButton }
+    }
+
 
 
 
