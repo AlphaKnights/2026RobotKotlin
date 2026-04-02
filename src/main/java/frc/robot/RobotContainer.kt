@@ -102,7 +102,8 @@ object RobotContainer {
                     {ArcSlidingCalc.getXChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
                     {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
                     {Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
-                    {false}
+                    {false},
+                    false,
                 )
             )
 
@@ -112,7 +113,8 @@ object RobotContainer {
                     { ArcSlidingCalc.getXChange(-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
                     {ArcSlidingCalc.getYChange(-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
                     {-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
-                    {true}
+                    {false},
+                    false,
                 )
             )
 

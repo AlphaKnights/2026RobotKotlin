@@ -16,7 +16,7 @@ import kotlin.math.PI
 object Constants {
     object OperatorConstants {
         const val DRIVER_CONTROLLER_PORT = 0
-        const val DRIVE_DEADBAND = 0.01
+        const val DRIVE_DEADBAND = 0.5
         const val LERP_VAL = 0.035
 
         const val RESET_HEADING_BUTTON = 11
@@ -85,10 +85,10 @@ object Constants {
             )
         val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
-        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.83)
-        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.119)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(.817) //+ is clockwise
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.25)//- counter-clockwise
+        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.831299)
+        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.113525 + 0.5)
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.170166) //+ is clockwise
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.002686 + 0.5)//- counter-clockwise
 
 
         //   back right - > front left
@@ -202,9 +202,9 @@ object Constants {
         // Hub field positions (meters). Set to real field measurements before competition.
         // Red hub: robot approaches from y < RED_HUB_Y
         // Blue hub: robot approaches from y > BLUE_HUB_Y
-        const val RED_HUB_X = 0.5
-        const val RED_HUB_Y = 0.5
-        const val BLUE_HUB_X = 0.0
+        const val RED_HUB_X = 3.644
+        const val RED_HUB_Y = 0.0
+        const val BLUE_HUB_X = -3.644
         const val BLUE_HUB_Y = 0.0 // placeholder — team must tune
 
         // Valid shooting-arc sector, in degrees, measured from hub center.
