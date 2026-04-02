@@ -89,6 +89,10 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return Trigger { rightBumperButton }
     }
 
+    fun north(): Trigger {
+        return Trigger { getRawButton(7) } // Select Button
+    }
+
 
 
 

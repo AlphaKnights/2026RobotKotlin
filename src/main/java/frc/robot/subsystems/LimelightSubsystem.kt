@@ -52,7 +52,7 @@ object LimelightSubsystem : PoseProvider {
                     ?.let(::parseJson)
                     ?.targets_Fiducials
                     ?.firstOrNull()
-                    ?.targetPose_RobotSpace
+                    ?.getRobotPose_FieldSpace()
             }.onSuccess { pose ->
                 return pose
             }.onFailure {

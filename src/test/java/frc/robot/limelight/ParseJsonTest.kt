@@ -96,21 +96,21 @@ class ParseJsonTest {
             result!!
                 .targets_Fiducials
                 ?.get(0)
-                ?.targetPose_RobotSpace
+                ?.getRobotPose_FieldSpace()
                 ?.x,
         )
         assertEquals(
             -0.1234042720218289,
             result.targets_Fiducials
                 ?.get(0)
-                ?.targetPose_RobotSpace
+                ?.getRobotPose_FieldSpace()
                 ?.y,
         )
         assertEquals(
             2.5218203039582496,
             result.targets_Fiducials
                 ?.get(0)
-                ?.targetPose_RobotSpace
+                ?.getRobotPose_FieldSpace()
                 ?.z,
         )
     }

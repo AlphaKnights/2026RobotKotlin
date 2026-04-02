@@ -22,8 +22,7 @@ class NorthCommand(
         super.execute()
         // take current rotation in radians and make a new PID Controller
         val curpose = DriveSubsystem.getPose().rotation.radians
-        val tuning = 0.0005 * Constants.DriveConstants.MAX_ANGULAR_SPEED
-        val controller = PIDController(tuning, 0.0, 2 * tuning)
+        val controller = PIDController(0.05, 0.0, 0.01)
         val dir = when {
             (curpose > Math.PI/2)  -> Math.PI
             (curpose < -Math.PI/2) -> -Math.PI

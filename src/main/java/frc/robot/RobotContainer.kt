@@ -5,12 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.XBoxController
-import frc.robot.commands.AutoDeliveryCommand
-import frc.robot.commands.AutoStorageCommand
-import frc.robot.commands.DeliveryCommand
-import frc.robot.commands.DriveCommand
-import frc.robot.commands.ResetHeadingCommand
-import frc.robot.commands.StorageCommand
+import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
@@ -19,8 +14,6 @@ import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import kotlin.math.*
 import frc.robot.subsystems.DriveToArcPoseGenerator
-import frc.robot.commands.DriveSetPointCommand
-import frc.robot.commands.ResetOdometry
 
 
 /**
@@ -122,6 +115,16 @@ object RobotContainer {
                     {true}
                 )
             )
+
+        xBoxController
+            .north().whileTrue(
+                NorthCommand(
+                    x = { xBoxController.x() },
+                    y = { xBoxController.y() },
+                )
+            )
+
+
 
         // Button Board
         buttonBoard
