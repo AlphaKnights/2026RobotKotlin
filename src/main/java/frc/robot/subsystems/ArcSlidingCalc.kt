@@ -10,6 +10,6 @@ object ArcSlidingCalc {
         return AimingConstants.DISTANCE * sin(angleChange)
     }
     fun getYChange(angleChange: Double): Double {
-        return AimingConstants.DISTANCE * cos(angleChange)
+        return AimingConstants.DISTANCE * angleChange
     }
 }
