@@ -69,8 +69,8 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 5.9
-        const val MAX_ANGULAR_SPEED = 5
+        const val MAX_METERS_PER_SECOND = 2.0 //5.9
+        const val MAX_ANGULAR_SPEED = 2.0 //5
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -140,7 +140,7 @@ object Constants {
     object LimelightConstants {
         const val POLLING_RATE = 20L
         const val TIMEOUT = 500L // milliseconds
-        const val IP_ADDR = "10.66.95.200"
+        const val IP_ADDR = "10.66.95.201"
 //        const val IP_ADDR = "172.29.0.1"
     }
 

@@ -130,7 +130,9 @@ object DriveSubsystem : SubsystemBase()
             )
 
             resetOdometry(LimelightSubsystem.getPose()?.toPose2d() ?: getPose())
-            println(LimelightSubsystem.getPose())
+            println(getPose())
+
+            println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")
       //  if(counter % 5 ==0) {
             // swervePublisher.set(states);
             //currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
