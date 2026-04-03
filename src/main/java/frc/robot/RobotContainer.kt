@@ -35,19 +35,19 @@ object RobotContainer {
 
     init
     {
-//        LimelightSubsystem.startPolling()
+        LimelightSubsystem.startPolling()
 
-//        NamedCommands.registerCommands(
-//            mapOf(
-//                "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
-//                "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-//                "Delivery" to AutoDeliveryCommand(0.5 /*Constants.LaunchConstants.LAUNCH_SPEED*/),
-//                "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
-//                "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
-//                "Intake" to IntakeCommand(false),
-//                "Indexer" to AutoStorageCommand(false),
-//            ),
-//        )
+        NamedCommands.registerCommands(
+            mapOf(
+                "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
+                "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
+                "Delivery" to AutoDeliveryCommand(0.5 /*Constants.LaunchConstants.LAUNCH_SPEED*/),
+                "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
+                "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
+                "Intake" to IntakeCommand(false),
+                "Indexer" to AutoStorageCommand(false),
+            ),
+        )
 
         configureBindings()
     }
@@ -90,7 +90,7 @@ object RobotContainer {
         xBoxController
             .driveToArc().onTrue(
                 DriveSetPointCommand(
-                    { DriveToArcPoseGenerator.generatePath().x } ,
+                    { DriveToArcPoseGenerator.generatePath().x },
                     { DriveToArcPoseGenerator.generatePath().y },
                     { -DriveToArcPoseGenerator.generatePath().rotation.radians }
                 )

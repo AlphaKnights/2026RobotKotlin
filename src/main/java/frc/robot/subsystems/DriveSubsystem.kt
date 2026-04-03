@@ -130,7 +130,7 @@ object DriveSubsystem : SubsystemBase()
             )
 
             resetOdometry(LimelightSubsystem.getPose()?.toPose2d() ?: getPose())
-            println(getPose())
+            println(LimelightSubsystem.getPose())
       //  if(counter % 5 ==0) {
             // swervePublisher.set(states);
             //currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())

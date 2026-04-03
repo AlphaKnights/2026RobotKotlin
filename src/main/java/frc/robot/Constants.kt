@@ -16,7 +16,7 @@ import kotlin.math.PI
 object Constants {
     object OperatorConstants {
         const val DRIVER_CONTROLLER_PORT = 0
-        const val DRIVE_DEADBAND = 0.5
+        const val DRIVE_DEADBAND = 0.01
         const val LERP_VAL = 0.035
 
         const val RESET_HEADING_BUTTON = 11
