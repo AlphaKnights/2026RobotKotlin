@@ -161,8 +161,8 @@ object Constants {
     object RollerConstants {
         const val ROLLER_MOTOR_ID = 23
 
-        const val ROLLER_MOTOR_ID_2 = 0
-        const val ROLLER_SPEED = 0.5
+        const val ROLLER_MOTOR_ID_2 = 24
+        const val ROLLER_SPEED = 0.65
         const val ROLLER_MOTOR_CURRENT_LIMITS = 20.0
         const val ROLLER_MOTOR_STATOR_LIMITS = 40.0
         const val BUTTON = 11
