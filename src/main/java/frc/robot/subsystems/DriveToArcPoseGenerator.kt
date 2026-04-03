@@ -7,6 +7,7 @@ package frc.robot.subsystems
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.Constants.AimingConstants
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -15,13 +16,24 @@ import kotlin.math.pow
 object DriveToArcPoseGenerator {
     fun generatePath(): Pose2d {
         val curpose = DriveSubsystem.getPose()
-//
-        val hubPos = Translation2d(AimingConstants.BLUE_HUB_X, AimingConstants.BLUE_HUB_Y)
+
+        val allianceRed = (DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+        val hubPos =
+            if (allianceRed) {
+                Translation2d(AimingConstants.RED_HUB_X, AimingConstants.RED_HUB_Y)
+            } else {
+                Translation2d(AimingConstants.BLUE_HUB_X, AimingConstants.BLUE_HUB_Y)
+            }
         val distance = (curpose.translation.minus(hubPos))
         val scalar = AimingConstants.DISTANCE / sqrt(distance.x.pow(2) + distance.y.pow(2))
         val target = (distance.times(scalar)) + hubPos
 
-        val angleChange = -atan2(distance.y,distance.x)
+        val angleChange =
+            when {
+                atan2(distance.y,distance.x) > 0 -> atan2(distance.y,distance.x) - Math.PI
+                atan2(distance.y,distance.x) < 0 -> atan2(distance.y,distance.x) + Math.PI
+                else -> 0.0
+            }
 
 //        val distanceHubX = curpose.translation.x - AimingConstants.BLUE_HUB_X // distance between robot and hub
 //        val distanceHubY = curpose.translation.y - AimingConstants.BLUE_HUB_Y
