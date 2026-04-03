@@ -21,7 +21,12 @@ object DriveToArcPoseGenerator {
         val scalar = AimingConstants.DISTANCE / sqrt(distance.x.pow(2) + distance.y.pow(2))
         val target = (distance.times(scalar)) + hubPos
 
-        val angleChange = -atan2(distance.y,distance.x)
+        val angleChange =
+            when {
+                atan2(distance.y,distance.x) > 0 -> atan2(distance.y,distance.x) - Math.PI
+                atan2(distance.y,distance.x) < 0 -> atan2(distance.y,distance.x) + Math.PI
+                else -> 0.0
+            }
 
 //        val distanceHubX = curpose.translation.x - AimingConstants.BLUE_HUB_X // distance between robot and hub
 //        val distanceHubY = curpose.translation.y - AimingConstants.BLUE_HUB_Y
