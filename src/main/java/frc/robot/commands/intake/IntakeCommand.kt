@@ -15,7 +15,7 @@ class IntakeCommand(
         IntakeSubsystem.limitOutput()
         val intakeSpeed =
             if (isReversed) {
-                -Constants.IntakeConstants.INTAKE_SPEED
+                -Constants.IntakeConstants.INTAKE_SPEED-0.2
             } else Constants.IntakeConstants.INTAKE_SPEED
 
         IntakeSubsystem.runIntake(intakeSpeed)

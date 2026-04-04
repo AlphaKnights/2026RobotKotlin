@@ -213,7 +213,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Auto Deliver Only",
+            "Red Auto Deliver Only",
         )
     }
 }

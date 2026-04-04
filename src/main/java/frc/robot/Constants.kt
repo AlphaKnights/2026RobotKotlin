@@ -49,7 +49,7 @@ object Constants {
         const val LEVER_LIMIT_FORWARD = 0.0
         const val LEVER_LIMIT_REVERSE = 0.25
 
-        const val P = 0.1
+        const val P = 0.01
         const val I = 0.0
         const val D = 0.0
 
@@ -69,8 +69,8 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 2.0 //5.9
-        const val MAX_ANGULAR_SPEED = 2.0 //5
+        const val MAX_METERS_PER_SECOND = 5.9
+        const val MAX_ANGULAR_SPEED = 5.0
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)

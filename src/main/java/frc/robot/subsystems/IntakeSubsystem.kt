@@ -83,7 +83,7 @@ object IntakeSubsystem : SubsystemBase() {
 
                 MotorOutput.apply {
                     InvertedValue.CounterClockwise_Positive
-
+                    NeutralMode = NeutralModeValue.Brake
                 }
 
                 ResetMode.kResetSafeParameters
@@ -127,6 +127,10 @@ object IntakeSubsystem : SubsystemBase() {
 
 
 
+    }
+
+    fun isInPosition(deadzone: Double): Boolean {
+        return (rightleverMotor.getClosedLoopError().valueAsDouble < deadzone)
     }
 
     fun moveLever(speed: Double) {

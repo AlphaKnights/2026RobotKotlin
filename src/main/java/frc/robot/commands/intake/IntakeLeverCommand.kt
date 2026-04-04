@@ -17,7 +17,7 @@ class IntakeLeverCommand(
     }
 
     override fun isFinished(): Boolean {
-        return IntakeSubsystem.limitSwitchPressed()
+        return IntakeSubsystem.limitSwitchPressed() or IntakeSubsystem.isInPosition(0.1)
     }
 
     override fun end(interrupted: Boolean) {
