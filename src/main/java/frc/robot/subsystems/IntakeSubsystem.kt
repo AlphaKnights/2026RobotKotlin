@@ -155,10 +155,9 @@ object IntakeSubsystem : SubsystemBase() {
         //return (limitUp.get() || limitDown.get())
         return false
     }
-    fun limitOutput(){
+    fun limitOutput() {
         //print("Limit Up Pressed: "+limitUp.get())
         //print("Limit Down Pressed: "+limitDown.get())
-
     }
 }
 

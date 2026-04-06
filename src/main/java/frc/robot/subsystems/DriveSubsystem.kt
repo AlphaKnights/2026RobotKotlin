@@ -3,7 +3,6 @@ package frc.robot.subsystems
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.Pigeon2
 import com.ctre.phoenix6.hardware.TalonFX
-import com.ctre.phoenix6.swerve.SwerveModule
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
@@ -17,10 +16,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.XBoxController
+import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
 
 
 object DriveSubsystem : SubsystemBase()

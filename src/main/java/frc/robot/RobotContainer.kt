@@ -2,18 +2,13 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
-import frc.robot.XBoxController
 import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
-import frc.robot.subsystems.ArcSlidingCalc
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
-import kotlin.math.*
-import frc.robot.subsystems.DriveToArcPoseGenerator
 
 
 /**
@@ -96,27 +91,27 @@ object RobotContainer {
 //                )
 //            )
 
-        xBoxController
-            .slideLeft().whileTrue(
-                DriveCommand(
-                    {0.0},
-                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
-                    {Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
-                    {false},
-                    false
-                )
-            )
-
-        xBoxController
-            .slideRight().whileTrue(
-                DriveCommand(
-                    {0.0},
-                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
-                    {-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
-                    {false},
-                    false
-                )
-            )
+//        xBoxController
+//            .slideLeft().whileTrue(
+//                DriveCommand(
+//                    {0.0},
+//                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
+//                    {Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
+//                    {false},
+//                    false
+//                )
+//            )
+//
+//        xBoxController
+//            .slideRight().whileTrue(
+//                DriveCommand(
+//                    {0.0},
+//                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
+//                    {-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
+//                    {false},
+//                    false
+//                )
+//            )
 
         xBoxController
             .north().whileTrue(
@@ -126,7 +121,10 @@ object RobotContainer {
                 )
             )
 
-
+        xBoxController
+            .XLock().whileTrue(
+                LockXCommand()
+            )
 
         // Button Board
         buttonBoard

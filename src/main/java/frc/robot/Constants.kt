@@ -43,7 +43,7 @@ object Constants {
         const val INTAKE_MOTOR_ID = 34
         const val RIGHT_LEVER_MOTOR_ID = 31
         const val LEFT_LEVER_MOTOR_ID = 30
-        const val INTAKE_SPEED = 0.4
+        const val INTAKE_SPEED = 0.67
 
         // Limits should be in rotations
         const val LEVER_LIMIT_FORWARD = 0.0
