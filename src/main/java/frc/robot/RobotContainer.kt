@@ -87,14 +87,14 @@ object RobotContainer {
                 ResetOdometry()
             )
 
-        xBoxController
-            .driveToArc().onTrue(
-                DriveSetPointCommand(
-                    { DriveToArcPoseGenerator.generatePath().x },
-                    { DriveToArcPoseGenerator.generatePath().y },
-                    { -DriveToArcPoseGenerator.generatePath().rotation.radians }
-                )
-            )
+//        xBoxController
+//            .driveToArc().onTrue(
+//                DriveSetPointCommand(
+//                    { DriveToArcPoseGenerator.generatePath().x },
+//                    { DriveToArcPoseGenerator.generatePath().y },
+//                    { -DriveToArcPoseGenerator.generatePath().rotation.radians }
+//                )
+//            )
 
         xBoxController
             .slideLeft().whileTrue(
@@ -213,7 +213,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Red Auto Deliver Only",
+            "Red Auto Deliver Only RIGHT",
         )
     }
 }
