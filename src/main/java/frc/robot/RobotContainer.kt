@@ -151,7 +151,7 @@ object RobotContainer {
         buttonBoard
             .button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON)
             .whileTrue(
-                DeliveryCommand(0.5),
+                DeliveryCommand(-Constants.LaunchConstants.LAUNCH_SPEED),
             )
 
         buttonBoard

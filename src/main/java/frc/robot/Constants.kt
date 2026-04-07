@@ -43,17 +43,17 @@ object Constants {
         const val INTAKE_MOTOR_ID = 34
         const val RIGHT_LEVER_MOTOR_ID = 31
         const val LEFT_LEVER_MOTOR_ID = 30
-        const val INTAKE_SPEED = 0.4
+        const val INTAKE_SPEED = 0.75
 
         // Limits should be in rotations
         const val LEVER_LIMIT_FORWARD = 0.0
         const val LEVER_LIMIT_REVERSE = 0.25
 
-        const val P = 0.01
+        const val P = 0.1
         const val I = 0.0
-        const val D = 0.0
+        const val D = 0.01
 
-        const val LEVER_OUT_POSITION = 51.5/3
+        const val LEVER_OUT_POSITION = 12.0
         const val LEVER_IN_POSITION = 0.0
 
         const val LEVER_SPEED = 0.2 // in rpm
@@ -69,8 +69,8 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 5.9
-        const val MAX_ANGULAR_SPEED = 5.0
+        const val MAX_METERS_PER_SECOND = 1.0 //5.0
+        const val MAX_ANGULAR_SPEED = 1.0 //5.9
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)

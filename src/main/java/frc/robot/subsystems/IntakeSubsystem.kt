@@ -115,6 +115,11 @@ object IntakeSubsystem : SubsystemBase() {
 
     }
 
+    override fun periodic() {
+        super.periodic()
+        println("Lever Position = ${leftLeverMotor.position}")
+    }
+
     fun runIntake(speed: Double) {
         intakeMotor.set(-speed)
     }
@@ -130,6 +135,7 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun isInPosition(deadzone: Double): Boolean {
+        println("What the fuck is this shit" + rightleverMotor.getClosedLoopError().valueAsDouble)
         return (rightleverMotor.getClosedLoopError().valueAsDouble < deadzone)
     }
 
@@ -158,6 +164,7 @@ object IntakeSubsystem : SubsystemBase() {
     fun limitOutput(){
         //print("Limit Up Pressed: "+limitUp.get())
         //print("Limit Down Pressed: "+limitDown.get())
+
 
     }
 }

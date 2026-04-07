@@ -133,6 +133,7 @@ object DriveSubsystem : SubsystemBase()
             println(getPose())
 
             println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")
+            println("AllianceRed = ${(DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red}")
       //  if(counter % 5 ==0) {
             // swervePublisher.set(states);
             //currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
