@@ -18,7 +18,7 @@ object DriveToArcPoseGenerator {
     fun generatePath(): Pose2d {
         val curpose = DriveSubsystem.getPose()
 
-        val allianceRed = (DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+        val allianceRed = (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
         val hubPos =
             if (allianceRed) {
                 Translation2d(AimingConstants.RED_HUB_X, AimingConstants.RED_HUB_Y)
