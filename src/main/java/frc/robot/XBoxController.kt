@@ -80,20 +80,21 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return Trigger { startButton }
     }
 
-    fun slideLeft(): Trigger {
-        return Trigger { leftBumperButton }
-    }
-
-
-    fun slideRight(): Trigger {
-        return Trigger { rightBumperButton }
-    }
+//    fun slideLeft(): Trigger {
+//        return Trigger { leftBumperButton }
+//    }
+//
+//    fun slideRight(): Trigger {
+//        return Trigger { rightBumperButton }
+//    }
 
     fun north(): Trigger {
         return Trigger { getRawButton(7) } // Select Button
     }
 
-
+    fun XLock(): Trigger {
+        return Trigger { leftBumperButton }
+    }
 
 
 }

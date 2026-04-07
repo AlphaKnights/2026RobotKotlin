@@ -2,13 +2,14 @@
 /*
  * (C) 2025 Galvaknights
  */
-package frc.robot.subsystems
+package frc.robot.subsystems.aiming
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.Constants.AimingConstants
+import frc.robot.subsystems.DriveSubsystem
 import kotlin.math.atan2
 import kotlin.math.sqrt
 import kotlin.math.pow

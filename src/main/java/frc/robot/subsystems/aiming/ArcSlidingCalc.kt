@@ -1,9 +1,7 @@
-package frc.robot.subsystems
+package frc.robot.subsystems.aiming
 
 import frc.robot.Constants.AimingConstants
-import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.math.sinh
 
 object ArcSlidingCalc {
     fun getXChange(angleChange: Double): Double {

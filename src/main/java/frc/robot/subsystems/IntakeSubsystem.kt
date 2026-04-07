@@ -135,7 +135,6 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun isInPosition(deadzone: Double): Boolean {
-        println("What the fuck is this shit" + rightleverMotor.getClosedLoopError().valueAsDouble)
         return (rightleverMotor.getClosedLoopError().valueAsDouble < deadzone)
     }
 
@@ -161,11 +160,9 @@ object IntakeSubsystem : SubsystemBase() {
         //return (limitUp.get() || limitDown.get())
         return false
     }
-    fun limitOutput(){
+    fun limitOutput() {
         //print("Limit Up Pressed: "+limitUp.get())
         //print("Limit Down Pressed: "+limitDown.get())
-
-
     }
 }
 

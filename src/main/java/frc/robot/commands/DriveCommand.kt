@@ -6,9 +6,8 @@ package frc.robot.commands
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
-import frc.robot.subsystems.AimingCalc
+import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.DriveSubsystem
-import frc.robot.subsystems.LimelightSubsystem
 
 class DriveCommand(
     private val x: () -> Double,
