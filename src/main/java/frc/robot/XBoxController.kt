@@ -89,7 +89,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 //    }
 
     fun north(): Trigger {
-        return Trigger { getRawButton(7) } // Select Button
+        return Trigger { startButton } // Select Button
     }
 
     fun XLock(): Trigger {

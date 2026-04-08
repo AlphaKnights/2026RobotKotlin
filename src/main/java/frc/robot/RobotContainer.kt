@@ -211,7 +211,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Red Auto Deliver Only RIGHT",
+            "Blue Sweep",
         )
     }
 }

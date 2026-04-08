@@ -10,12 +10,15 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.XBoxController
@@ -128,11 +131,11 @@ object DriveSubsystem : SubsystemBase()
                 )
             )
 
-            resetOdometry(LimelightSubsystem.getPose()?.toPose2d() ?: getPose())
+            resetOdometry(LimelightSubsystem.getPose()?.toPose2d()!!.relativeTo(Pose2d(Translation2d(-16.54099/2, -8.069326/2), Rotation2d())) ?: getPose()) //limelight synchronization
             println(getPose())
 
-            println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")
-            println("AllianceRed = ${(DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red}")
+            //println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")
+            //println("AllianceRed = ${(DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red}")
       //  if(counter % 5 ==0) {
             // swervePublisher.set(states);
             //currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
@@ -151,7 +154,7 @@ object DriveSubsystem : SubsystemBase()
 //
 //        println("angle:"+gyro.getYaw())
 //        println(xBoxController.getRawAxis(0))
-    }
+        }
 
     fun getPose(): Pose2d {
         return odometry.poseMeters

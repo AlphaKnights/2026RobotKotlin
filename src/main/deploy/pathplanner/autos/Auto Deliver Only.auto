@@ -41,6 +41,12 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Back Up - Middle Continued"
+          }
         }
       ]
     }

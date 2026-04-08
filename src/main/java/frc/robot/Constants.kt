@@ -53,7 +53,7 @@ object Constants {
         const val I = 0.0
         const val D = 0.01
 
-        const val LEVER_OUT_POSITION = 12.0
+        const val LEVER_OUT_POSITION = 11.6
         const val LEVER_IN_POSITION = 0.0
 
         const val LEVER_SPEED = 0.2 // in rpm
