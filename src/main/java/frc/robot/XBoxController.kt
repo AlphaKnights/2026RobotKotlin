@@ -96,5 +96,9 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return Trigger { leftBumperButton }
     }
 
+    fun snakeDrive(): Trigger {
+        return Trigger { rightBumperButton }
+    }
+
 
 }

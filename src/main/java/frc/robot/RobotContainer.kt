@@ -9,6 +9,7 @@ import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import kotlin.math.atan2
 
 
 /**
@@ -124,6 +125,15 @@ object RobotContainer {
         xBoxController
             .XLock().whileTrue(
                 LockXCommand()
+            )
+
+        xBoxController
+            .snakeDrive().whileTrue(
+                DriveSetPointCommand(
+                    x = { xBoxController.x() },
+                    y = { xBoxController.y() },
+                    angle = { atan2(xBoxController.y(), xBoxController.x()) },
+                )
             )
 
         // Button Board
