@@ -103,8 +103,8 @@ object DriveSubsystem : SubsystemBase()
                 drive(speeds, fieldRelative = false)
             },
             PPHolonomicDriveController(
-                PIDConstants(5.0, 0.0, 0.0),
-                PIDConstants(17.0, 0.0, 0.0),
+                PIDConstants(5.0, 0.0, 0.01),
+                PIDConstants(2.0, 0.0, 0.01),
                 1.0,
             ),
             config,
@@ -131,7 +131,7 @@ object DriveSubsystem : SubsystemBase()
                 )
             )
 
-            resetOdometry(LimelightSubsystem.getPose()?.toPose2d()!!.relativeTo(Pose2d(Translation2d(-16.54099/2, -8.069326/2), Rotation2d())) ?: getPose()) //limelight synchronization
+            resetOdometry(LimelightSubsystem.getPose()?.toPose2d()?.relativeTo(Pose2d(Translation2d(-16.54099/2, -8.069326/2), Rotation2d())) ?: getPose()) //limelight synchronization
             println(getPose())
 
             //println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")

@@ -56,7 +56,7 @@ object RobotContainer {
                 x = { xBoxController.x() },
                 y = { xBoxController.y() },
                 rot = { xBoxController.rot() },
-                autoAngle = { xBoxController.autoAim().asBoolean },
+                autoAngle = { /* xBoxController.autoAim().asBoolean */ false },
             )
 
         // Reset heading
@@ -211,7 +211,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Blue Sweep",
+            "Red Swipe",
         )
     }
 }

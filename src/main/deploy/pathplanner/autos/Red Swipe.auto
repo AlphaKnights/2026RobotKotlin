@@ -11,6 +11,18 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Red Back Up - Middle Continued"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Return"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
