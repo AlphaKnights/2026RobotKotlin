@@ -118,12 +118,22 @@ object RobotContainer {
                 NorthCommand(
                     x = { xBoxController.x() },
                     y = { xBoxController.y() },
-                )
+                ),
             )
 
         xBoxController
             .XLock().whileTrue(
-                LockXCommand()
+                LockXCommand(),
+            )
+
+        xBoxController
+            .altDelivery().whileTrue(
+                DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
+            )
+
+        xBoxController
+            .altIntake().whileTrue(
+                IntakeCommand(false)
             )
 
         // Button Board
@@ -143,7 +153,7 @@ object RobotContainer {
             .whileTrue(
                 DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
             )
-        if (xBoxController.deliveryScale() >= 0.5) {
+        if (xBoxController.deliveryScale() >= 0.5) { // Yo what fucking dumbass made this
             DeliveryCommand(xBoxController.deliveryScale())
         }
         buttonBoard

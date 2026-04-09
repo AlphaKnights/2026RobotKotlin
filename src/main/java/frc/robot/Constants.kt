@@ -148,6 +148,7 @@ object Constants {
         const val LEFT_LAUNCHMOTOR_ID = 54
         const val RIGHT_LAUNCHMOTOR_ID = 28
         const val LAUNCH_SPEED = 0.65
+        const val ALT_LAUNCH_SPEED = 0.75
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0

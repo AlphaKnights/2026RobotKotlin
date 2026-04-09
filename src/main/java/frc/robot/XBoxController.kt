@@ -96,5 +96,13 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return Trigger { leftBumperButton }
     }
 
+    fun altDelivery(): Trigger {
+        return Trigger { aButton }
+    }
+
+    fun altIntake(): Trigger {
+        return Trigger { rightBumperButton }
+    }
+
 
 }
