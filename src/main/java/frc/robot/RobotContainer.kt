@@ -230,7 +230,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Red Swipe",
+            "Blue Depot",
         )
     }
 }
