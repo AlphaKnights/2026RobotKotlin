@@ -36,7 +36,8 @@ object RobotContainer {
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-                "Delivery" to AutoDeliveryCommand(0.5 /*Constants.LaunchConstants.LAUNCH_SPEED*/),
+                "Delivery" to AutoDeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
+                "Supershoot" to AutoDeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
                 "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
                 "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
                 "Intake" to IntakeCommand(false),
@@ -221,7 +222,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Red Swipe",
+            "Red Auto Deliver Only",
         )
     }
 }

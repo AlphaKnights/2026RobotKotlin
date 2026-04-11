@@ -93,8 +93,8 @@ object DeliverySubsystem : SubsystemBase() {
     fun forward(launchProp: Double) {
         //leftLaunchMotor.setControl(VelocityVoltage(launchProp))
         //rightLaunchMotor.setControl(VelocityVoltage(launchProp))
-        leftLaunchMotor.set(LaunchConstants.LAUNCH_SPEED)
-        rightLaunchMotor.set(-LaunchConstants.LAUNCH_SPEED)
+        leftLaunchMotor.set(launchProp)
+        rightLaunchMotor.set(-launchProp)
 
     }
 
