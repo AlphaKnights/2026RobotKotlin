@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Back Up - Middle"
+            "pathName": "Red Back Up - Middle"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Delivery"
+                  "name": "Supershoot"
                 }
               },
               {

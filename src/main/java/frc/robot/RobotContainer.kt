@@ -2,6 +2,8 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
@@ -42,6 +44,8 @@ object RobotContainer {
                 "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
                 "Intake" to IntakeCommand(false),
                 "Indexer" to AutoStorageCommand(false),
+                "Intake Manual In" to IntakeLeverManualCommand(Constants.IntakeDirection.IN),
+                "Intake Manual Out" to IntakeLeverManualCommand(Constants.IntakeDirection.OUT),
             ),
         )
 
@@ -72,11 +76,11 @@ object RobotContainer {
                 Constants.AlignDirection.LEFT,
             ),
         )
-        xBoxController.alignR().whileTrue(
-            AutoAlignManualCommand(
-                Constants.AlignDirection.RIGHT,
-            ),
-        )
+  //      xBoxController.alignR().whileTrue(
+      //      AutoAlignManualCommand(
+          //      Constants.AlignDirection.RIGHT,
+            //),
+       // )
 
         xBoxController.resetOdometry()
             .whileTrue(
@@ -135,6 +139,10 @@ object RobotContainer {
         xBoxController
             .altIntake().whileTrue(
                 IntakeCommand(false)
+            )
+        buttonBoard
+            .button(7).whileTrue(
+                SuperStorageCommand(false),
             )
 
         // Button Board
@@ -222,7 +230,7 @@ object RobotContainer {
         //        #                                         )
 
         return PathPlannerAuto(
-            "Red Auto Deliver Only",
+            "Red Swipe",
         )
     }
 }

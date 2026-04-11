@@ -148,7 +148,7 @@ object Constants {
         const val LEFT_LAUNCHMOTOR_ID = 54
         const val RIGHT_LAUNCHMOTOR_ID = 28
         const val LAUNCH_SPEED = 0.65
-        const val ALT_LAUNCH_SPEED = 0.75
+        const val ALT_LAUNCH_SPEED = 0.85
         const val LAUNCH_P = 0.1
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0
@@ -164,6 +164,7 @@ object Constants {
 
         const val ROLLER_MOTOR_ID_2 = 24
         const val ROLLER_SPEED = 0.65
+        const val ALT_ROLLER_SPEED = 0.9
         const val ROLLER_MOTOR_CURRENT_LIMITS = 20.0
         const val ROLLER_MOTOR_STATOR_LIMITS = 40.0
         const val BUTTON = 11

@@ -54,9 +54,9 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun alignL() : Trigger {
         return Trigger { xButton }
     }
-    fun alignR() : Trigger {
-        return Trigger { bButton }
-    }
+   // fun alignR() : Trigger {
+     //   return Trigger { bButton }
+   // }
     fun autoAim() : Trigger {
         return Trigger { aButton }
     }
@@ -102,6 +102,10 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     fun altIntake(): Trigger {
         return Trigger { rightBumperButton }
+    }
+
+    fun altIndexer(): Trigger {
+        return Trigger { bButton }
     }
 
 
