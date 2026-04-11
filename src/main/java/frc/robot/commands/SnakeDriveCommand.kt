@@ -7,14 +7,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.DriveSubsystem
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj2.command.WrapperCommand
 
 
 class SnakeDriveCommand(
-    private val X: () ->  Double,
-    private val Y: () -> Double,
-    private val Angle: () -> Double
+    private val x: () ->  Double,
+    private val y: () -> Double,
+    private val angle: () -> Double
 ) : Command() {
 
     init {
@@ -40,21 +38,21 @@ class SnakeDriveCommand(
         // calculate rotational speed using PID controller, making sure max speed is respected
         val rotSpeed =
             clamp(
-                rotateController.calculate(curpose.rotation.radians, Angle()),
+                rotateController.calculate(curpose.rotation.radians, angle()),
                 -1.0,
                 1.0,
             ) * Constants.DriveConstants.MAX_ANGULAR_SPEED
 
         val driveSpeedX =
             clamp(
-                driveController.calculate(curpose.translation.x, X()),
+                driveController.calculate(curpose.translation.x, x()),
                 -1.0,
                 1.0,
             ) * Constants.DriveConstants.MAX_METERS_PER_SECOND
 
         val driveSpeedY =
             clamp(
-                driveController.calculate(curpose.translation.y, Y()),
+                driveController.calculate(curpose.translation.y, y()),
                 -1.0,
                 1.0,
             ) * Constants.DriveConstants.MAX_METERS_PER_SECOND

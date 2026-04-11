@@ -129,7 +129,7 @@ object RobotContainer {
 
         xBoxController
             .snakeDrive().whileTrue(
-                DriveSetPointCommand(
+                SnakeDriveCommand(
                     x = { xBoxController.x() },
                     y = { xBoxController.y() },
                     angle = { atan2(xBoxController.y(), xBoxController.x()) },
