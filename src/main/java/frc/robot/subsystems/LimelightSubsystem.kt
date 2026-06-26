@@ -5,7 +5,6 @@ package frc.robot.subsystems
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Pose3d
 import frc.robot.Constants
 import frc.robot.LimelightHelpers.LimelightResults
@@ -53,7 +52,7 @@ object LimelightSubsystem : PoseProvider {
                     ?.let(::parseJson)
                     ?.targets_Fiducials
                     ?.firstOrNull()
-                    ?.getRobotPose_FieldSpace()
+                    ?.robotPose_FieldSpace
             }.onSuccess { pose ->
                 return pose
             }.onFailure {
@@ -69,8 +68,6 @@ object LimelightSubsystem : PoseProvider {
         }
     }
 
-
-
     fun isAligned(): Boolean {
         val pose = tagPose ?: return false
 
@@ -81,9 +78,7 @@ object LimelightSubsystem : PoseProvider {
             isRotationAligned(pose)
     }
 
-    fun getPose(): Pose3d? {
-        return tagPose
-    }
+    fun getPose(): Pose3d? = tagPose
 
     private fun isWithinLeftPosition(pose: Pose3d): Boolean {
         val translation = pose.translation

@@ -1,11 +1,15 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.commands
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.StorageSubsystem
 
-class AutoStorageCommand(reversed: Boolean) : Command() {
-
+class AutoStorageCommand(
+    reversed: Boolean,
+) : Command() {
     val reverse = reversed
     val timer: Timer = Timer()
 
@@ -22,15 +26,12 @@ class AutoStorageCommand(reversed: Boolean) : Command() {
     override fun execute() {
         if (reverse) {
             StorageSubsystem.roll(-Constants.RollerConstants.ROLLER_SPEED)
-        }
-        else {
+        } else {
             StorageSubsystem.roll(Constants.RollerConstants.ROLLER_SPEED)
         }
     }
 
-    override fun isFinished(): Boolean {
-        return if (timer.get() > 3) true else false
-    }
+    override fun isFinished(): Boolean = if (timer.get() > 3) true else false
 
     override fun end(interrupted: Boolean) {
         StorageSubsystem.rollerstop()

@@ -20,33 +20,35 @@ import kotlin.math.sqrt
 object AimingCalc {
     fun canShoot(curPose: Pose2d): Double {
         // in meters
-        var x: Double = -curPose.x
-        var y: Double = curPose.y
+        val x: Double = -curPose.x
+        val y: Double = curPose.y
 
         val hub = getHubPosition()
-        var distanceX: Double = abs(x - hub.x)
-        var distanceY: Double = abs(y - hub.y)
-        var distanceTotal: Double = sqrt(distanceX.pow(2) + distanceY.pow(2))
+        val distanceX: Double = abs(x - hub.x)
+        val distanceY: Double = abs(y - hub.y)
+        val distanceTotal: Double = sqrt(distanceX.pow(2) + distanceY.pow(2))
 
-        var distanceGood: Boolean = (
+        var distanceGood: Boolean =
+            (
                 AimingConstants.DISTANCE - AimingConstants.GOOD_DISTANCE_TOLERANCE <= distanceTotal &&
-                        distanceTotal <= AimingConstants.DISTANCE + AimingConstants.GOOD_DISTANCE_TOLERANCE
-                )
-        var distanceMiddlingLow: Boolean = (
-                AimingConstants.DISTANCE - AimingConstants.MIDDLING_DISTANCE_TOLERANCE <=
-                        distanceTotal &&
-                        distanceTotal <= AimingConstants.DISTANCE &&
-                        !distanceGood
-                )
-        var distanceMiddlingHigh: Boolean = (
+                    distanceTotal <= AimingConstants.DISTANCE + AimingConstants.GOOD_DISTANCE_TOLERANCE
+            )
+        var distanceMiddlingLow: Boolean =
+            (
+                AimingConstants.DISTANCE - AimingConstants.MIDDLING_DISTANCE_TOLERANCE <= distanceTotal &&
+                    distanceTotal <= AimingConstants.DISTANCE &&
+                    !distanceGood
+            )
+        var distanceMiddlingHigh: Boolean =
+            (
                 AimingConstants.DISTANCE <= distanceTotal &&
-                        distanceTotal <= AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE &&
-                        !distanceGood
-                )
-        var distanceBadHigh: Boolean = (
-                distanceTotal >
-                        AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE
-                )
+                    distanceTotal <= AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE &&
+                    !distanceGood
+            )
+        val distanceBadHigh: Boolean =
+            (distanceTotal > AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE)
+
+        // to-do: integrate with dashboard
 
         if (distanceBadHigh) {
             return 1.0
@@ -66,21 +68,21 @@ object AimingCalc {
         vy: Double,
     ): Double {
         // in meters and radians
-        var x: Double = -curPose.x
-        var y: Double = curPose.y
-        var angle: Double = curPose.rotation.radians
+        val x: Double = -curPose.x
+        val y: Double = curPose.y
+        val angle: Double = curPose.rotation.radians
 
-        var distanceX: Double = AimingConstants.RED_HUB_X - x
-        var distanceY: Double = AimingConstants.RED_HUB_Y - y
+        val distanceX: Double = AimingConstants.RED_HUB_X - x
+        val distanceY: Double = AimingConstants.RED_HUB_Y - y
 
         // (-dx/dt(-rx) + dy/dt(-ry)) / (hx-rx)^2
-        var termOne: Double = (vx - vy) / (distanceX.pow(2))
+        val termOne: Double = (vx - vy) / (distanceX.pow(2))
 
         // 1/(1+((hy-ry)/(hx-rx))^2)
-        var termTwo: Double = 1 / (1 + (distanceY / distanceX).pow(2))
+        val termTwo: Double = 1 / (1 + (distanceY / distanceX).pow(2))
 
         // atan2(hy-ry,hx-rx)-angle
-        var termThree: Double = atan2(distanceY, distanceX) - angle
+        val termThree: Double = atan2(distanceY, distanceX) - angle
         var angularDistance = 1.0
         if (abs(termThree) <= AimingConstants.SLOW_DISTANCE) {
             angularDistance = max(AimingConstants.MIN_SPEED, abs(termThree) / AimingConstants.SLOW_DISTANCE)
@@ -89,7 +91,8 @@ object AimingCalc {
 
         return angularDistance * AimingConstants.MAX_SPEED + sign(x) * termOne * termTwo
     }
-    //claude starts here beware
+
+    // claude starts here beware
     // Returns true when targeting red hub, false for blue.
     // Reads DriverStation at runtime; falls back to the constant if DS hasn't set it.
     private fun isRedAlliance(): Boolean {
@@ -206,11 +209,11 @@ object AimingCalc {
         val angleToHub = atan2(-dy, -dx) // direction from robot toward hub
         val currentAngle = curPose.rotation.radians
         // Wrap to (−π, π] so robot always turns the short way around.
-        val angleDiff = (angleToHub - currentAngle) //+ PI).mod(2 * PI) - PI
+        val angleDiff = (angleToHub - currentAngle) // + PI).mod(2 * PI) - PI
         val rotScale =
             if (abs(angleDiff) > AimingConstants.SLOW_DISTANCE) {
                 1.0
-            } else if(abs(angleDiff) < AimingConstants.ANGLE_DEADZONE) {
+            } else if (abs(angleDiff) < AimingConstants.ANGLE_DEADZONE) {
                 0.0
             } else {
                 max(AimingConstants.MIN_SPEED, abs(angleDiff) / AimingConstants.SLOW_DISTANCE)
@@ -225,10 +228,7 @@ object AimingCalc {
         //
         // where vx/vy are the robot's current field-relative velocities.
         val feedforwardOmega =
-            (
-                    -currentSpeeds.vxMetersPerSecond * dy +
-                            currentSpeeds.vyMetersPerSecond * dx
-                    ) / distanceSq
+            (-currentSpeeds.vxMetersPerSecond * dy + currentSpeeds.vyMetersPerSecond * dx) / distanceSq
 
         return ChassisSpeeds(vx, vy, proportionalOmega + feedforwardOmega)
     }

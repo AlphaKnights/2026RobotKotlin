@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -192,7 +193,7 @@ internal class LimelightTest {
                 }
 
             testScheduler.advanceUntilIdle() // Execute all coroutines instantly
-            jobs.forEach { it.join() }
+            jobs.joinAll()
 
             // Verify final state is consistent
             val finalPose = LimelightSubsystem.tagPose

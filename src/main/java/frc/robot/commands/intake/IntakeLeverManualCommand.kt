@@ -1,15 +1,15 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.commands.intake
 
-import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.subsystems.IntakeSubsystem
 import frc.robot.Constants
+import frc.robot.subsystems.IntakeSubsystem
 
 class IntakeLeverManualCommand(
     private val direction: Constants.IntakeDirection,
-) : Command(){
-
-
+) : Command() {
     init {
         addRequirements(IntakeSubsystem)
     }
@@ -25,13 +25,9 @@ class IntakeLeverManualCommand(
         IntakeSubsystem.moveLever(speed)
     }
 
-    override fun isFinished(): Boolean {
-        return IntakeSubsystem.limitSwitchPressed()
-    }
+    override fun isFinished(): Boolean = IntakeSubsystem.limitSwitchPressed()
 
     override fun end(interrupted: Boolean) {
         IntakeSubsystem.stopIntakeLever()
-
     }
-
 }

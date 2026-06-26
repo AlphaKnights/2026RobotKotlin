@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot
 
 import edu.wpi.first.math.MathUtil.applyDeadband
@@ -13,7 +16,8 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         lerpX =
             lerp(
                 -applyDeadband(
-                    getRawAxis(1), // right y
+                    getRawAxis(1),
+                    // right y
                     Constants.OperatorConstants.DRIVE_DEADBAND,
                 ) * speedScale(),
                 lerpX,
@@ -22,63 +26,65 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     }
 
     fun y(): Double {
-        lerpY = lerp(-applyDeadband(
-            getRawAxis(0),    //right x
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale(),
-            lerpY
-                )
+        lerpY =
+            lerp(
+                -applyDeadband(
+                    getRawAxis(0),
+                    // right x
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpY,
+            )
         return lerpY
     }
 
     fun rot(): Double {
-        lerpRot = lerp(-applyDeadband(
-            getRawAxis(4),   //left x
-            Constants.OperatorConstants.DRIVE_DEADBAND
-        ) * speedScale(),
-            lerpRot
-                )
+        lerpRot =
+            lerp(
+                -applyDeadband(
+                    getRawAxis(4),
+                    // left x
+                    Constants.OperatorConstants.DRIVE_DEADBAND,
+                ) * speedScale(),
+                lerpRot,
+            )
         return lerpRot
     }
-    fun speedScale(): Double{
-        return ((-getRightTriggerAxis() +1))
-    }
 
-    fun deliveryScale(): Double {
-        return getLeftTriggerAxis()
-    }
+    fun speedScale(): Double = ((-rightTriggerAxis + 1))
 
-    fun heading() : Trigger {
-        return Trigger { yButton }
-    }
-    fun alignL() : Trigger {
-        return Trigger { xButton }
-    }
-   // fun alignR() : Trigger {
-     //   return Trigger { bButton }
-   // }
-    fun autoAim() : Trigger {
-        return Trigger { aButton }
-    }
+    fun deliveryScale(): Double = leftTriggerAxis
 
-    fun lerp(ref: Double, start: Double) : Double {
+    fun heading(): Trigger = Trigger { yButton }
+
+    fun alignL(): Trigger = Trigger { xButton }
+
+    // fun alignR() : Trigger {
+    //   return Trigger { bButton }
+    // }
+    fun autoAim(): Trigger = Trigger { aButton }
+
+    fun lerp(
+        ref: Double,
+        start: Double,
+    ): Double =
         if (ref > start) {
-            return if (start + Constants.OperatorConstants.LERP_VAL > ref) ref
-            else start + Constants.OperatorConstants.LERP_VAL
+            if (start + Constants.OperatorConstants.LERP_VAL > ref) {
+                ref
+            } else {
+                start + Constants.OperatorConstants.LERP_VAL
+            }
         } else {
-            return if (start - Constants.OperatorConstants.LERP_VAL < ref) ref
-            else start - Constants.OperatorConstants.LERP_VAL
+            if (start - Constants.OperatorConstants.LERP_VAL < ref) {
+                ref
+            } else {
+                start - Constants.OperatorConstants.LERP_VAL
+            }
         }
 
-    }
+    fun resetOdometry(): Trigger = Trigger { rightStickButton }
 
-    fun resetOdometry(): Trigger {
-        return Trigger { rightStickButton }
-    }
-
-    fun driveToArc(): Trigger {
-        return Trigger { startButton }
-    }
+    fun driveToArc(): Trigger = Trigger { startButton }
 
 //    fun slideLeft(): Trigger {
 //        return Trigger { leftBumperButton }
@@ -92,21 +98,11 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return Trigger { startButton } // Select Button
     }
 
-    fun XLock(): Trigger {
-        return Trigger { leftBumperButton }
-    }
+    fun xLock(): Trigger = Trigger { leftBumperButton }
 
-    fun altDelivery(): Trigger {
-        return Trigger { aButton }
-    }
+    fun altDelivery(): Trigger = Trigger { aButton }
 
-    fun altIntake(): Trigger {
-        return Trigger { rightBumperButton }
-    }
+    fun altIntake(): Trigger = Trigger { rightBumperButton }
 
-    fun altIndexer(): Trigger {
-        return Trigger { bButton }
-    }
-
-
+    fun altIndexer(): Trigger = Trigger { bButton }
 }

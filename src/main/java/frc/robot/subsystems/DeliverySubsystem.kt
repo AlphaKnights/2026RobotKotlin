@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.subsystems
 
 import com.ctre.phoenix6.CANBus
@@ -10,22 +13,25 @@ import frc.robot.Constants.LaunchConstants
 
 object DeliverySubsystem : SubsystemBase() {
     /*
+    // Ultrasonic if we need one
     private val rangeFinder =
         Ultrasonic(
             Constants.UltrasonicConstants.PING_CHANNEL,
             Constants.UltrasonicConstants.ECHO_CHANNEL,
         )
      */
-    /* Ultrasonic if we need one */
     private val CAN = CANBus("didy")
     private val leftLaunchMotor =
         TalonFX(
-            LaunchConstants.LEFT_LAUNCHMOTOR_ID, CAN
+            LaunchConstants.LEFT_LAUNCHMOTOR_ID,
+            CAN,
         )
     private val rightLaunchMotor =
         TalonFX(
-            LaunchConstants.RIGHT_LAUNCHMOTOR_ID, CAN
+            LaunchConstants.RIGHT_LAUNCHMOTOR_ID,
+            CAN,
         )
+
     init {
         Ultrasonic.setAutomaticMode(true)
 
@@ -76,7 +82,7 @@ object DeliverySubsystem : SubsystemBase() {
             }
 
         rightLaunchMotor.configurator.apply(launchMotorConfig2)
-        /* rangeFinder.isEnabled = true */
+        // rangeFinder.isEnabled = true
 
 //        val launchMotorConfig =
 //            SparkMaxConfig().apply {
@@ -91,11 +97,10 @@ object DeliverySubsystem : SubsystemBase() {
     }
 
     fun forward(launchProp: Double) {
-        //leftLaunchMotor.setControl(VelocityVoltage(launchProp))
-        //rightLaunchMotor.setControl(VelocityVoltage(launchProp))
+        // leftLaunchMotor.setControl(VelocityVoltage(launchProp))
+        // rightLaunchMotor.setControl(VelocityVoltage(launchProp))
         leftLaunchMotor.set(launchProp)
         rightLaunchMotor.set(-launchProp)
-
     }
 
     fun stop() {
@@ -107,5 +112,5 @@ object DeliverySubsystem : SubsystemBase() {
     fun fuelInside(): Boolean =
     rangeFinder.rangeInches <
     Constants.UltrasonicConstants.CORAL_DISTANCE
-    */
+     */
 }

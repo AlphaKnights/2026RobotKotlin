@@ -1,9 +1,11 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot
+
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
-import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
@@ -11,7 +13,6 @@ import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,8 +31,7 @@ object RobotContainer {
 
     private val buttonBoard = CommandJoystick(Constants.OperatorConstants.BUTTON_BOARD_PORT)
 
-    init
-    {
+    init {
         LimelightSubsystem.startPolling()
 
         NamedCommands.registerCommands(
@@ -61,115 +61,121 @@ object RobotContainer {
                 x = { xBoxController.x() },
                 y = { xBoxController.y() },
                 rot = { xBoxController.rot() },
-                autoAngle = { /* xBoxController.autoAim().asBoolean */ false },
+                autoAngle = {
+                    // xBoxController.autoAim().asBoolean
+                    false
+                },
             )
 
         // Reset heading
-        xBoxController
-            .heading()
-            .whileTrue(
-                ResetHeadingCommand(),
-            )
+        xBoxController.heading().whileTrue(
+            ResetHeadingCommand(),
+        )
         // Auto Align
         xBoxController.alignL().whileTrue(
             AutoAlignManualCommand(
                 Constants.AlignDirection.LEFT,
             ),
         )
-  //      xBoxController.alignR().whileTrue(
-      //      AutoAlignManualCommand(
-          //      Constants.AlignDirection.RIGHT,
-            //),
-       // )
+        //      xBoxController.alignR().whileTrue(
+        //      AutoAlignManualCommand(
+        //      Constants.AlignDirection.RIGHT,
+        // ),
+        // )
 
-        xBoxController.resetOdometry()
-            .whileTrue(
-                ResetOdometry()
-            )
+        xBoxController.resetOdometry().whileTrue(
+            ResetOdometry(),
+        )
 
 //        xBoxController
-//            .driveToArc().onTrue(
+//            .driveToArc()
+//            .onTrue(
 //                DriveSetPointCommand(
 //                    { DriveToArcPoseGenerator.generatePath().x },
 //                    { DriveToArcPoseGenerator.generatePath().y },
-//                    { -DriveToArcPoseGenerator.generatePath().rotation.radians }
-//                )
-//            )
-
-//        xBoxController
-//            .slideLeft().whileTrue(
-//                DriveCommand(
-//                    {0.0},
-//                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
-//                    {Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
-//                    {false},
-//                    false
-//                )
+//                    { -DriveToArcPoseGenerator.generatePath().rotation.radians },
+//                ),
 //            )
 //
 //        xBoxController
-//            .slideRight().whileTrue(
+//            .slideLeft()
+//            .whileTrue(
 //                DriveCommand(
-//                    {0.0},
-//                    {ArcSlidingCalc.getYChange(Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE)},
-//                    {-Constants.DriveConstants.MAX_ANGULAR_SPEED*Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE},
-//                    {false},
-//                    false
-//                )
+//                    { 0.0 },
+//                    {
+//                        ArcSlidingCalc.getYChange(
+//                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
+//                        )
+//                    },
+//                    {
+//                        Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
+//                    },
+//                    { false },
+//                    false,
+//                ),
+//            )
+//
+//        xBoxController
+//            .slideRight()
+//            .whileTrue(
+//                DriveCommand(
+//                    { 0.0 },
+//                    {
+//                        ArcSlidingCalc.getYChange(
+//                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
+//                        )
+//                    },
+//                    {
+//                        -Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
+//                    },
+//                    { false },
+//                    false,
+//                ),
 //            )
 
-        xBoxController
-            .north().whileTrue(
-                NorthCommand(
-                    x = { xBoxController.x() },
-                    y = { xBoxController.y() },
-                ),
-            )
+        xBoxController.north().whileTrue(
+            NorthCommand(
+                x = { xBoxController.x() },
+                y = { xBoxController.y() },
+            ),
+        )
 
-        xBoxController
-            .XLock().whileTrue(
-                LockXCommand(),
-            )
+        xBoxController.xLock().whileTrue(
+            LockXCommand(),
+        )
 
-        xBoxController
-            .altDelivery().whileTrue(
-                DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
-            )
+        xBoxController.altDelivery().whileTrue(
+            DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
+        )
 
-        xBoxController
-            .altIntake().whileTrue(
-                IntakeCommand(false)
-            )
-        buttonBoard
-            .button(7).whileTrue(
-                SuperStorageCommand(false),
-            )
+        xBoxController.altIntake().whileTrue(
+            IntakeCommand(false),
+        )
+        buttonBoard.button(7).whileTrue(
+            SuperStorageCommand(false),
+        )
 
         // Button Board
-        buttonBoard
-            .button(Constants.RollerConstants.BUTTON)
-            .whileTrue(
-                StorageCommand(false),
-            )
-        buttonBoard
-            .button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON)
-            .whileTrue(
-                StorageCommand(true),
-            )
+        buttonBoard.button(Constants.RollerConstants.BUTTON).whileTrue(
+            StorageCommand(false),
+        )
+        buttonBoard.button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON).whileTrue(
+            StorageCommand(true),
+        )
 
-        buttonBoard
-            .button(Constants.OperatorConstants.DELIVERY_BUTTON)
-            .whileTrue(
-                DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
-            )
+        buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON).whileTrue(
+            DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
+        )
         if (xBoxController.deliveryScale() >= 0.5) { // Yo what fucking dumbass made this
             DeliveryCommand(xBoxController.deliveryScale())
         }
-        buttonBoard
-            .button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON)
-            .whileTrue(
-                DeliveryCommand(-Constants.LaunchConstants.LAUNCH_SPEED),
-            )
+        buttonBoard.button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON).whileTrue(
+            DeliveryCommand(-Constants.LaunchConstants.LAUNCH_SPEED),
+        )
 
         buttonBoard
             .button(
@@ -207,27 +213,33 @@ object RobotContainer {
                 ),
             )
 
-        buttonBoard
-            .button(Constants.OperatorConstants.INTAKE_BUTTON)
-            .whileTrue(
-                IntakeCommand(
-                    false,
-                ),
-            )
-        buttonBoard
-            .button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON)
-            .whileTrue(
-                IntakeCommand(
-                    true,
-                ),
-            )
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(
+            IntakeCommand(
+                false,
+            ),
+        )
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON).whileTrue(
+            IntakeCommand(
+                true,
+            ),
+        )
     }
 
     fun getAutonomousCommand(): Command {
-        // return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(-8, 0, 0), False, False), self.robotDrive),
-        //        #                                         commands2.WaitCommand(AutoConstants.kTimedTime),
-        //        #                                         commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(0, 0, 0), False, False), self.robotDrive)
-        //        #                                         )
+//        return commands2.SequentialCommandGroup(
+//            commands2.InstantCommand(lambda: self. robotDrive . drive (ChassisSpeeds(
+//                -8,
+//                0,
+//                0
+//            ), False, False
+//        ), self.robotDrive),
+//        commands2.WaitCommand(AutoConstants.kTimedTime),
+//        commands2.InstantCommand(lambda: self. robotDrive . drive (ChassisSpeeds(
+//            0,
+//            0,
+//            0
+//        ), False, False), self.robotDrive)
+//        )
 
         return PathPlannerAuto(
             "Blue Depot",

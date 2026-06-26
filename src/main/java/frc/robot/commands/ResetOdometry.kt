@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.commands
 
 import edu.wpi.first.math.geometry.Pose2d
@@ -12,6 +15,6 @@ class ResetOdometry : Command() {
 
     override fun execute() {
         super.execute()
-        DriveSubsystem.resetOdometry(Pose2d(0.0,0.0, Rotation2d(0.0) )) // DriveSubsystem.getPose().rotation
+        DriveSubsystem.resetOdometry(Pose2d(0.0, 0.0, Rotation2d(0.0))) // DriveSubsystem.getPose().rotation
     }
 }

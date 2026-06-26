@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.commands
 
 import edu.wpi.first.math.MathUtil.clamp
@@ -5,24 +8,30 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.Constants
+import frc.robot.Constants.DriveConstants
 import frc.robot.subsystems.DriveSubsystem
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj2.command.WrapperCommand
-
 
 class DriveSetPointCommand(
-    private val X: () ->  Double,
-    private val Y: () -> Double,
-    private val Angle: () -> Double
+    private val x: () -> Double,
+    private val y: () -> Double,
+    private val angle: () -> Double,
 ) : Command() {
-
     init {
         addRequirements(DriveSubsystem)
     }
 
-    val rotateController = PIDController(1.0, 0.0, 0.01)
-    val driveController = PIDController(0.5, 0.0, 0.0)
+    val rotateController =
+        PIDController(
+            DriveConstants.ROTATE_CONTROLLER_P,
+            DriveConstants.ROTATE_CONTROLLER_I,
+            DriveConstants.ROTATE_CONTROLLER_D,
+        )
+    val driveController =
+        PIDController(
+            DriveConstants.TRANSLATION_CONTROLLER_P,
+            DriveConstants.TRANSLATION_CONTROLLER_I,
+            DriveConstants.TRANSLATION_CONTROLLER_D,
+        )
 
     // Do angle optimization (south) and scalable tuning based on max speed
     override fun execute() {
@@ -43,30 +52,29 @@ class DriveSetPointCommand(
         rotateController.setTolerance(Rotation2d.fromRadians(1.0).radians)
         rotateController.enableContinuousInput(-Math.PI, Math.PI)
 
-        driveController.setTolerance(0.05) // meters
-
+        driveController.setTolerance(DriveConstants.DRIVE_SETPOINT_TOLERANCE) // meters
 
         // calculate rotational speed using PID controller, making sure max speed is respected
         val rotSpeed =
             clamp(
-                rotateController.calculate(curpose.rotation.radians, Angle()),
+                rotateController.calculate(curpose.rotation.radians, angle()),
                 -1.0,
                 1.0,
-            ) * Constants.DriveConstants.MAX_ANGULAR_SPEED
+            ) * DriveConstants.MAX_ANGULAR_SPEED
 
         val driveSpeedX =
             clamp(
-                driveController.calculate(curpose.translation.x, X()),
+                driveController.calculate(curpose.translation.x, x()),
                 -1.0,
                 1.0,
-            ) * Constants.DriveConstants.MAX_METERS_PER_SECOND
+            ) * DriveConstants.MAX_METERS_PER_SECOND
 
         val driveSpeedY =
             clamp(
-                driveController.calculate(curpose.translation.y, Y()),
+                driveController.calculate(curpose.translation.y, y()),
                 -1.0,
                 1.0,
-            ) * Constants.DriveConstants.MAX_METERS_PER_SECOND
+            ) * DriveConstants.MAX_METERS_PER_SECOND
 
         DriveSubsystem.drive(
             ChassisSpeeds(
@@ -78,11 +86,9 @@ class DriveSetPointCommand(
         )
     }
 
-
     override fun isFinished(): Boolean {
         val curpose = DriveSubsystem.getPose()
-        return if (
-            driveController.atSetpoint() &&
+        return driveController.atSetpoint() &&
             rotateController.atSetpoint()
 //            curpose.x > X() - 0.05 &&
 //            curpose.x < X() + 0.05 &&
@@ -90,9 +96,5 @@ class DriveSetPointCommand(
 //            curpose.y < Y() + 0.05 &&
 //            curpose.rotation.radians > Angle() + 0.1 &&
 //            curpose.rotation.radians < Angle() - 0.1
-        ) {
-            true
-        } else false
     }
-
 }

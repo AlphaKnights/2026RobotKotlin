@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionOnlyReturningConstant:DriveSubsystem.kt$DriveSubsystem$fun shouldFlipPath(): Boolean</ID>
+    <ID>FunctionOnlyReturningConstant:IntakeSubsystem.kt$IntakeSubsystem$fun limitSwitchPressed(): Boolean</ID>
+    <ID>LongMethod:RobotContainer.kt$RobotContainer$private fun configureBindings()</ID>
+    <ID>MagicNumber:AimingCalc.kt$AimingCalc$0.1</ID>
+    <ID>MagicNumber:AimingCalc.kt$AimingCalc$5.0</ID>
+    <ID>MagicNumber:AutoDeliveryCommand.kt$AutoDeliveryCommand$3</ID>
+    <ID>MagicNumber:AutoStorageCommand.kt$AutoStorageCommand$3</ID>
+    <ID>MagicNumber:Constants.kt$Constants.AlignConstants$5.0</ID>
+    <ID>MagicNumber:Constants.kt$Constants.DriveConstants$0.002686</ID>
+    <ID>MagicNumber:Constants.kt$Constants.DriveConstants$0.113525</ID>
+    <ID>MagicNumber:Constants.kt$Constants.DriveConstants$0.170166</ID>
+    <ID>MagicNumber:Constants.kt$Constants.DriveConstants$0.5</ID>
+    <ID>MagicNumber:Constants.kt$Constants.DriveConstants$0.831299</ID>
+    <ID>MagicNumber:Constants.kt$Constants.DriveConstants$25.5</ID>
+    <ID>MagicNumber:Constants.kt$Constants.ModuleConstants$4.0</ID>
+    <ID>MagicNumber:Constants.kt$Constants.PathPlannerConstants$16.54099</ID>
+    <ID>MagicNumber:Constants.kt$Constants.PathPlannerConstants$8.069326</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$DriveSubsystem$3</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$DriveSubsystem$45.0</ID>
+    <ID>MagicNumber:IntakeCommand.kt$IntakeCommand$0.2</ID>
+    <ID>MagicNumber:RobotContainer.kt$RobotContainer$0.5</ID>
+    <ID>MagicNumber:RobotContainer.kt$RobotContainer$7</ID>
+    <ID>MagicNumber:XBoxController.kt$XBoxController$4</ID>
+    <ID>SpreadOperator:Constants.kt$Constants.DriveConstants$(*MODULE_POSITIONS)</ID>
+    <ID>TooManyFunctions:XBoxController.kt$XBoxController : XboxController</ID>
+    <ID>UnusedPrivateProperty:DriveSubsystem.kt$DriveSubsystem$private val states: Array&lt;SwerveModuleState&gt; = arrayOf( frontLeft.getState(), frontRight.getState(), rearLeft.getState(), rearRight.getState(), )</ID>
+    <ID>UnusedPrivateProperty:DriveSubsystem.kt$DriveSubsystem$private var fL: TalonFX = TalonFX(Constants.DriveConstants.FRONT_LEFT_DRIVING_ID)</ID>
+    <ID>UnusedPrivateProperty:DriveSubsystem.kt$DriveSubsystem$private var frontRightEncoder = CANcoder(Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID)</ID>
+    <ID>WildcardImport:RobotContainer.kt$import frc.robot.commands.*</ID>
+    <ID>WildcardImport:RobotContainer.kt$import frc.robot.commands.intake.*</ID>
+  </CurrentIssues>
+</SmellBaseline>
