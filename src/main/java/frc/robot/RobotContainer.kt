@@ -5,6 +5,10 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.util.sendable.Sendable
+import edu.wpi.first.util.sendable.SendableBuilder
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
@@ -13,6 +17,7 @@ import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import java.io.File
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,6 +54,7 @@ object RobotContainer {
             ),
         )
 
+        configureAuto()
         configureBindings()
     }
 
@@ -223,6 +229,21 @@ object RobotContainer {
                 true,
             ),
         )
+    }
+
+    private fun configureAuto() {
+        val autoChooser = SendableChooser<PathPlannerAuto>()
+        autoChooser.setDefaultOption("Default", PathPlannerAuto("Auto Deliver Only"))
+        val autoList =
+            buildList {
+                File("src/main/deploy/pathplanner/autos/").listFiles()?.forEach { auto ->
+                    add(PathPlannerAuto(auto.name))
+                }
+            }
+        for (auto in autoList) {
+            autoChooser.addOption(auto.name, auto)
+        }
+        SmartDashboard.putData("Auto Chooser", autoChooser)
     }
 
     fun getAutonomousCommand(): Command {
