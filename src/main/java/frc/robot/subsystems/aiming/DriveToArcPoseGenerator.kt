@@ -18,7 +18,13 @@ object DriveToArcPoseGenerator {
         val curpose = DriveSubsystem.getPose()
 
         val allianceRed =
-            (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+            try {
+                (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+            } catch (
+                e: java.util.NoSuchElementException,
+            ) {
+                true
+            }
         val hubPos =
             if (allianceRed) {
                 Translation2d(AimingConstants.RED_HUB_X, AimingConstants.RED_HUB_Y)

@@ -36,6 +36,8 @@ object RobotContainer {
 
     private val buttonBoard = CommandJoystick(Constants.OperatorConstants.BUTTON_BOARD_PORT)
 
+    private val autoChooser = SendableChooser<PathPlannerAuto>()
+
     init {
         LimelightSubsystem.startPolling()
 
@@ -232,7 +234,6 @@ object RobotContainer {
     }
 
     private fun configureAuto() {
-        val autoChooser = SendableChooser<PathPlannerAuto>()
         autoChooser.setDefaultOption("Default", PathPlannerAuto("Auto Deliver Only"))
         val autoList =
             buildList {
@@ -246,24 +247,5 @@ object RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser)
     }
 
-    fun getAutonomousCommand(): Command {
-//        return commands2.SequentialCommandGroup(
-//            commands2.InstantCommand(lambda: self. robotDrive . drive (ChassisSpeeds(
-//                -8,
-//                0,
-//                0
-//            ), False, False
-//        ), self.robotDrive),
-//        commands2.WaitCommand(AutoConstants.kTimedTime),
-//        commands2.InstantCommand(lambda: self. robotDrive . drive (ChassisSpeeds(
-//            0,
-//            0,
-//            0
-//        ), False, False), self.robotDrive)
-//        )
-
-        return PathPlannerAuto(
-            "Blue Depot",
-        )
-    }
+    fun getAutonomousCommand(): Command = autoChooser.selected
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.PathPlannerConstants
@@ -171,9 +172,8 @@ object DriveSubsystem : SubsystemBase() {
         )
     }
 
-    fun shouldFlipPath(): Boolean {
-        return false // (DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
-    }
+    fun shouldFlipPath(): Boolean =
+        (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
 
     fun drive(
         speeds: ChassisSpeeds,

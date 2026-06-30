@@ -9,12 +9,9 @@ import edu.wpi.first.hal.HAL
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.TimedRobot
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.subsystems.DriveSubsystem
-import frc.robot.subsystems.LimelightSubsystem
-import frc.robot.subsystems.aiming.AimingCalc
+import frc.robot.subsystems.Logger
 
 /**
  * The functions in this object (which basically functions as a singleton class) are called automatically
@@ -27,11 +24,8 @@ import frc.robot.subsystems.aiming.AimingCalc
  * object or package, it will get changed everywhere.)
  */
 object Robot : TimedRobot() {
-    /**
-     * The autonomous command to run. While a default value is set here,
-     * the method will set it to the value selected in
-     *the  AutoChooser on the dashboard.
-     */
+    val logger = Logger()
+
     init {
         // Kotlin initializer block, which effectually serves as the constructor code.
         // https://kotlinlang.org/docs/classes.html#constructors
@@ -66,40 +60,7 @@ object Robot : TimedRobot() {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run()
-
-        SmartDashboard.putNumber(
-            "Match Time",
-            DriverStation.getMatchTime(),
-        )
-        SmartDashboard.putNumber(
-            "CAN Utilization",
-            RobotController.getCANStatus().percentBusUtilization *
-                100,
-        )
-        SmartDashboard.putBoolean(
-            "Tag Detected",
-            LimelightSubsystem.tagPose != null,
-        )
-        SmartDashboard.putBoolean(
-            "Aligned to Tag",
-            LimelightSubsystem.isAligned(),
-        )
-        SmartDashboard.putNumber(
-            "limelight x",
-            LimelightSubsystem.tagPose?.x ?: -1.0,
-        )
-        SmartDashboard.putNumber(
-            "limelight z",
-            LimelightSubsystem.tagPose?.z ?: -1.0,
-        )
-        SmartDashboard.putNumber(
-            "limelight yaw",
-            LimelightSubsystem.tagPose?.rotation?.y ?: -1.0,
-        )
-        SmartDashboard.putNumber(
-            "Shooting Distance",
-            AimingCalc.canShoot(DriveSubsystem.getPose()),
-        )
+        logger.log()
     }
 
     /** This autonomous runs the autonomous command selected by your [RobotContainer] class.  */
