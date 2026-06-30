@@ -10,6 +10,7 @@ package frc.robot
  * `const` definitions. Other constant types should use `val` definitions.
  */
 
+import com.ctre.phoenix6.CANBus
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
@@ -156,6 +157,8 @@ object Constants {
         const val TURNING_MOTOR_CURRENT_LIMIT = 60.0
         const val DRIVING_STATOR_CURRENT_LIMIT = 120.0
         const val TURNING_STATOR_CURRENT_LIMIT = 120.0
+
+        val CANBUS: CANBus = CANBus("didy")
     }
 
     object LimelightConstants {

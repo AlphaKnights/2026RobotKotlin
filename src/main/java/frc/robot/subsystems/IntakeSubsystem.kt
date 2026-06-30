@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 
 object IntakeSubsystem : SubsystemBase() {
-    private val CAN = CANBus("didy")
+    private val CAN = Constants.ModuleConstants.CANBUS
     private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID, CAN)
 
     private val rightleverMotor =
@@ -107,7 +107,6 @@ object IntakeSubsystem : SubsystemBase() {
 
     override fun periodic() {
         super.periodic()
-        println("Lever Position = ${leftLeverMotor.position}")
     }
 
     fun runIntake(speed: Double) {

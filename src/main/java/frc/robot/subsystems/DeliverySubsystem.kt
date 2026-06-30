@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.wpilibj.Ultrasonic
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants
 import frc.robot.Constants.LaunchConstants
 
 object DeliverySubsystem : SubsystemBase() {
@@ -20,7 +21,7 @@ object DeliverySubsystem : SubsystemBase() {
             Constants.UltrasonicConstants.ECHO_CHANNEL,
         )
      */
-    private val CAN = CANBus("didy")
+    private val CAN = Constants.ModuleConstants.CANBUS
     private val leftLaunchMotor =
         TalonFX(
             LaunchConstants.LEFT_LAUNCHMOTOR_ID,

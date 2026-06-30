@@ -139,28 +139,6 @@ object DriveSubsystem : SubsystemBase() {
                 Pose2d(PathPlannerConstants.FIELD_SIZE, Rotation2d()),
             ) ?: getPose(),
         ) // limelight synchronization
-        println(getPose())
-
-        // println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")
-        // println("AllianceRed =
-        // ${(DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red}")
-        //  if(counter % 5 ==0) {
-        // swervePublisher.set(states);
-        // currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
-        // currentPublisher.set(fR.getStatorCurrent().getValueAsDouble())
-        //    }
-
-//        }
-
-//        println("Front Right:"+ FrontRightEncoder.getVelocity())
-//        println("Front Right Speed: "+frontRight.getState().speedMetersPerSecond)
-//        println("Front Left Speed: "+frontLeft.getState().speedMetersPerSecond)
-//        println("Back Right Speed: "+rearRight.getState().speedMetersPerSecond)
-//        println("Back Left Speed: "+rearLeft.getState().speedMetersPerSecond)
-//        println("Odometry:"+getPose())
-//
-//        println("angle:"+gyro.getYaw())
-//        println(xBoxController.getRawAxis(0))
     }
 
     fun getPose(): Pose2d = odometry.poseMeters
