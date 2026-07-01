@@ -16,10 +16,6 @@ class DriveSetPointCommand(
     private val y: () -> Double,
     private val angle: () -> Double,
 ) : Command() {
-    init {
-        addRequirements(DriveSubsystem)
-    }
-
     val rotateController =
         PIDController(
             DriveConstants.ROTATE_CONTROLLER_P,
@@ -33,13 +29,20 @@ class DriveSetPointCommand(
             DriveConstants.TRANSLATION_CONTROLLER_D,
         )
 
+    init {
+        addRequirements(DriveSubsystem)
+
+        // configure the PID Controllers
+        rotateController.setTolerance(Rotation2d.fromRadians(1.0).radians)
+        rotateController.enableContinuousInput(-Math.PI, Math.PI)
+
+        driveController.setTolerance(DriveConstants.DRIVE_SETPOINT_TOLERANCE)
+    }
+
     // Do angle optimization (south) and scalable tuning based on max speed
     override fun execute() {
         super.execute()
 
-        // println("X() = ${X()}, Y() = ${Y()}, Angle() = ${Angle()}")
-
-        // take current rotation in radians and make a new PID Controller
         val curpose = DriveSubsystem.getPose()
 
 //        val dir = when {
@@ -48,13 +51,6 @@ class DriveSetPointCommand(
 //            else -> 0.0
 //        }
 
-        // set PID deadzones and angle wrapping
-        rotateController.setTolerance(Rotation2d.fromRadians(1.0).radians)
-        rotateController.enableContinuousInput(-Math.PI, Math.PI)
-
-        driveController.setTolerance(DriveConstants.DRIVE_SETPOINT_TOLERANCE) // meters
-
-        // calculate rotational speed using PID controller, making sure max speed is respected
         val rotSpeed =
             clamp(
                 rotateController.calculate(curpose.rotation.radians, angle()),
@@ -86,15 +82,7 @@ class DriveSetPointCommand(
         )
     }
 
-    override fun isFinished(): Boolean {
-        val curpose = DriveSubsystem.getPose()
-        return driveController.atSetpoint() &&
+    override fun isFinished(): Boolean =
+        driveController.atSetpoint() &&
             rotateController.atSetpoint()
-//            curpose.x > X() - 0.05 &&
-//            curpose.x < X() + 0.05 &&
-//            curpose.y > Y() - 0.05 &&
-//            curpose.y < Y() + 0.05 &&
-//            curpose.rotation.radians > Angle() + 0.1 &&
-//            curpose.rotation.radians < Angle() - 0.1
-    }
 }

@@ -7,10 +7,11 @@ import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants
 import frc.robot.Constants.RollerConstants
 
 object StorageSubsystem : SubsystemBase() {
-    private val CAN = CANBus("didy")
+    private val CAN = Constants.ModuleConstants.CANBUS
     private val rollerMotor = TalonFX(RollerConstants.ROLLER_MOTOR_ID, CAN)
 
     private val rollerMotor2 = TalonFX(RollerConstants.ROLLER_MOTOR_ID_2, CAN)

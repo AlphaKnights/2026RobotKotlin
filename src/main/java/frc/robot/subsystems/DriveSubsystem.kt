@@ -11,6 +11,7 @@ import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -20,6 +21,7 @@ import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.PathPlannerConstants
@@ -75,6 +77,8 @@ object DriveSubsystem : SubsystemBase() {
     var currentPublisher: DoublePublisher =
         NetworkTableInstance.getDefault().getDoubleTopic("Drive/StatorCurrent").publish()
     var counter = 0
+
+//    val DrivePID = SmartDashboard.getData("DrivePID")
 
     init {
         // gyro.reset()

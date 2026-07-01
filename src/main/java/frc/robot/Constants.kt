@@ -11,20 +11,22 @@ package frc.robot
  */
 
 import com.ctre.phoenix6.CANBus
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlin.math.PI
 
-// data class PID(
-//    val p: Double,
-//    val i: Double,
-//    val d: Double,
-//    val ff: Double? = null,
-//    val v: Double? = null,
-//    val a: Double? = null,
-// )
+data class PID(
+    val p: Double,
+    val i: Double,
+    val d: Double,
+    val ff: Double? = null,
+    val v: Double? = null,
+    val a: Double? = null,
+)
 
 object Constants {
     object OperatorConstants {
@@ -159,6 +161,14 @@ object Constants {
         const val TURNING_STATOR_CURRENT_LIMIT = 120.0
 
         val CANBUS: CANBus = CANBus("didy")
+
+//        val testPID =
+//            try {
+//                SmartDashboard.getData("testPID")
+//            } catch (e: IllegalArgumentException) {
+//                null
+//            }
+//        val test2PID = PIDController(1.0, 0.0, 1.0)
     }
 
     object LimelightConstants {
