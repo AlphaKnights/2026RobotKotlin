@@ -24,8 +24,6 @@ import frc.robot.subsystems.Logger
  * object or package, it will get changed everywhere.)
  */
 object Robot : TimedRobot() {
-    val logger = Logger()
-
     init {
         // Kotlin initializer block, which effectually serves as the constructor code.
         // https://kotlinlang.org/docs/classes.html#constructors
@@ -60,7 +58,7 @@ object Robot : TimedRobot() {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run()
-        logger.log()
+        Logger.log()
     }
 
     /** This autonomous runs the autonomous command selected by your [RobotContainer] class.  */

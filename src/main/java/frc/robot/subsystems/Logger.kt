@@ -10,7 +10,7 @@ import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
 
-class Logger : SubsystemBase() {
+object Logger : SubsystemBase() {
     private val field = Field2d()
 
     init {
