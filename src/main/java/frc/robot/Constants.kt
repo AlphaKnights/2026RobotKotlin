@@ -97,9 +97,6 @@ object Constants {
             TALON,
             SPARKMAX,
         }
-        init {
-            SmartDashboard.
-        }
     }
 
     object DriveConstants {

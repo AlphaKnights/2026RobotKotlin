@@ -3,24 +3,17 @@
  */
 package frc.robot.subsystems
 
-import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.Pigeon2
-import com.ctre.phoenix6.hardware.TalonFX
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
-import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.networktables.DoublePublisher
-import edu.wpi.first.networktables.NetworkTableInstance
-import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -39,10 +32,10 @@ object DriveSubsystem : SubsystemBase() {
     private var gyro: Pigeon2 = Pigeon2(Constants.DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
-    private var Drive: Swerve? =
+    private var drive: Swerve =
         when (Constants.SomeConstants.currentMode) {
             Constants.SomeConstants.Mode.REAL -> {
-                if (SmartDashboard.getData("SwerveType") as Constants.SomeConstants.SwerveType ==
+                if (SmartDashboard.getData("Swerve Type Chooser") as Constants.SomeConstants.SwerveType ==
                     Constants.SomeConstants.SwerveType.TALON
                 ) {
                     // Real robot, instantiate hardware IO implementations
@@ -74,7 +67,7 @@ object DriveSubsystem : SubsystemBase() {
                             DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
                         ),
                     )
-                } else {
+                } else { // TODO: Add actual robert IDs from 2025KitBot code
                     Swerve(
                         SwerveModuleIOSparkMAX(
                             DriveConstants.FRONT_LEFT_DRIVING_ID,
@@ -103,7 +96,10 @@ object DriveSubsystem : SubsystemBase() {
             Constants.SomeConstants.Mode.SIM -> {
                 // Sim robot, instantiate physics sim IO implementations
                 Swerve(
-                    SwerveModule,
+                    SwerveModuleSim(),
+                    SwerveModuleSim(),
+                    SwerveModuleSim(),
+                    SwerveModuleSim(),
                 )
             }
         }
@@ -114,7 +110,10 @@ object DriveSubsystem : SubsystemBase() {
 
     private val states: Array<SwerveModuleState> =
         arrayOf(
-            Drive.fl.getState(),
+            drive.fl.getState(),
+            drive.fr.getState(),
+            drive.bl.getState(),
+            drive.br.getState(),
         )
 
     var counter = 0
@@ -132,10 +131,10 @@ object DriveSubsystem : SubsystemBase() {
                 Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
                 // gyro.rotation3d.x
                 arrayOf(
-                    frontLeft.getPosition(),
-                    frontRight.getPosition(),
-                    rearLeft.getPosition(),
-                    rearRight.getPosition(),
+                    drive.fl.getPosition(),
+                    drive.fr.getPosition(),
+                    drive.bl.getPosition(),
+                    drive.br.getPosition(),
                 ),
             )
 
@@ -173,10 +172,10 @@ object DriveSubsystem : SubsystemBase() {
         odometry.update(
             Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
             arrayOf(
-                frontLeft.getPosition(),
-                frontRight.getPosition(),
-                rearLeft.getPosition(),
-                rearRight.getPosition(),
+                drive.fl.getPosition(),
+                drive.fr.getPosition(),
+                drive.bl.getPosition(),
+                drive.br.getPosition(),
             ),
         )
 
@@ -197,10 +196,10 @@ object DriveSubsystem : SubsystemBase() {
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
     fun getCurrentSpeeds(): ChassisSpeeds =
         Constants.DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(
-            frontLeft.getState(),
-            frontRight.getState(),
-            rearLeft.getState(),
-            rearRight.getState(),
+            drive.fl.getState(),
+            drive.fr.getState(),
+            drive.bl.getState(),
+            drive.br.getState(),
         )
 
     fun resetOdometry(pose: Pose2d) {
@@ -208,10 +207,10 @@ object DriveSubsystem : SubsystemBase() {
             Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
             // gyro.getRotation2d(),
             arrayOf(
-                frontLeft.getPosition(),
-                frontRight.getPosition(),
-                rearLeft.getPosition(),
-                rearRight.getPosition(),
+                drive.fl.getPosition(),
+                drive.fr.getPosition(),
+                drive.bl.getPosition(),
+                drive.br.getPosition(),
             ),
             pose,
         )
@@ -236,32 +235,32 @@ object DriveSubsystem : SubsystemBase() {
                 ) // gyro.getRotation2d()
         }
 
-        frontLeft.setDesiredState(swerveModuleStates[0])
-        frontRight.setDesiredState(swerveModuleStates[1])
-        rearLeft.setDesiredState(swerveModuleStates[2])
-        rearRight.setDesiredState(swerveModuleStates[3])
+        drive.fl.setDesiredState(swerveModuleStates[0])
+        drive.fr.setDesiredState(swerveModuleStates[1])
+        drive.bl.setDesiredState(swerveModuleStates[2])
+        drive.br.setDesiredState(swerveModuleStates[3])
     }
 
     fun setX() {
-        frontLeft.setDesiredState(
+        drive.fl.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(45.0),
             ),
         )
-        frontRight.setDesiredState(
+        drive.fr.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(-45.0),
             ),
         )
-        rearLeft.setDesiredState(
+        drive.bl.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(-45.0),
             ),
         )
-        rearRight.setDesiredState(
+        drive.br.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(45.0),

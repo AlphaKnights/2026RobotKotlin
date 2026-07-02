@@ -42,7 +42,7 @@ object RobotContainer {
 
     private val autoChooser = SendableChooser<PathPlannerAuto>()
 
-    // TODO: Move dirve init into DriveSubsystem.kt, make DriveSubsystem into an Object, make Sim clases, figure out where networktables stuff should go (NOT IN CONTRANTS!)
+    // TODO: figure out where networktables stuff should go (NOT IN CONSTANTS!)
 
     init {
         LimelightSubsystem.startPolling()
@@ -70,7 +70,7 @@ object RobotContainer {
         // Drive control
 
         // x is forward
-        drive.defaultCommand =
+        DriveSubsystem.defaultCommand =
             DriveCommand(
                 x = { xBoxController.x() },
                 y = { xBoxController.y() },

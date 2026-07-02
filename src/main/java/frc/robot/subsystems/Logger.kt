@@ -1,21 +1,35 @@
 package frc.robot.subsystems
 
+import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
+import java.io.File
 
 object Logger : SubsystemBase() {
     private val field = Field2d()
+    private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
 
     init {
 //        initTunablePID("TESTING", PIDController(67.0, 67.0, 67.0))
 //        initTunablePID("DrivePID", Constants.ModuleConstants.test2PID)
+
+        val swerveList =
+            buildList {
+                Constants.SomeConstants.SwerveType.entries
+                    .forEach { type -> add(type) }
+            }
+        for (type in swerveList) {
+            swerveType.addOption(type.name, type)
+        }
+        SmartDashboard.putData("Swerve Type Chooser", swerveType)
     }
 
     override fun periodic() {
