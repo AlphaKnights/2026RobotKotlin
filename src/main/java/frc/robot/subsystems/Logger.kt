@@ -76,5 +76,8 @@ object Logger : SubsystemBase() {
             SmartDashboard.putData(key, pid)
             SmartDashboard.setPersistent(key)
         }
+        if (!SmartDashboard.isPersistent("key")) {
+            SmartDashboard.setPersistent(key)
+        }
     }
 }

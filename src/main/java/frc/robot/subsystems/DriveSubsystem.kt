@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
+import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.networktables.DoublePublisher
 import edu.wpi.first.networktables.NetworkTableInstance
@@ -24,42 +25,88 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
+import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.PathPlannerConstants
 
 object DriveSubsystem : SubsystemBase() {
-    private var frontLeft: TalonSwerveModule =
-        TalonSwerveModule(
-            Constants.DriveConstants.FRONT_LEFT_DRIVING_ID,
-            Constants.DriveConstants.FRONT_LEFT_TURNING_ID,
-            Constants.DriveConstants.FRONT_LEFT_CANCODER_ID,
-            Constants.DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
-        )
-    private var frontRight: TalonSwerveModule =
-        TalonSwerveModule(
-            Constants.DriveConstants.FRONT_RIGHT_DRIVING_ID,
-            Constants.DriveConstants.FRONT_RIGHT_TURNING_ID,
-            Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID,
-            Constants.DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
-        )
-    private var rearLeft: TalonSwerveModule =
-        TalonSwerveModule(
-            Constants.DriveConstants.REAR_LEFT_DRIVING_ID,
-            Constants.DriveConstants.REAR_LEFT_TURNING_ID,
-            Constants.DriveConstants.REAR_LEFT_CANCODER_ID,
-            Constants.DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
-        )
-    private var rearRight: TalonSwerveModule =
-        TalonSwerveModule(
-            Constants.DriveConstants.REAR_RIGHT_DRIVING_ID,
-            Constants.DriveConstants.REAR_RIGHT_TURNING_ID,
-            Constants.DriveConstants.REAR_RIGHT_CANCODER_ID,
-            Constants.DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
-        )
-    private var frontRightEncoder = CANcoder(Constants.DriveConstants.FRONT_RIGHT_CANCODER_ID)
-    private var fL: TalonFX = TalonFX(Constants.DriveConstants.FRONT_LEFT_DRIVING_ID)
+    data class Swerve(
+        val fl: SwerveModule,
+        val fr: SwerveModule,
+        val bl: SwerveModule,
+        val br: SwerveModule,
+    )
 
     private var gyro: Pigeon2 = Pigeon2(Constants.DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
+
+    private var Drive: Swerve? =
+        when (Constants.SomeConstants.currentMode) {
+            Constants.SomeConstants.Mode.REAL -> {
+                if (SmartDashboard.getData("SwerveType") as Constants.SomeConstants.SwerveType ==
+                    Constants.SomeConstants.SwerveType.TALON
+                ) {
+                    // Real robot, instantiate hardware IO implementations
+                    // SwerveModuleIOTalon is intended for modules with TalonFX drive, TalonFX turn, and
+                    // a CANcoder
+                    Swerve(
+                        SwerveModuleIOTalon(
+                            DriveConstants.FRONT_LEFT_DRIVING_ID,
+                            DriveConstants.FRONT_LEFT_TURNING_ID,
+                            DriveConstants.FRONT_LEFT_CANCODER_ID,
+                            DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                        SwerveModuleIOTalon(
+                            DriveConstants.FRONT_RIGHT_DRIVING_ID,
+                            DriveConstants.FRONT_RIGHT_TURNING_ID,
+                            DriveConstants.FRONT_RIGHT_CANCODER_ID,
+                            DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                        SwerveModuleIOTalon(
+                            DriveConstants.REAR_LEFT_DRIVING_ID,
+                            DriveConstants.REAR_LEFT_TURNING_ID,
+                            DriveConstants.REAR_LEFT_CANCODER_ID,
+                            DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                        SwerveModuleIOTalon(
+                            DriveConstants.REAR_RIGHT_DRIVING_ID,
+                            DriveConstants.REAR_RIGHT_TURNING_ID,
+                            DriveConstants.REAR_RIGHT_CANCODER_ID,
+                            DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                    )
+                } else {
+                    Swerve(
+                        SwerveModuleIOSparkMAX(
+                            DriveConstants.FRONT_LEFT_DRIVING_ID,
+                            DriveConstants.FRONT_LEFT_TURNING_ID,
+                            DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                        SwerveModuleIOSparkMAX(
+                            DriveConstants.FRONT_RIGHT_DRIVING_ID,
+                            DriveConstants.FRONT_RIGHT_TURNING_ID,
+                            DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                        SwerveModuleIOSparkMAX(
+                            DriveConstants.REAR_LEFT_DRIVING_ID,
+                            DriveConstants.REAR_LEFT_TURNING_ID,
+                            DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                        SwerveModuleIOSparkMAX(
+                            DriveConstants.REAR_RIGHT_DRIVING_ID,
+                            DriveConstants.REAR_RIGHT_TURNING_ID,
+                            DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                        ),
+                    )
+                }
+            }
+
+            Constants.SomeConstants.Mode.SIM -> {
+                // Sim robot, instantiate physics sim IO implementations
+                Swerve(
+                    SwerveModule,
+                )
+            }
+        }
 
     private var odometry: SwerveDriveOdometry
 
@@ -67,15 +114,9 @@ object DriveSubsystem : SubsystemBase() {
 
     private val states: Array<SwerveModuleState> =
         arrayOf(
-            frontLeft.getState(),
-            frontRight.getState(),
-            rearLeft.getState(),
-            rearRight.getState(),
+            Drive.fl.getState(),
         )
-    var swervePublisher: StructArrayPublisher<SwerveModuleState> =
-        NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish()
-    var currentPublisher: DoublePublisher =
-        NetworkTableInstance.getDefault().getDoubleTopic("Drive/StatorCurrent").publish()
+
     var counter = 0
 
 //    val DrivePID = SmartDashboard.getData("DrivePID")

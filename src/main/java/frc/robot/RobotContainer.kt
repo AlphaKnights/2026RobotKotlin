@@ -3,6 +3,7 @@
  */
 package frc.robot
 
+import com.ctre.phoenix6.swerve.SwerveModule
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.util.sendable.Sendable
@@ -11,12 +12,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
+import frc.robot.Constants.DriveConstants
 import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import frc.robot.subsystems.SwerveModuleIOSparkMAX
+import frc.robot.subsystems.SwerveModuleIOTalon
 import java.io.File
 
 /**
@@ -37,6 +41,8 @@ object RobotContainer {
     private val buttonBoard = CommandJoystick(Constants.OperatorConstants.BUTTON_BOARD_PORT)
 
     private val autoChooser = SendableChooser<PathPlannerAuto>()
+
+    // TODO: Move dirve init into DriveSubsystem.kt, make DriveSubsystem into an Object, make Sim clases, figure out where networktables stuff should go (NOT IN CONTRANTS!)
 
     init {
         LimelightSubsystem.startPolling()
@@ -64,7 +70,7 @@ object RobotContainer {
         // Drive control
 
         // x is forward
-        DriveSubsystem.defaultCommand =
+        drive.defaultCommand =
             DriveCommand(
                 x = { xBoxController.x() },
                 y = { xBoxController.y() },

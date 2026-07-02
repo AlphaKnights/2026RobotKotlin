@@ -11,11 +11,11 @@ package frc.robot
  */
 
 import com.ctre.phoenix6.CANBus
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj.RobotBase
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlin.math.PI
 
@@ -80,6 +80,26 @@ object Constants {
     enum class IntakeDirection {
         IN,
         OUT,
+    }
+
+    object SomeConstants {
+        val currentMode: Mode = if (RobotBase.isReal()) Mode.REAL else Mode.SIM
+
+        enum class Mode {
+            /** Running on a real robot.  */
+            REAL,
+
+            /** Running a physics simulator.  */
+            SIM,
+        }
+
+        enum class SwerveType {
+            TALON,
+            SPARKMAX,
+        }
+        init {
+            SmartDashboard.
+        }
     }
 
     object DriveConstants {
