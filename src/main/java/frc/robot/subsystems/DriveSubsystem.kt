@@ -15,11 +15,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.PathPlannerConstants
+import frc.robot.Constants.SomeConstants.Mode
 
 object DriveSubsystem : SubsystemBase() {
     data class Swerve(
@@ -186,11 +188,13 @@ object DriveSubsystem : SubsystemBase() {
         ) // limelight synchronization
     }
 
-    fun getPose(): Pose2d = odometry.poseMeters
-
-    fun resetPose(pose: Pose2d) {
-        resetOdometry(pose)
-    }
+    fun getPose(): Pose2d =
+        if (Constants.SomeConstants.currentMode == Mode.REAL) {
+            odometry.poseMeters
+        } else {
+            val field = SmartDashboard.getData("Field") as Field2d
+            field.robotPose
+        }
 
     // IDE bug, the detected and actual signatures are different
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")

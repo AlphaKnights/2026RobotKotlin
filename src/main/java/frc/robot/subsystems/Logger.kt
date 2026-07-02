@@ -2,6 +2,9 @@ package frc.robot.subsystems
 
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
@@ -30,10 +33,13 @@ object Logger : SubsystemBase() {
             swerveType.addOption(type.name, type)
         }
         SmartDashboard.putData("Swerve Type Chooser", swerveType)
+
+        field.setRobotPose(Pose2d(Translation2d.kZero, Rotation2d.kZero))
     }
 
     override fun periodic() {
-        field.setRobotPose(DriveSubsystem.getPose())
+        // field.setRobotPose(DriveSubsystem.getPose())
+
         field.getObject("targetPose").setPose(DriveToArcPoseGenerator.generatePath())
 
 // //        if (SmartDashboard.getData("DrivePID") != Constants.ModuleConstants.test2PID) {

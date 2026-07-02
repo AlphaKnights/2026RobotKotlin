@@ -6,6 +6,7 @@ package frc.robot
 import com.ctre.phoenix6.swerve.SwerveModule
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -19,6 +20,8 @@ import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import frc.robot.subsystems.Logger
+import frc.robot.subsystems.Logger.initTunablePID
 import frc.robot.subsystems.SwerveModuleIOSparkMAX
 import frc.robot.subsystems.SwerveModuleIOTalon
 import java.io.File
@@ -46,7 +49,7 @@ object RobotContainer {
 
     init {
         LimelightSubsystem.startPolling()
-
+        Logger.initTunablePID("DrivePID", PIDController(1.0, 1.0, 1.0))
         NamedCommands.registerCommands(
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),

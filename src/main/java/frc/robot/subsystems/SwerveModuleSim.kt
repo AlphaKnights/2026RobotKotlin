@@ -14,6 +14,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
 import edu.wpi.first.wpilibj.simulation.EncoderSim
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.ModuleConstants
 
@@ -25,7 +26,7 @@ class SwerveModuleSim : SwerveModule {
         DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DRIVE_GEARBOX,
-                5.0,
+                2.0,
                 ModuleConstants.DRIVE_RATIO,
             ),
             DRIVE_GEARBOX,
@@ -34,18 +35,19 @@ class SwerveModuleSim : SwerveModule {
         DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 TURN_GEARBOX,
-                5.0,
+                2.0,
                 ModuleConstants.DRIVE_RATIO, // PLEASE CHANGE THIS IT IS SO WRONG
             ),
             TURN_GEARBOX,
         )
 
     private val driveController =
-        PIDController(
-            DriveConstants.TRANSLATION_CONTROLLER_P,
-            DriveConstants.TRANSLATION_CONTROLLER_I,
-            DriveConstants.TRANSLATION_CONTROLLER_D,
-        )
+//        PIDController(
+//            1.0,
+//            1.0,
+//            1.0,
+//        )
+        SmartDashboard.getData("DrivePID") as PIDController
     private val turnController =
         PIDController(
             DriveConstants.ROTATE_CONTROLLER_P,
@@ -61,7 +63,6 @@ class SwerveModuleSim : SwerveModule {
 
     override fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
-            // driveMotor.rotor
             ModuleConstants.WHEEL_CIRCUMFERENCE * driveSim.angularPositionRotations,
             Rotation2d.fromRotations(
                 turnSim.angularPositionRotations,
@@ -85,9 +86,10 @@ class SwerveModuleSim : SwerveModule {
 
         val driveAppliedVolts: Double =
             driveController.calculate(
-                driveSim.angularPositionRotations,
+                driveSim.angularVelocityRPM * 60,
                 desiredState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE,
             )
+        SmartDashboard.putNumber("driveAppliedVolts", driveAppliedVolts)
         val turnAppliedVolts: Double =
             turnController.calculate(
                 turnSim.angularPositionRotations,
