@@ -11,6 +11,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
@@ -31,13 +32,15 @@ object DriveSubsystem : SubsystemBase() {
         val br: SwerveModule,
     )
 
+    val field = Logger.safeGetData("Field") as Field2d
+
     private var gyro: Pigeon2 = Pigeon2(Constants.DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
-    private var drive: Swerve =
+    var drive: Swerve =
         when (Constants.SomeConstants.currentMode) {
             Constants.SomeConstants.Mode.REAL -> {
-                if (SmartDashboard.getData("Swerve Type Chooser") as Constants.SomeConstants.SwerveType ==
+                if (Logger.safeGetData("Swerve Type Chooser") as Constants.SomeConstants.SwerveType ==
                     Constants.SomeConstants.SwerveType.TALON
                 ) {
                     // Real robot, instantiate hardware IO implementations
@@ -110,7 +113,7 @@ object DriveSubsystem : SubsystemBase() {
 
     private val config: RobotConfig = RobotConfig.fromGUISettings()
 
-    private val states: Array<SwerveModuleState> =
+    val states: Array<SwerveModuleState> =
         arrayOf(
             drive.fl.getState(),
             drive.fr.getState(),
@@ -119,8 +122,6 @@ object DriveSubsystem : SubsystemBase() {
         )
 
     var counter = 0
-
-//    val DrivePID = SmartDashboard.getData("DrivePID")
 
     init {
         // gyro.reset()
@@ -188,13 +189,7 @@ object DriveSubsystem : SubsystemBase() {
         ) // limelight synchronization
     }
 
-    fun getPose(): Pose2d =
-        if (Constants.SomeConstants.currentMode == Mode.REAL) {
-            odometry.poseMeters
-        } else {
-            val field = SmartDashboard.getData("Field") as Field2d
-            field.robotPose
-        }
+    fun getPose(): Pose2d = odometry.poseMeters
 
     // IDE bug, the detected and actual signatures are different
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
@@ -218,6 +213,10 @@ object DriveSubsystem : SubsystemBase() {
             ),
             pose,
         )
+    }
+
+    fun resetPose(pose: Pose2d) {
+        resetOdometry(pose)
     }
 
     fun shouldFlipPath(): Boolean =

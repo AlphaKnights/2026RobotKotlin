@@ -97,6 +97,7 @@ object Constants {
             TALON,
             SPARKMAX,
         }
+        // TODO: have a check to see if NetworkTables is up and Logger.log() has been called
     }
 
     object DriveConstants {

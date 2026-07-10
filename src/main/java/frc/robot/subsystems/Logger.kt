@@ -14,16 +14,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.io.File
+import java.lang.reflect.Type
 
 object Logger : SubsystemBase() {
     private val field = Field2d()
     private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
 
     init {
-//        initTunablePID("TESTING", PIDController(67.0, 67.0, 67.0))
-//        initTunablePID("DrivePID", Constants.ModuleConstants.test2PID)
-
+        initTunablePID("DrivePID", PIDController(1.0, 1.0, 1.0))
+        initTunablePID("TurnPID", PIDController(1.0, 1.0, 1.0))
         val swerveList =
             buildList {
                 Constants.SomeConstants.SwerveType.entries
@@ -33,18 +35,15 @@ object Logger : SubsystemBase() {
             swerveType.addOption(type.name, type)
         }
         SmartDashboard.putData("Swerve Type Chooser", swerveType)
+        SmartDashboard.putData("Field", field)
 
         field.setRobotPose(Pose2d(Translation2d.kZero, Rotation2d.kZero))
     }
 
     override fun periodic() {
-        // field.setRobotPose(DriveSubsystem.getPose())
+        field.setRobotPose(DriveSubsystem.getPose())
 
         field.getObject("targetPose").setPose(DriveToArcPoseGenerator.generatePath())
-
-// //        if (SmartDashboard.getData("DrivePID") != Constants.ModuleConstants.test2PID) {
-// //            println("DrivePID CHANGED!! -----------------------------------")
-//        }
     }
 
     fun log() {
@@ -81,23 +80,36 @@ object Logger : SubsystemBase() {
             AimingCalc.canShoot(DriveSubsystem.getPose()),
         )
         SmartDashboard.putData("Field", field)
-
-        // SmartDashboard.putData("DrivePID", DriveSubsystem.TestPID)
-        // SmartDashboard.setPersistent("DrivePID")
+        SmartDashboard.putNumber(
+            "DriveSpeed",
+            DriveSubsystem.drive.fr
+                .getState()
+                .speedMetersPerSecond,
+        )
+        // SmartDashboard.putData("states", DriveSubsystem.states.)
     }
 
     fun initTunablePID(
         key: String,
         pid: PIDController,
     ) {
-        try {
-            SmartDashboard.getData(key)
-        } catch (e: IllegalArgumentException) {
+        if (!SmartDashboard.containsKey(key)) {
             SmartDashboard.putData(key, pid)
             SmartDashboard.setPersistent(key)
         }
-        if (!SmartDashboard.isPersistent("key")) {
-            SmartDashboard.setPersistent(key)
+    }
+
+    fun safeGetData(key: String): Any {
+        while (true) {
+            try {
+                SmartDashboard.getData(key)
+                break
+            } catch (e: IllegalArgumentException) {
+                println("error getting $key, retrying...")
+                continue
+            }
         }
+
+        return SmartDashboard.getData(key)
     }
 }

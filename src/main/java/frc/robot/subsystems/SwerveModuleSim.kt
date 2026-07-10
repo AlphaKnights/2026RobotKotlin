@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
 import edu.wpi.first.wpilibj.simulation.EncoderSim
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.robot.Constants
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.ModuleConstants
 
@@ -22,7 +23,7 @@ class SwerveModuleSim : SwerveModule {
     private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
     private val TURN_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
 
-    private val driveSim =
+    val driveSim =
         DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DRIVE_GEARBOX,
@@ -36,34 +37,23 @@ class SwerveModuleSim : SwerveModule {
             LinearSystemId.createDCMotorSystem(
                 TURN_GEARBOX,
                 2.0,
-                ModuleConstants.DRIVE_RATIO, // PLEASE CHANGE THIS IT IS SO WRONG
+                ModuleConstants.DRIVE_RATIO, // PLEASE CHANGE THIS TO ACTUAL VALUE
             ),
             TURN_GEARBOX,
         )
 
-    private val driveController =
-//        PIDController(
-//            1.0,
-//            1.0,
-//            1.0,
-//        )
-        SmartDashboard.getData("DrivePID") as PIDController
-    private val turnController =
-        PIDController(
-            DriveConstants.ROTATE_CONTROLLER_P,
-            DriveConstants.ROTATE_CONTROLLER_I,
-            DriveConstants.ROTATE_CONTROLLER_D,
-        )
+    val driveController = Logger.safeGetData("DrivePID") as PIDController
+
+    val turnController = Logger.safeGetData("TurnPID") as PIDController
 
     init {
-
         // Enable wrapping for turn PID
         turnController.enableContinuousInput(-Math.PI, Math.PI)
     }
 
     override fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
-            ModuleConstants.WHEEL_CIRCUMFERENCE * driveSim.angularPositionRotations,
+            driveSim.angularPositionRotations * ModuleConstants.WHEEL_CIRCUMFERENCE,
             Rotation2d.fromRotations(
                 turnSim.angularPositionRotations,
             ),
@@ -71,7 +61,7 @@ class SwerveModuleSim : SwerveModule {
 
     override fun getState(): SwerveModuleState =
         SwerveModuleState(
-            ModuleConstants.WHEEL_CIRCUMFERENCE * driveSim.angularVelocityRPM * 60,
+            ModuleConstants.WHEEL_CIRCUMFERENCE * driveSim.angularVelocityRPM / 60,
             Rotation2d.fromRotations(
                 turnSim.angularPositionRotations,
             ),
@@ -86,8 +76,8 @@ class SwerveModuleSim : SwerveModule {
 
         val driveAppliedVolts: Double =
             driveController.calculate(
-                driveSim.angularVelocityRPM * 60,
-                desiredState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE,
+                driveSim.angularVelocityRPM / 60,
+                desiredState.speedMetersPerSecond,
             )
         SmartDashboard.putNumber("driveAppliedVolts", driveAppliedVolts)
         val turnAppliedVolts: Double =
