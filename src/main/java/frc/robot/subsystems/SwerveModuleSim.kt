@@ -23,6 +23,12 @@ class SwerveModuleSim : SwerveModule {
     private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
     private val TURN_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
 
+    val turn_KV: Double = SmartDashboard.getNumber("turn_KV", 0.12)
+
+    init {
+        SmartDashboard.putNumber("turn_KV", 0.12)
+    }
+
     val driveSim =
         DCMotorSim(
             LinearSystemId.createDCMotorSystem(
@@ -80,13 +86,14 @@ class SwerveModuleSim : SwerveModule {
                 desiredState.speedMetersPerSecond,
             )
         SmartDashboard.putNumber("driveAppliedVolts", driveAppliedVolts)
-        val turnAppliedVolts: Double =
-            turnController.calculate(
-                turnSim.angularPositionRotations,
-                desiredState.angle.rotations,
-            )
+//        val turnAppliedVolts: Double =
+//            turnController.calculate(
+//                turnSim.angularPositionRotations,
+//                desiredState.angle.rotations,
+//            ) + (turnSim.angularAccelerationRadPerSecSq * turn_KV * Math.PI)
 
-        turnSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -12.0, 12.0))
+//        turnSim.setInputVoltage(MathUtil.clamp(turnAppliedVolts, -12.0, 12.0))
+        turnSim.setAngle(desiredState.angle.radians)
         driveSim.setInputVoltage(MathUtil.clamp(driveAppliedVolts, -12.0, 12.0))
 
         turnSim.update(0.02)

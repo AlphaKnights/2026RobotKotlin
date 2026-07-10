@@ -24,8 +24,8 @@ object Logger : SubsystemBase() {
     private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
 
     init {
-        initTunablePID("DrivePID", PIDController(1.0, 1.0, 1.0))
-        initTunablePID("TurnPID", PIDController(1.0, 1.0, 1.0))
+        initTunablePID("DrivePID", PIDController(1.0, 0.0, 0.0))
+        initTunablePID("TurnPID", PIDController(1.0, 0.0, 0.0))
         val swerveList =
             buildList {
                 Constants.SomeConstants.SwerveType.entries
@@ -87,6 +87,8 @@ object Logger : SubsystemBase() {
                 .speedMetersPerSecond,
         )
         // SmartDashboard.putData("states", DriveSubsystem.states.)
+
+        DriveSubsystem.swervePublisher.set(DriveSubsystem.getStates())
     }
 
     fun initTunablePID(

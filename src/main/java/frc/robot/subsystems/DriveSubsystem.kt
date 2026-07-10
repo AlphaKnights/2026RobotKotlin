@@ -15,6 +15,8 @@ import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -113,13 +115,11 @@ object DriveSubsystem : SubsystemBase() {
 
     private val config: RobotConfig = RobotConfig.fromGUISettings()
 
-    val states: Array<SwerveModuleState> =
-        arrayOf(
-            drive.fl.getState(),
-            drive.fr.getState(),
-            drive.bl.getState(),
-            drive.br.getState(),
-        )
+    var swervePublisher: StructArrayPublisher<SwerveModuleState> =
+        NetworkTableInstance
+            .getDefault()
+            .getStructArrayTopic("MyStates", SwerveModuleState.struct)
+            .publish()
 
     var counter = 0
 
@@ -188,6 +188,14 @@ object DriveSubsystem : SubsystemBase() {
             ) ?: getPose(),
         ) // limelight synchronization
     }
+
+    fun getStates(): Array<SwerveModuleState> =
+        arrayOf(
+            drive.fl.getState(),
+            drive.fr.getState(),
+            drive.bl.getState(),
+            drive.br.getState(),
+        )
 
     fun getPose(): Pose2d = odometry.poseMeters
 
