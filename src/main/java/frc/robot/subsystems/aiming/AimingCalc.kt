@@ -8,14 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.Constants.AimingConstants
-import kotlin.math.abs
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sign
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 object AimingCalc {
     fun canShoot(curPose: Pose2d): Double {

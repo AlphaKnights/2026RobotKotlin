@@ -9,22 +9,18 @@ import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
+import edu.wpi.first.epilogue.Logged
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.networktables.NetworkTableInstance
-import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.smartdashboard.Field2d
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.PathPlannerConstants
-import frc.robot.Constants.SomeConstants.Mode
+import frc.robot.interfaces.SwerveModule
 
 object DriveSubsystem : SubsystemBase() {
     data class Swerve(
@@ -34,9 +30,7 @@ object DriveSubsystem : SubsystemBase() {
         val br: SwerveModule,
     )
 
-    val field = Logger.safeGetData("Field") as Field2d
-
-    private var gyro: Pigeon2 = Pigeon2(Constants.DriveConstants.PIDGEON2_ID)
+    private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     var drive: Swerve =
@@ -111,15 +105,20 @@ object DriveSubsystem : SubsystemBase() {
             }
         }
 
-    private var odometry: SwerveDriveOdometry
+    private var odometry =
+        SwerveDriveOdometry(
+            DriveConstants.DRIVE_KINEMATICS,
+            Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
+            // gyro.rotation3d.x
+            arrayOf(
+                drive.fl.getPosition(),
+                drive.fr.getPosition(),
+                drive.bl.getPosition(),
+                drive.br.getPosition(),
+            ),
+        )
 
     private val config: RobotConfig = RobotConfig.fromGUISettings()
-
-    var swervePublisher: StructArrayPublisher<SwerveModuleState> =
-        NetworkTableInstance
-            .getDefault()
-            .getStructArrayTopic("MyStates", SwerveModuleState.struct)
-            .publish()
 
     var counter = 0
 
@@ -127,19 +126,6 @@ object DriveSubsystem : SubsystemBase() {
         // gyro.reset()
 //        gyro.enableBoardlevelYawReset(false)
         gyro.reset()
-
-        odometry =
-            SwerveDriveOdometry(
-                Constants.DriveConstants.DRIVE_KINEMATICS,
-                Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
-                // gyro.rotation3d.x
-                arrayOf(
-                    drive.fl.getPosition(),
-                    drive.fr.getPosition(),
-                    drive.bl.getPosition(),
-                    drive.br.getPosition(),
-                ),
-            )
 
         AutoBuilder.configure(
             this::getPose,
@@ -202,7 +188,7 @@ object DriveSubsystem : SubsystemBase() {
     // IDE bug, the detected and actual signatures are different
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
     fun getCurrentSpeeds(): ChassisSpeeds =
-        Constants.DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(
+        DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(
             drive.fl.getState(),
             drive.fr.getState(),
             drive.bl.getState(),
@@ -234,11 +220,11 @@ object DriveSubsystem : SubsystemBase() {
         speeds: ChassisSpeeds,
         fieldRelative: Boolean,
     ) {
-        var swerveModuleStates = Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds)
+        var swerveModuleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(speeds)
 
         if (fieldRelative) {
             swerveModuleStates =
-                Constants.DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(
+                DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
                         speeds,
                         Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),

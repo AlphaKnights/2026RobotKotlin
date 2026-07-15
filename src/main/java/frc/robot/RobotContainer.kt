@@ -12,10 +12,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
-import frc.robot.commands.intake.*
+import frc.robot.commands.intake.IntakeCommand
+import frc.robot.commands.intake.IntakeLeverCommand
+import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
-import frc.robot.subsystems.Logger
 import java.io.File
 
 /**
@@ -53,7 +54,6 @@ object RobotContainer {
                 "Intake Manual Out" to IntakeLeverManualCommand(Constants.IntakeDirection.OUT),
             ),
         )
-
         configureAuto()
         configureBindings()
     }
@@ -236,7 +236,7 @@ object RobotContainer {
         val autoList =
             buildList {
                 File("src/main/deploy/pathplanner/autos/").listFiles()?.forEach { auto ->
-                    add(PathPlannerAuto(auto.name))
+                    add(PathPlannerAuto(auto.name.toString().removeSuffix(".auto")))
                 }
             }
         for (auto in autoList) {

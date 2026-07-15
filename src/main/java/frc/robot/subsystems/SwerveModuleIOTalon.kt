@@ -1,3 +1,6 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.subsystems
 
 import com.ctre.phoenix6.controls.PositionVoltage
@@ -7,8 +10,8 @@ import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import frc.robot.Constants
 import frc.robot.Constants.ModuleConstants
+import frc.robot.interfaces.SwerveModule
 
 class SwerveModuleIOTalon(
     driveMotorId: Int,

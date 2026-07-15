@@ -6,12 +6,7 @@ package frc.robot.subsystems
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import frc.robot.Constants
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 object AutoAlignCalc {
     @Suppress("LongMethod")

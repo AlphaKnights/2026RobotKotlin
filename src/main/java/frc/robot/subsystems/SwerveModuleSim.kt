@@ -1,23 +1,19 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.subsystems
 
-import com.ctre.phoenix6.controls.PositionVoltage
-import com.ctre.phoenix6.controls.VelocityVoltage
-import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
-import edu.wpi.first.wpilibj.Encoder
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
-import edu.wpi.first.wpilibj.simulation.EncoderSim
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import frc.robot.Constants
-import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.ModuleConstants
+import frc.robot.interfaces.SwerveModule
 
 class SwerveModuleSim : SwerveModule {
     private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)

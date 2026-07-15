@@ -3,7 +3,6 @@
  */
 package frc.robot.subsystems
 
-import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionDutyCycle
@@ -103,10 +102,6 @@ object IntakeSubsystem : SubsystemBase() {
         intakeMotor.configurator.apply(intakeMotorConfig)
         leftLeverMotor.configurator.apply(globalConfig)
         rightleverMotor.configurator.apply(globalConfig)
-    }
-
-    override fun periodic() {
-        super.periodic()
     }
 
     fun runIntake(speed: Double) {

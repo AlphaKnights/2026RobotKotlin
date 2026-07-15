@@ -1,10 +1,17 @@
+/*
+ * (C) 2025 Galvaknights
+ */
 package frc.robot.subsystems
 
-import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.struct.Pose3dStruct
+import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
@@ -14,39 +21,43 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import java.io.File
-import java.lang.reflect.Type
 
 object Logger : SubsystemBase() {
+    private val table = NetworkTableInstance.getDefault()
     private val field = Field2d()
     private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
+    private val swervePublisher: StructArrayPublisher<SwerveModuleState> =
+        table
+            .getStructArrayTopic("MyStates", SwerveModuleState.struct)
+            .publish()
+    private val limeLightPublisher: StructArrayPublisher<Pose3d?> =
+        table
+            .getStructArrayTopic("limeLight pose", Pose3d.struct)
+            .publish()
 
     init {
         initTunablePID("DrivePID", PIDController(1.0, 0.0, 0.0))
         initTunablePID("TurnPID", PIDController(1.0, 0.0, 0.0))
-        val swerveList =
-            buildList {
-                Constants.SomeConstants.SwerveType.entries
-                    .forEach { type -> add(type) }
-            }
-        for (type in swerveList) {
+
+        for (type in Constants.SomeConstants.SwerveType.entries) {
             swerveType.addOption(type.name, type)
         }
         SmartDashboard.putData("Swerve Type Chooser", swerveType)
-        SmartDashboard.putData("Field", field)
 
-        field.setRobotPose(Pose2d(Translation2d.kZero, Rotation2d.kZero))
+        SmartDashboard.putData("Field", field)
+        field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
     }
 
     override fun periodic() {
-        field.setRobotPose(DriveSubsystem.getPose())
-
-        field.getObject("targetPose").setPose(DriveToArcPoseGenerator.generatePath())
+        field.robotPose = DriveSubsystem.getPose()
+        field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath()
     }
 
-    fun log() {
+    /** Initializes all logged data.
+     *
+     *  Values are updated with SmartDashboard.updateValues()
+     */
+    fun initLog() {
         SmartDashboard.putNumber(
             "Match Time",
             DriverStation.getMatchTime(),
@@ -63,32 +74,34 @@ object Logger : SubsystemBase() {
             "Aligned to Tag",
             LimelightSubsystem.isAligned(),
         )
-        SmartDashboard.putNumber(
-            "limelight x",
-            LimelightSubsystem.tagPose?.x ?: -1.0,
-        )
-        SmartDashboard.putNumber(
-            "limelight z",
-            LimelightSubsystem.tagPose?.z ?: -1.0,
-        )
-        SmartDashboard.putNumber(
-            "limelight yaw",
-            LimelightSubsystem.tagPose?.rotation?.y ?: -1.0,
-        )
+//        SmartDashboard.putNumber(
+//            "limelight x",
+//            LimelightSubsystem.tagPose?.x ?: -1.0,
+//        )
+//        SmartDashboard.putNumber(
+//            "limelight z",
+//            LimelightSubsystem.tagPose?.z ?: -1.0,
+//        )
+//        SmartDashboard.putNumber(
+//            "limelight yaw",
+//            LimelightSubsystem.tagPose?.rotation?.y ?: -1.0,
+//        )
+        limeLightPublisher.set(arrayOf(LimelightSubsystem.tagPose))
+
         SmartDashboard.putNumber(
             "Shooting Distance",
             AimingCalc.canShoot(DriveSubsystem.getPose()),
         )
         SmartDashboard.putData("Field", field)
+
         SmartDashboard.putNumber(
             "DriveSpeed",
             DriveSubsystem.drive.fr
                 .getState()
                 .speedMetersPerSecond,
         )
-        // SmartDashboard.putData("states", DriveSubsystem.states.)
 
-        DriveSubsystem.swervePublisher.set(DriveSubsystem.getStates())
+        swervePublisher.set(DriveSubsystem.getStates())
     }
 
     fun initTunablePID(
@@ -102,16 +115,20 @@ object Logger : SubsystemBase() {
     }
 
     fun safeGetData(key: String): Any {
+//        while (!SmartDashboard.containsKey(key)) {
+//            SmartDashboard.updateValues()
+//            println("waiting for $key to arrive...")
+//        }
+//        return SmartDashboard.getData(key)
+
         while (true) {
             try {
                 SmartDashboard.getData(key)
                 break
             } catch (e: IllegalArgumentException) {
-                println("error getting $key, retrying...")
                 continue
             }
         }
-
         return SmartDashboard.getData(key)
     }
 }
