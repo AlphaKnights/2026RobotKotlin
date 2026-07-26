@@ -19,12 +19,6 @@ class SwerveModuleSim : SwerveModule {
     private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
     private val TURN_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
 
-    val turn_KV: Double = SmartDashboard.getNumber("turn_KV", 0.12)
-
-    init {
-        SmartDashboard.putNumber("turn_KV", 0.12)
-    }
-
     val driveSim =
         DCMotorSim(
             LinearSystemId.createDCMotorSystem(

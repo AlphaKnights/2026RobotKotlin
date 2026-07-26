@@ -12,6 +12,8 @@ import edu.wpi.first.math.geometry.struct.Pose3dStruct
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
+import edu.wpi.first.util.struct.Struct
+import edu.wpi.first.util.struct.StructSerializable
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
@@ -26,6 +28,7 @@ object Logger : SubsystemBase() {
     private val table = NetworkTableInstance.getDefault()
     private val field = Field2d()
     private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
+
     private val swervePublisher: StructArrayPublisher<SwerveModuleState> =
         table
             .getStructArrayTopic("MyStates", SwerveModuleState.struct)
@@ -93,13 +96,6 @@ object Logger : SubsystemBase() {
             AimingCalc.canShoot(DriveSubsystem.getPose()),
         )
         SmartDashboard.putData("Field", field)
-
-        SmartDashboard.putNumber(
-            "DriveSpeed",
-            DriveSubsystem.drive.fr
-                .getState()
-                .speedMetersPerSecond,
-        )
 
         swervePublisher.set(DriveSubsystem.getStates())
     }

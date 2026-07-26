@@ -11,21 +11,14 @@ package frc.robot
  */
 
 import com.ctre.phoenix6.CANBus
+import com.pathplanner.lib.path.PathConstraints
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.RobotBase
 import kotlin.math.PI
-
-data class PID(
-    val p: Double,
-    val i: Double,
-    val d: Double,
-    val ff: Double? = null,
-    val v: Double? = null,
-    val a: Double? = null,
-)
 
 object Constants {
     object OperatorConstants {
@@ -82,7 +75,7 @@ object Constants {
     }
 
     object SomeConstants {
-        val currentMode: Mode = if (RobotBase.isReal()) Mode.REAL else Mode.SIM
+        val currentMode: Mode = if (RobotBase.isReal()) Mode.REAL else Mode.REAL
 
         enum class Mode {
             /** Running on a real robot.  */
@@ -96,7 +89,6 @@ object Constants {
             TALON,
             SPARKMAX,
         }
-        // TODO: have a check to see if NetworkTables is up and Logger.log() has been called
     }
 
     object DriveConstants {
@@ -121,7 +113,6 @@ object Constants {
         val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.170166) // + is clockwise
         val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.002686 + 0.5)
         // - counter-clockwise
-
         //   back right - > front left
         //   back left - >front right
         //   front left -> back right
@@ -178,14 +169,6 @@ object Constants {
         const val TURNING_STATOR_CURRENT_LIMIT = 120.0
 
         val CANBUS: CANBus = CANBus("didy")
-
-//        val testPID =
-//            try {
-//                SmartDashboard.getData("testPID")
-//            } catch (e: IllegalArgumentException) {
-//                null
-//            }
-//        val test2PID = PIDController(1.0, 0.0, 1.0)
     }
 
     object LimelightConstants {
