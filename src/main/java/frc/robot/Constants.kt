@@ -23,7 +23,7 @@ import kotlin.math.PI
 object Constants {
     object OperatorConstants {
         const val DRIVER_CONTROLLER_PORT = 0
-        const val DRIVE_DEADBAND = 0.01
+        const val DRIVE_DEADBAND = 0.2
         const val LERP_VAL = 0.035
 
         const val RESET_HEADING_BUTTON = 11
@@ -75,15 +75,7 @@ object Constants {
     }
 
     object SomeConstants {
-        val currentMode: Mode = if (RobotBase.isReal()) Mode.REAL else Mode.REAL
-
-        enum class Mode {
-            /** Running on a real robot.  */
-            REAL,
-
-            /** Running a physics simulator.  */
-            SIM,
-        }
+        val isReal: Boolean = RobotBase.isReal()
 
         enum class SwerveType {
             TALON,

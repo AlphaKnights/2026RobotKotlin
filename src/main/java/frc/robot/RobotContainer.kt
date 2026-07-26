@@ -5,6 +5,7 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -56,6 +57,7 @@ object RobotContainer {
         )
         configureAuto()
         configureBindings()
+        // LiveWindow.setEnabled(true)
     }
 
     private fun configureBindings() {

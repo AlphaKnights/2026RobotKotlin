@@ -15,14 +15,42 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.PathPlannerConstants
 import frc.robot.interfaces.SwerveModule
 
-object DriveSubsystem : SubsystemBase() {
+interface IDriveSubsystem {
+    fun getPose(): Pose2d
+
+    fun getStates(): Array<SwerveModuleState>?
+
+    // IDE bug, the detected and actual signatures are different
+    @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
+    fun getCurrentSpeeds(): ChassisSpeeds
+
+    fun resetOdometry(pose: Pose2d)
+
+    fun resetPose(pose: Pose2d)
+
+    fun shouldFlipPath(): Boolean =
+        (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+
+    fun drive(
+        speeds: ChassisSpeeds,
+        fieldRelative: Boolean,
+    )
+
+    fun setX()
+
+    fun zeroHeading()
+}
+
+object RealDriveSubsystem : SubsystemBase(), IDriveSubsystem {
     data class Swerve(
         val fl: SwerveModule,
         val fr: SwerveModule,
@@ -33,77 +61,64 @@ object DriveSubsystem : SubsystemBase() {
     private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
-    var drive: Swerve =
-        when (Constants.SomeConstants.currentMode) {
-            Constants.SomeConstants.Mode.REAL -> {
-                if (Logger.safeGetData("Swerve Type Chooser") as Constants.SomeConstants.SwerveType ==
-                    Constants.SomeConstants.SwerveType.TALON
-                ) {
-                    // Real robot, instantiate hardware IO implementations
-                    // SwerveModuleIOTalon is intended for modules with TalonFX drive, TalonFX turn, and
-                    // a CANcoder
-                    Swerve(
-                        SwerveModuleIOTalon(
-                            DriveConstants.FRONT_LEFT_DRIVING_ID,
-                            DriveConstants.FRONT_LEFT_TURNING_ID,
-                            DriveConstants.FRONT_LEFT_CANCODER_ID,
-                            DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                        SwerveModuleIOTalon(
-                            DriveConstants.FRONT_RIGHT_DRIVING_ID,
-                            DriveConstants.FRONT_RIGHT_TURNING_ID,
-                            DriveConstants.FRONT_RIGHT_CANCODER_ID,
-                            DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                        SwerveModuleIOTalon(
-                            DriveConstants.REAR_LEFT_DRIVING_ID,
-                            DriveConstants.REAR_LEFT_TURNING_ID,
-                            DriveConstants.REAR_LEFT_CANCODER_ID,
-                            DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                        SwerveModuleIOTalon(
-                            DriveConstants.REAR_RIGHT_DRIVING_ID,
-                            DriveConstants.REAR_RIGHT_TURNING_ID,
-                            DriveConstants.REAR_RIGHT_CANCODER_ID,
-                            DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                    )
-                } else { // TODO: Add actual robert IDs from 2025KitBot code
-                    Swerve(
-                        SwerveModuleIOSparkMAX(
-                            DriveConstants.FRONT_LEFT_DRIVING_ID,
-                            DriveConstants.FRONT_LEFT_TURNING_ID,
-                            DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                        SwerveModuleIOSparkMAX(
-                            DriveConstants.FRONT_RIGHT_DRIVING_ID,
-                            DriveConstants.FRONT_RIGHT_TURNING_ID,
-                            DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                        SwerveModuleIOSparkMAX(
-                            DriveConstants.REAR_LEFT_DRIVING_ID,
-                            DriveConstants.REAR_LEFT_TURNING_ID,
-                            DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                        SwerveModuleIOSparkMAX(
-                            DriveConstants.REAR_RIGHT_DRIVING_ID,
-                            DriveConstants.REAR_RIGHT_TURNING_ID,
-                            DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                        ),
-                    )
-                }
-            }
-
-            Constants.SomeConstants.Mode.SIM -> {
-                // Sim robot, instantiate physics sim IO implementations
+    private val drive: Swerve
+        get() =
+            if (Logger.safeGetData("Swerve Type Chooser") as Constants.SomeConstants.SwerveType ==
+                Constants.SomeConstants.SwerveType.TALON
+            ) {
+                // Real robot, instantiate hardware IO implementations
+                // SwerveModuleIOTalon is intended for modules with TalonFX drive, TalonFX turn, and
+                // a CANcoder
                 Swerve(
-                    SwerveModuleSim(),
-                    SwerveModuleSim(),
-                    SwerveModuleSim(),
-                    SwerveModuleSim(),
+                    SwerveModuleIOTalon(
+                        DriveConstants.FRONT_LEFT_DRIVING_ID,
+                        DriveConstants.FRONT_LEFT_TURNING_ID,
+                        DriveConstants.FRONT_LEFT_CANCODER_ID,
+                        DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                    SwerveModuleIOTalon(
+                        DriveConstants.FRONT_RIGHT_DRIVING_ID,
+                        DriveConstants.FRONT_RIGHT_TURNING_ID,
+                        DriveConstants.FRONT_RIGHT_CANCODER_ID,
+                        DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                    SwerveModuleIOTalon(
+                        DriveConstants.REAR_LEFT_DRIVING_ID,
+                        DriveConstants.REAR_LEFT_TURNING_ID,
+                        DriveConstants.REAR_LEFT_CANCODER_ID,
+                        DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                    SwerveModuleIOTalon(
+                        DriveConstants.REAR_RIGHT_DRIVING_ID,
+                        DriveConstants.REAR_RIGHT_TURNING_ID,
+                        DriveConstants.REAR_RIGHT_CANCODER_ID,
+                        DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                )
+            } else { // TODO: Add actual robert IDs from 2025KitBot code
+                Swerve(
+                    SwerveModuleIOSparkMAX(
+                        DriveConstants.FRONT_LEFT_DRIVING_ID,
+                        DriveConstants.FRONT_LEFT_TURNING_ID,
+                        DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                    SwerveModuleIOSparkMAX(
+                        DriveConstants.FRONT_RIGHT_DRIVING_ID,
+                        DriveConstants.FRONT_RIGHT_TURNING_ID,
+                        DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                    SwerveModuleIOSparkMAX(
+                        DriveConstants.REAR_LEFT_DRIVING_ID,
+                        DriveConstants.REAR_LEFT_TURNING_ID,
+                        DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
+                    ),
+                    SwerveModuleIOSparkMAX(
+                        DriveConstants.REAR_RIGHT_DRIVING_ID,
+                        DriveConstants.REAR_RIGHT_TURNING_ID,
+                        DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
+                    ),
                 )
             }
-        }
 
     private var odometry =
         SwerveDriveOdometry(
@@ -119,8 +134,6 @@ object DriveSubsystem : SubsystemBase() {
         )
 
     private val config: RobotConfig = RobotConfig.fromGUISettings()
-
-    var counter = 0
 
     init {
         // gyro.reset()
@@ -154,7 +167,6 @@ object DriveSubsystem : SubsystemBase() {
     }
 
     override fun periodic() {
-        counter++
         // This method will be called once per scheduler run
 //        if (Robot.isAutonomous()) {
 
@@ -175,7 +187,7 @@ object DriveSubsystem : SubsystemBase() {
         ) // limelight synchronization
     }
 
-    fun getStates(): Array<SwerveModuleState> =
+    override fun getStates(): Array<SwerveModuleState> =
         arrayOf(
             drive.fl.getState(),
             drive.fr.getState(),
@@ -183,11 +195,11 @@ object DriveSubsystem : SubsystemBase() {
             drive.br.getState(),
         )
 
-    fun getPose(): Pose2d = odometry.poseMeters
+    override fun getPose(): Pose2d = odometry.poseMeters
 
     // IDE bug, the detected and actual signatures are different
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
-    fun getCurrentSpeeds(): ChassisSpeeds =
+    override fun getCurrentSpeeds(): ChassisSpeeds =
         DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(
             drive.fl.getState(),
             drive.fr.getState(),
@@ -195,7 +207,7 @@ object DriveSubsystem : SubsystemBase() {
             drive.br.getState(),
         )
 
-    fun resetOdometry(pose: Pose2d) {
+    override fun resetOdometry(pose: Pose2d) {
         odometry.resetPosition(
             Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
             // gyro.getRotation2d(),
@@ -209,14 +221,11 @@ object DriveSubsystem : SubsystemBase() {
         )
     }
 
-    fun resetPose(pose: Pose2d) {
+    override fun resetPose(pose: Pose2d) {
         resetOdometry(pose)
     }
 
-    fun shouldFlipPath(): Boolean =
-        (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
-
-    fun drive(
+    override fun drive(
         speeds: ChassisSpeeds,
         fieldRelative: Boolean,
     ) {
@@ -238,7 +247,7 @@ object DriveSubsystem : SubsystemBase() {
         drive.br.setDesiredState(swerveModuleStates[3])
     }
 
-    fun setX() {
+    override fun setX() {
         drive.fl.setDesiredState(
             SwerveModuleState(
                 0.0,
@@ -265,7 +274,83 @@ object DriveSubsystem : SubsystemBase() {
         )
     }
 
-    fun zeroHeading() {
+    override fun zeroHeading() {
         gyro.reset()
     }
 }
+
+object SimDriveSubsystem : SubsystemBase(), IDriveSubsystem {
+    var m_pose: Pose2d = Pose2d.kZero
+    var m_speeds: ChassisSpeeds = ChassisSpeeds()
+
+    private val config: RobotConfig = RobotConfig.fromGUISettings()
+
+    init {
+        AutoBuilder.configure(
+            this::getPose,
+            this::resetPose,
+            this::getCurrentSpeeds,
+            { speeds: ChassisSpeeds, _: DriveFeedforwards ->
+                drive(speeds, fieldRelative = false)
+            },
+            PPHolonomicDriveController(
+                PIDConstants(
+                    PathPlannerConstants.TRANSLATION_P,
+                    PathPlannerConstants.TRANSLATION_I,
+                    PathPlannerConstants.TRANSLATION_D,
+                ),
+                PIDConstants(
+                    PathPlannerConstants.ROTATION_P,
+                    PathPlannerConstants.ROTATION_I,
+                    PathPlannerConstants.ROTATION_D,
+                ),
+                1.0,
+            ),
+            config,
+            this::shouldFlipPath,
+            this,
+        )
+    }
+
+    override fun periodic() {
+        // println(m_pose.toString())
+    }
+
+    override fun getPose(): Pose2d = m_pose
+
+    override fun getStates(): Array<SwerveModuleState>? = null
+
+    override fun getCurrentSpeeds(): ChassisSpeeds = m_speeds
+
+    override fun resetOdometry(newPose: Pose2d) {
+        m_pose = newPose
+    }
+
+    override fun resetPose(pose: Pose2d) {
+        resetOdometry(pose)
+    }
+
+    override fun drive(
+        speeds: ChassisSpeeds,
+        fieldRelative: Boolean,
+    ) {
+        m_speeds = speeds
+        m_pose = m_pose.exp(speeds.toTwist2d(0.20))
+    }
+
+    override fun setX() {
+        // Does nothing in the sim
+    }
+
+    override fun zeroHeading() {
+        // Does nothing in the sim
+    }
+}
+
+object DriveSubsystem :
+    SubsystemBase(),
+    IDriveSubsystem by if (Constants.SomeConstants.isReal) {
+        DriveSubsystem
+    } else {
+        SimDriveSubsystem
+    }

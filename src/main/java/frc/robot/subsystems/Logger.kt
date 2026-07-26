@@ -19,17 +19,21 @@ import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.CommandScheduler
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
+import kotlinx.coroutines.Runnable
 
 object Logger : SubsystemBase() {
     private val table = NetworkTableInstance.getDefault()
     private val field = Field2d()
     private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
 
-    private val swervePublisher: StructArrayPublisher<SwerveModuleState> =
+    private val swervePublisher: StructArrayPublisher<SwerveModuleState?> =
         table
             .getStructArrayTopic("MyStates", SwerveModuleState.struct)
             .publish()
@@ -49,6 +53,17 @@ object Logger : SubsystemBase() {
 
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
+
+        SmartDashboard.putData(
+            "Reset Robot Pose",
+            object : Command() {
+                override fun execute() {
+                    DriveSubsystem.resetPose(Pose2d.kZero)
+                }
+
+                override fun isFinished(): Boolean = true
+            },
+        )
     }
 
     override fun periodic() {
