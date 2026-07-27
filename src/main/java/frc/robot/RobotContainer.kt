@@ -5,12 +5,12 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
-import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
+import frc.robot.commands.DriveToArcCommand
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.IntakeCommand
@@ -18,6 +18,7 @@ import frc.robot.commands.intake.IntakeLeverCommand
 import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import frc.robot.subsystems.aiming.ArcSlidingCalc
 import java.io.File
 
 /**
@@ -95,55 +96,49 @@ object RobotContainer {
             ResetOdometry(),
         )
 
-//        xBoxController
-//            .driveToArc()
-//            .onTrue(
-//                DriveSetPointCommand(
-//                    { DriveToArcPoseGenerator.generatePath().x },
-//                    { DriveToArcPoseGenerator.generatePath().y },
-//                    { -DriveToArcPoseGenerator.generatePath().rotation.radians },
-//                ),
-//            )
-//
-//        xBoxController
-//            .slideLeft()
-//            .whileTrue(
-//                DriveCommand(
-//                    { 0.0 },
-//                    {
-//                        ArcSlidingCalc.getYChange(
-//                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
-//                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
-//                        )
-//                    },
-//                    {
-//                        Constants.DriveConstants.MAX_ANGULAR_SPEED *
-//                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
-//                    },
-//                    { false },
-//                    false,
-//                ),
-//            )
-//
-//        xBoxController
-//            .slideRight()
-//            .whileTrue(
-//                DriveCommand(
-//                    { 0.0 },
-//                    {
-//                        ArcSlidingCalc.getYChange(
-//                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
-//                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
-//                        )
-//                    },
-//                    {
-//                        -Constants.DriveConstants.MAX_ANGULAR_SPEED *
-//                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
-//                    },
-//                    { false },
-//                    false,
-//                ),
-//            )
+        xBoxController
+            .driveToArc()
+            .onTrue(DriveToArcCommand())
+
+        xBoxController
+            .slideLeft()
+            .whileTrue(
+                DriveCommand(
+                    { 0.0 },
+                    {
+                        ArcSlidingCalc.getYChange(
+                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
+                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
+                        )
+                    },
+                    {
+                        Constants.DriveConstants.MAX_ANGULAR_SPEED *
+                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
+                    },
+                    { false },
+                    false,
+                ),
+            )
+
+        xBoxController
+            .slideRight()
+            .whileTrue(
+                DriveCommand(
+                    { 0.0 },
+                    {
+                        ArcSlidingCalc.getYChange(
+                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
+                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
+                        )
+                    },
+                    {
+                        -Constants.DriveConstants.MAX_ANGULAR_SPEED *
+                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
+                    },
+                    { false },
+                    false,
+                ),
+            )
 
         xBoxController.north().whileTrue(
             NorthCommand(

@@ -12,8 +12,10 @@ import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.robot.Constants
 import frc.robot.Constants.ModuleConstants
 import frc.robot.interfaces.SwerveModule
+import frc.robot.subsystems.Logger.initTunablePID
 
 class SwerveModuleSim : SwerveModule {
     private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
@@ -38,13 +40,15 @@ class SwerveModuleSim : SwerveModule {
             TURN_GEARBOX,
         )
 
-    val driveController = Logger.safeGetData("DrivePID") as PIDController
+    val driveController = PIDController(1.0, 0.0, 0.0)
 
-    val turnController = Logger.safeGetData("TurnPID") as PIDController
+    val turnController = PIDController(1.0, 0.0, 0.0)
 
     init {
         // Enable wrapping for turn PID
         turnController.enableContinuousInput(-Math.PI, Math.PI)
+        initTunablePID("DrivePID", driveController)
+        initTunablePID("TurnPID", turnController)
     }
 
     override fun getPosition(): SwerveModulePosition =
@@ -73,7 +77,7 @@ class SwerveModuleSim : SwerveModule {
         val driveAppliedVolts: Double =
             driveController.calculate(
                 driveSim.angularVelocityRPM / 60,
-                desiredState.speedMetersPerSecond,
+                desiredState.speedMetersPerSecond / Constants.ModuleConstants.WHEEL_CIRCUMFERENCE,
             )
         SmartDashboard.putNumber("driveAppliedVolts", driveAppliedVolts)
 //        val turnAppliedVolts: Double =

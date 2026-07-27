@@ -8,30 +8,26 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.geometry.struct.Pose3dStruct
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
-import edu.wpi.first.util.struct.Struct
-import edu.wpi.first.util.struct.StructSerializable
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.CommandScheduler
-import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
-import kotlinx.coroutines.Runnable
 
+/**
+Only use Logger for telemetry, not inputs or choosers!
+ */
 object Logger : SubsystemBase() {
     private val table = NetworkTableInstance.getDefault()
     private val field = Field2d()
-    private val swerveType = SendableChooser<Constants.SomeConstants.SwerveType>()
 
     private val swervePublisher: StructArrayPublisher<SwerveModuleState?> =
         table
@@ -43,32 +39,17 @@ object Logger : SubsystemBase() {
             .publish()
 
     init {
-        initTunablePID("DrivePID", PIDController(1.0, 0.0, 0.0))
-        initTunablePID("TurnPID", PIDController(1.0, 0.0, 0.0))
-
-        for (type in Constants.SomeConstants.SwerveType.entries) {
-            swerveType.addOption(type.name, type)
-        }
-        SmartDashboard.putData("Swerve Type Chooser", swerveType)
 
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
 
-        SmartDashboard.putData(
-            "Reset Robot Pose",
-            object : Command() {
-                override fun execute() {
-                    DriveSubsystem.resetPose(Pose2d.kZero)
-                }
-
-                override fun isFinished(): Boolean = true
-            },
-        )
+        // SmartDashboard.putData("DriveSubsystem", DriveSubsystem)
     }
 
     override fun periodic() {
         field.robotPose = DriveSubsystem.getPose()
         field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath()
+        SmartDashboard.updateValues()
     }
 
     /** Initializes all logged data.
@@ -113,33 +94,36 @@ object Logger : SubsystemBase() {
         SmartDashboard.putData("Field", field)
 
         swervePublisher.set(DriveSubsystem.getStates())
+
+        SmartDashboard.putData(
+            "Reset Robot Pose",
+            object : Command() {
+                override fun execute() {
+                    DriveSubsystem.resetPose(Pose2d.kZero)
+                }
+
+                override fun isFinished(): Boolean = true
+            },
+        )
     }
 
     fun initTunablePID(
         key: String,
         pid: PIDController,
     ) {
-        if (!SmartDashboard.containsKey(key)) {
-            SmartDashboard.putData(key, pid)
-            SmartDashboard.setPersistent(key)
-        }
-    }
+        SmartDashboard.putData(key, pid)
 
-    fun safeGetData(key: String): Any {
-//        while (!SmartDashboard.containsKey(key)) {
-//            SmartDashboard.updateValues()
-//            println("waiting for $key to arrive...")
-//        }
-//        return SmartDashboard.getData(key)
+        val table =
+            NetworkTableInstance
+                .getDefault()
+                .getTable("SmartDashboard")
+                .getSubTable(key)
 
-        while (true) {
-            try {
-                SmartDashboard.getData(key)
-                break
-            } catch (e: IllegalArgumentException) {
-                continue
+        for (name in listOf("p", "i", "d")) {
+            val entry = table.getEntry(name)
+            if (entry.exists()) {
+                entry.setPersistent()
             }
         }
-        return SmartDashboard.getData(key)
     }
 }

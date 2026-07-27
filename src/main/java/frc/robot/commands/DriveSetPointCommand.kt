@@ -12,9 +12,9 @@ import frc.robot.Constants.DriveConstants
 import frc.robot.subsystems.DriveSubsystem
 
 class DriveSetPointCommand(
-    private val x: () -> Double,
-    private val y: () -> Double,
-    private val angle: () -> Double,
+    private val x: Double,
+    private val y: Double,
+    private val angle: Double,
 ) : Command() {
     val rotateController =
         PIDController(
@@ -33,10 +33,10 @@ class DriveSetPointCommand(
         addRequirements(DriveSubsystem)
 
         // configure the PID Controllers
-        rotateController.setTolerance(Rotation2d.fromRadians(1.0).radians)
+        rotateController.setTolerance(Rotation2d.fromRadians(1.0).radians, 0.2)
         rotateController.enableContinuousInput(-Math.PI, Math.PI)
 
-        driveController.setTolerance(DriveConstants.DRIVE_SETPOINT_TOLERANCE)
+        driveController.setTolerance(DriveConstants.DRIVE_SETPOINT_TOLERANCE, 0.2)
     }
 
     // Do angle optimization (south) and scalable tuning based on max speed
@@ -53,21 +53,21 @@ class DriveSetPointCommand(
 
         val rotSpeed =
             clamp(
-                rotateController.calculate(curpose.rotation.radians, angle()),
+                rotateController.calculate(curpose.rotation.radians, angle),
                 -1.0,
                 1.0,
             ) * DriveConstants.MAX_ANGULAR_SPEED
 
         val driveSpeedX =
             clamp(
-                driveController.calculate(curpose.translation.x, x()),
+                driveController.calculate(curpose.translation.x, x),
                 -1.0,
                 1.0,
             ) * DriveConstants.MAX_METERS_PER_SECOND
 
         val driveSpeedY =
             clamp(
-                driveController.calculate(curpose.translation.y, y()),
+                driveController.calculate(curpose.translation.y, y),
                 -1.0,
                 1.0,
             ) * DriveConstants.MAX_METERS_PER_SECOND

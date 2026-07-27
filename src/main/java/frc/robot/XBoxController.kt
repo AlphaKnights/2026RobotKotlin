@@ -42,7 +42,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         lerpRot =
             lerp(
                 -applyDeadband(
-                    getRawAxis(4),
+                    getRawAxis(2),
                     // left x
                     Constants.OperatorConstants.DRIVE_DEADBAND,
                 ) * speedScale(),
@@ -84,18 +84,14 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     fun resetOdometry(): Trigger = Trigger { rightStickButton }
 
-    fun driveToArc(): Trigger = Trigger { startButton }
+    fun driveToArc(): Trigger = Trigger { getRawButton(12) }
 
-//    fun slideLeft(): Trigger {
-//        return Trigger { leftBumperButton }
-//    }
-//
-//    fun slideRight(): Trigger {
-//        return Trigger { rightBumperButton }
-//    }
+    fun slideLeft(): Trigger = Trigger { leftBumperButton }
+
+    fun slideRight(): Trigger = Trigger { rightBumperButton }
 
     fun north(): Trigger {
-        return Trigger { startButton } // Select Button
+        return Trigger { getRawButton(11) } // Select Button
     }
 
     fun xLock(): Trigger = Trigger { leftBumperButton }
