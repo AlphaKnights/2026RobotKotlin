@@ -11,6 +11,7 @@ package frc.robot
  */
 
 import com.ctre.phoenix6.CANBus
+import com.pathplanner.lib.path.PathConstraints
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
@@ -82,83 +83,98 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 5.9
-        const val MAX_ANGULAR_SPEED = 5.0
+        const val MAX_METERS_PER_SECOND = 2.0
+        const val MAX_ANGULAR_SPEED = 2.0
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
 
-        private val TRACK_WIDTH = Units.inchesToMeters(25.5)
-        private val WHEEL_BASE = Units.inchesToMeters(25.5)
+        val PATH_CONSTRAINTS =
+            PathConstraints(
+                MAX_METERS_PER_SECOND,
+                10.0,
+                MAX_ANGULAR_SPEED,
+                4 * Math.PI,
+            )
+
+        private val TRACK_WIDTH = Units.inchesToMeters(27.0)
+        private val WHEEL_BASE = Units.inchesToMeters(27.0)
 
         private val MODULE_POSITIONS =
             arrayOf(
-                Translation2d(WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-                Translation2d(WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
-                Translation2d(-WHEEL_BASE / 2.0, TRACK_WIDTH / 2.0),
-                Translation2d(-WHEEL_BASE / 2.0, -TRACK_WIDTH / 2.0),
+                Translation2d(
+                    WHEEL_BASE / 2.0,
+                    TRACK_WIDTH / 2.0,
+                ),
+                Translation2d(
+                    WHEEL_BASE / 2.0,
+                    -TRACK_WIDTH / 2.0,
+                ),
+                Translation2d(
+                    -WHEEL_BASE / 2.0,
+                    TRACK_WIDTH / 2.0,
+                ),
+                Translation2d(
+                    -WHEEL_BASE / 2.0,
+                    -TRACK_WIDTH / 2.0,
+                ),
             )
-        val DRIVE_KINEMATICS = SwerveDriveKinematics(*MODULE_POSITIONS)
 
-        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.831299)
-        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.113525 + 0.5)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.170166) // + is clockwise
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.002686 + 0.5)
-        // - counter-clockwise
-        //   back right - > front left
-        //   back left - >front right
-        //   front left -> back right
-        // front right -> back left
+        val DRIVE_KINEMATICS =
+            SwerveDriveKinematics(*MODULE_POSITIONS)
+        val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = // CAN ID 1
+            Rotation2d
+                .fromDegrees(
+                    180.0,
+                )
+        val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = // CAN ID 12
+            Rotation2d
+                .fromDegrees(
+                    180.0,
+                )
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = // CAN ID 14
+            Rotation2d
+                .fromDegrees(
+                    180.0,
+                )
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = // CAN ID 22
+            Rotation2d
+                .fromDegrees(
+                    180.0,
+                )
 
-        const val FRONT_LEFT_DRIVING_ID = 8 // 8->4
-        const val REAR_LEFT_DRIVING_ID = 7 // 5->19
-        const val FRONT_RIGHT_DRIVING_ID = 19 // 19->5
-        const val REAR_RIGHT_DRIVING_ID = 4 // 4->8
+        const val FRONT_LEFT_DRIVING_ID = 2
+        const val REAR_LEFT_DRIVING_ID = 5
+        const val FRONT_RIGHT_DRIVING_ID = 3
+        const val REAR_RIGHT_DRIVING_ID = 4
 
-        const val FRONT_LEFT_TURNING_ID = 2 // 2->3
-        const val REAR_LEFT_TURNING_ID = 5 // 7->6
-        const val FRONT_RIGHT_TURNING_ID = 6 // 6->7
-        const val REAR_RIGHT_TURNING_ID = 3 // 3->2
+        const val FRONT_LEFT_TURNING_ID = 1
+        const val REAR_LEFT_TURNING_ID = 14
+        const val FRONT_RIGHT_TURNING_ID = 12
+        const val REAR_RIGHT_TURNING_ID = 22
 
-        const val FRONT_LEFT_CANCODER_ID = 11 // 11->9
-        const val REAR_LEFT_CANCODER_ID = 12 // 12->10
-        const val FRONT_RIGHT_CANCODER_ID = 10 // 10->12
-        const val REAR_RIGHT_CANCODER_ID = 9 // 9->11
-
-        const val ROTATE_CONTROLLER_P = 2.0
-        const val ROTATE_CONTROLLER_I = 0.0
-        const val ROTATE_CONTROLLER_D = 0.01
-        const val TRANSLATION_CONTROLLER_P = 5.0
-        const val TRANSLATION_CONTROLLER_I = 0.0
-        const val TRANSLATION_CONTROLLER_D = 0.01
-
-        const val DRIVE_SETPOINT_TOLERANCE = 0.05
-        const val ROTATE_SETPOINT_TOLERANCE = 0.08
-
-        const val PIDGEON2_ID = 20
+        // const val FRONT_LEFT_CANCODER_ID = 3
+        // const val REAR_LEFT_CANCODER_ID = 4
+        // const val FRONT_RIGHT_CANCODER_ID = 2
+        // const val REAR_RIGHT_CANCODER_ID = 1
     }
 
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
-        val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0) * PI
+        const val kDrivingMotorPinionTeeth: Int = 14
 
-        // const val WHEEL_CIRCUMFERENCE = 0.5 // meters
+        // Calculations required for driving motor conversion factors and feed forward
+        const val kDrivingMotorFreeSpeedRps: Double = 5676.0 / 60
+        const val kWheelDiameterMeters: Double = 0.0762
+        const val kWheelCircumferenceMeters: Double = kWheelDiameterMeters * Math.PI
 
-        const val DRIVING_P = 0.8
-        const val DRIVING_I = 0.0
-        const val DRIVING_D = 0.0
-        const val DRIVING_FF = 1.0
-        const val DRIVING_V = 0.12 // 0.12*DRIVE_RATIO
-        const val DRIVING_A = 1.5
-        const val TURNING_P = 40.0
-        const val TURNING_I = 0.0
-        const val TURNING_D = 0.0
-        const val TURNING_FF = 0.0
+        // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
+        // teeth on the bevel pinion
+        const val kDrivingMotorReduction: Double = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15)
 
-        const val DRIVING_MOTOR_CURRENT_LIMIT = 60.0
-        const val TURNING_MOTOR_CURRENT_LIMIT = 60.0
-        const val DRIVING_STATOR_CURRENT_LIMIT = 120.0
-        const val TURNING_STATOR_CURRENT_LIMIT = 120.0
-
-        val CANBUS: CANBus = CANBus("didy")
+        val kDriveWheelFreeSpeedRps: Double = (
+            (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) /
+                kDrivingMotorReduction
+        )
+        val CANBUS: CANBus = CANBus("didy") // TODO: Rename the CanBUS
     }
 
     object LimelightConstants {
