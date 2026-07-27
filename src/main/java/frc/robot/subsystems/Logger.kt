@@ -17,6 +17,7 @@ import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
+import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -111,71 +112,23 @@ object Logger : SubsystemBase() {
         SmartDashboard.putData("DriveSubsystem", DriveSubsystem)
     }
 
-//    fun initTunablePID(key: String) {
-//        val table =
-//            NetworkTableInstance
-//                .getDefault()
-//                .getTable("SmartDashboard")
-//                .getSubTable(key)
-//
-// //        val controller =
-// //            PIDController(
-// //                table.getEntry("p").getDouble(0.0),
-// //                table.getEntry("i").getDouble(0.0),
-// //                table.getEntry("d").getDouble(0.0),
-// //            )
-//        if (!table.subTables.contains(key)) {}
-//        SmartDashboard.putData(key, PIDController(0.0, 0.0, 0.0))
-//
-//        for (name in listOf("p", "i", "d")) {
-//            val entry = table.getEntry(name)
-//            if (entry.exists()) {
-//                entry.setPersistent()
-//            }
-//        }
-//    }
+    fun PIDController.makeTunable(key: String): PIDController {
+        val table = NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable(key)
 
-    class TunablePIDController(
-        key: String,
-        kp: Double = 0.0,
-        ki: Double = 0.0,
-        kd: Double = 0.0,
-    ) : PIDController(kp, ki, kd) {
-        val controller = PIDController(kp, ki, kd)
+        this.setPID(
+            table.getEntry("p").getDouble(0.0),
+            table.getEntry("i").getDouble(0.0),
+            table.getEntry("d").getDouble(0.0),
+        )
 
-        init {
-
-            SmartDashboard.putData(key, controller)
-
-            val table = NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable(key)
-
-            for (name in listOf("p", "i", "d")) {
-                val entry = table.getEntry(name)
-                if (entry.exists()) {
-                    entry.setPersistent()
-                }
+        for (name in listOf("p", "i", "d")) {
+            val entry = table.getEntry(name)
+            if (entry.exists()) {
+                entry.setPersistent()
             }
         }
-    }
-
-    fun PIDController.makeTunable(key: String): PIDController {
-        val table = NetworkTableInstance.getDefault().getTable("SmartDashboard")
         SmartDashboard.putData(key, this)
 
-        return this
+        return SmartDashboard.getData(key) as PIDController
     }
 }
-
-//    class TunablePID : Sendable {
-//        fun set(name: String): DoubleSupplier {
-//            return
-//        }
-//
-//        fun get(name: String): DoubleConsumer {
-//
-//        }
-//
-//        override fun initSendable(builder: SendableBuilder?) {
-//            builder.addDoubleProperty("kP", (this::set)("kP"), (this::get)("kP"))
-//        }
-//    }
