@@ -18,14 +18,11 @@ class DriveToArcCommand : Command() {
     fun generatePose(): Pose2d {
         val curpose = DriveSubsystem.getPose()
 
-        val allianceRed =
-            try {
-                (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
-            } catch (
-                e: NoSuchElementException,
-            ) {
-                true
-            }
+        val allianceRed = (
+            DriverStation.getAlliance().isPresent &&
+                DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+        )
+
         val hubPos =
             if (allianceRed) {
                 Translation2d(Constants.AimingConstants.RED_HUB_X, Constants.AimingConstants.RED_HUB_Y)

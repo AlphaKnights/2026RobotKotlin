@@ -9,19 +9,15 @@ import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
-import edu.wpi.first.epilogue.Logged
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
-import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
-import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
-import edu.wpi.first.wpilibj.simulation.FlywheelSim
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -472,9 +468,6 @@ class PhysicsSimDriveSubsystem :
         val gyro = DCMotorSim(LinearSystemId.createDCMotorSystem(1.0, 2.0), DCMotor.getKrakenX60Foc(1))
 
         // TODO: Tune kV and kA
-        init {
-            // SmartDashboard.putNumber("Gyro Position", Rotation2d(gyro.angularPosition).rotations)
-        }
 
         fun update(speeds: ChassisSpeeds) {
             gyro.inputVoltage = speeds.toTwist2d(0.20).dtheta
@@ -529,8 +522,8 @@ class SimpleSimDriveSubsystem :
 
     override fun getCurrentSpeeds(): ChassisSpeeds = m_speeds
 
-    override fun resetOdometry(newPose: Pose2d) {
-        m_pose = newPose
+    override fun resetOdometry(pose: Pose2d) {
+        m_pose = pose
     }
 
     override fun resetPose(pose: Pose2d) {

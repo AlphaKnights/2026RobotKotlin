@@ -5,7 +5,6 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
-import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -19,7 +18,6 @@ import frc.robot.commands.intake.IntakeLeverCommand
 import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
-import frc.robot.subsystems.aiming.ArcSlidingCalc
 import java.io.File
 
 /**

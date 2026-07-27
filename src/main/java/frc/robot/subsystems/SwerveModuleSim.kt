@@ -12,7 +12,6 @@ import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import frc.robot.Constants
 import frc.robot.Constants.ModuleConstants
 import frc.robot.interfaces.SwerveModule
 import frc.robot.subsystems.Logger.makeTunable
@@ -35,7 +34,7 @@ class SwerveModuleSim : SwerveModule {
             LinearSystemId.createDCMotorSystem(
                 TURN_GEARBOX,
                 2.0,
-                ModuleConstants.DRIVE_RATIO, // PLEASE CHANGE THIS TO ACTUAL VALUE
+                ModuleConstants.DRIVE_RATIO,
             ),
             TURN_GEARBOX,
         )
@@ -75,7 +74,7 @@ class SwerveModuleSim : SwerveModule {
         val driveAppliedVolts: Double =
             driveController.calculate(
                 driveSim.angularVelocityRPM / 60,
-                desiredState.speedMetersPerSecond / Constants.ModuleConstants.WHEEL_CIRCUMFERENCE,
+                desiredState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE,
             )
         SmartDashboard.putNumber("driveAppliedVolts", driveAppliedVolts)
 //        val turnAppliedVolts: Double =

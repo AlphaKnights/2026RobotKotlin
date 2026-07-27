@@ -2,12 +2,10 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>ForbiddenComment:Constants.kt$Constants.SomeConstants$// TODO: have a check to see if NetworkTables is up and Logger.log() has been called</ID>
-    <ID>ForbiddenComment:DriveSubsystem.kt$DriveSubsystem$// TODO: Add actual robert IDs from 2025KitBot code</ID>
+    <ID>ForbiddenComment:DriveSubsystem.kt$PhysicsSimDriveSubsystem.GyroSim$// TODO: Tune kV and kA</ID>
+    <ID>ForbiddenComment:DriveSubsystem.kt$RealDriveSubsystem$// TODO: Add actual robert IDs from 2025KitBot code</ID>
     <ID>FunctionOnlyReturningConstant:IntakeSubsystem.kt$IntakeSubsystem$fun limitSwitchPressed(): Boolean</ID>
-    <ID>InvalidPackageDeclaration:OdometrySim.kt$package frc.robot.subsystems.swerve</ID>
     <ID>LongMethod:RobotContainer.kt$RobotContainer$private fun configureBindings()</ID>
-    <ID>LoopWithTooManyJumpStatements:Logger.kt$Logger$while</ID>
     <ID>MagicNumber:AimingCalc.kt$AimingCalc$0.1</ID>
     <ID>MagicNumber:AimingCalc.kt$AimingCalc$5.0</ID>
     <ID>MagicNumber:AutoDeliveryCommand.kt$AutoDeliveryCommand$3</ID>
@@ -22,24 +20,24 @@
     <ID>MagicNumber:Constants.kt$Constants.ModuleConstants$4.0</ID>
     <ID>MagicNumber:Constants.kt$Constants.PathPlannerConstants$16.54099</ID>
     <ID>MagicNumber:Constants.kt$Constants.PathPlannerConstants$8.069326</ID>
-    <ID>MagicNumber:DriveSubsystem.kt$DriveSubsystem$3</ID>
-    <ID>MagicNumber:DriveSubsystem.kt$DriveSubsystem$45.0</ID>
+    <ID>MagicNumber:DriveSetPointCommand.kt$DriveSetPointCommand$0.2</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$PhysicsSimDriveSubsystem$3</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$PhysicsSimDriveSubsystem$45.0</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$PhysicsSimDriveSubsystem.GyroSim$0.20</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$RealDriveSubsystem$3</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$RealDriveSubsystem$45.0</ID>
+    <ID>MagicNumber:DriveSubsystem.kt$SimpleSimDriveSubsystem$0.20</ID>
     <ID>MagicNumber:IntakeCommand.kt$IntakeCommand$0.2</ID>
     <ID>MagicNumber:Logger.kt$Logger$100</ID>
-    <ID>MagicNumber:MAXSwerveModule.kt$MAXSwerveModule$0.04</ID>
-    <ID>MagicNumber:MAXSwerveModule.kt$MAXSwerveModule$20</ID>
-    <ID>MagicNumber:MAXSwerveModule.kt$MAXSwerveModule$50</ID>
-    <ID>MagicNumber:MAXSwerveModule.kt$MAXSwerveModule$60.0</ID>
     <ID>MagicNumber:RobotContainer.kt$RobotContainer$0.5</ID>
     <ID>MagicNumber:RobotContainer.kt$RobotContainer$7</ID>
     <ID>MagicNumber:SwerveModuleSim.kt$SwerveModuleSim$0.02</ID>
-    <ID>MagicNumber:SwerveModuleSim.kt$SwerveModuleSim$0.12</ID>
     <ID>MagicNumber:SwerveModuleSim.kt$SwerveModuleSim$12.0</ID>
     <ID>MagicNumber:SwerveModuleSim.kt$SwerveModuleSim$60</ID>
-    <ID>MagicNumber:XBoxController.kt$XBoxController$4</ID>
+    <ID>MagicNumber:XBoxController.kt$XBoxController$11</ID>
+    <ID>MagicNumber:XBoxController.kt$XBoxController$12</ID>
     <ID>SpreadOperator:Constants.kt$Constants.DriveConstants$(*MODULE_POSITIONS)</ID>
     <ID>SwallowedException:DriveToArcPoseGenerator.kt$DriveToArcPoseGenerator$e: java.util.NoSuchElementException</ID>
-    <ID>SwallowedException:Logger.kt$Logger$e: IllegalArgumentException</ID>
     <ID>TooManyFunctions:XBoxController.kt$XBoxController : XboxController</ID>
     <ID>UnusedPrivateProperty:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$// Use module constants to calculate conversion factors and feed forward gain. private val drivingFactor = ModuleConstants.WHEEL_CIRCUMFERENCE / ModuleConstants.DRIVE_RATIO</ID>
     <ID>UnusedPrivateProperty:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$chassisAngularOffset: Rotation2d</ID>
@@ -47,14 +45,9 @@
     <ID>UnusedPrivateProperty:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private val drivingVelocityFeedForward = ModuleConstants.DRIVING_FF</ID>
     <ID>UnusedPrivateProperty:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private val turningConfig: SparkMaxConfig = SparkMaxConfig()</ID>
     <ID>UnusedPrivateProperty:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private val turningFactor = 2 * PI</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private val m_drivingClosedLoopController: SparkClosedLoopController = m_drivingSpark.getClosedLoopController()</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private val m_drivingEncoder: RelativeEncoder = m_drivingSpark.encoder</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private val m_drivingSpark = SparkFlex(drivingCANId, SparkLowLevel.MotorType.kBrushless)</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private val m_turningClosedLoopController: SparkClosedLoopController = m_turningSpark.getClosedLoopController()</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private val m_turningEncoder: AbsoluteEncoder = m_turningSpark.absoluteEncoder</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private val m_turningSpark = SparkMax(turningCANId, SparkLowLevel.MotorType.kBrushless)</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private var m_chassisAngularOffset = 0.0</ID>
-    <ID>VariableNaming:MAXSwerveModule.kt$MAXSwerveModule$private var m_desiredState = SwerveModuleState(0.0, Rotation2d())</ID>
+    <ID>VariableNaming:DriveSubsystem.kt$PhysicsSimDriveSubsystem$private var m_speeds: ChassisSpeeds = ChassisSpeeds()</ID>
+    <ID>VariableNaming:DriveSubsystem.kt$SimpleSimDriveSubsystem$var m_pose: Pose2d = Pose2d.kZero</ID>
+    <ID>VariableNaming:DriveSubsystem.kt$SimpleSimDriveSubsystem$var m_speeds: ChassisSpeeds = ChassisSpeeds()</ID>
     <ID>VariableNaming:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private val m_drivingClosedLoopController: SparkClosedLoopController = m_drivingSpark.getClosedLoopController()</ID>
     <ID>VariableNaming:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private val m_drivingEncoder: RelativeEncoder = m_drivingSpark.encoder</ID>
     <ID>VariableNaming:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private val m_drivingSpark = SparkFlex(drivingCANId, SparkLowLevel.MotorType.kBrushless)</ID>
@@ -65,11 +58,9 @@
     <ID>VariableNaming:SwerveModuleIOSparkMAX.kt$SwerveModuleIOSparkMAX$private var m_desiredState = SwerveModuleState(0.0, Rotation2d())</ID>
     <ID>VariableNaming:SwerveModuleSim.kt$SwerveModuleSim$private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)</ID>
     <ID>VariableNaming:SwerveModuleSim.kt$SwerveModuleSim$private val TURN_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)</ID>
-    <ID>VariableNaming:SwerveModuleSim.kt$SwerveModuleSim$val turn_KV: Double = SmartDashboard.getNumber("turn_KV", 0.12)</ID>
     <ID>WildcardImport:AimingCalc.kt$import kotlin.math.*</ID>
     <ID>WildcardImport:AutoAlignCalc.kt$import kotlin.math.*</ID>
     <ID>WildcardImport:LimelightSubsystem.kt$import kotlinx.coroutines.*</ID>
-    <ID>WildcardImport:MAXSwerveModule.kt$import com.revrobotics.spark.*</ID>
     <ID>WildcardImport:RobotContainer.kt$import frc.robot.commands.*</ID>
   </CurrentIssues>
 </SmellBaseline>

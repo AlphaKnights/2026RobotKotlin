@@ -9,26 +9,16 @@ import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.networktables.NetworkTable
-import edu.wpi.first.networktables.NetworkTableEvent
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
-import edu.wpi.first.util.sendable.Sendable
-import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
-import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
-import java.util.function.DoubleConsumer
-import java.util.function.DoubleSupplier
-import kotlin.reflect.KProperty
 
 /**
 Only use Logger for telemetry, not inputs or choosers!
@@ -114,21 +104,26 @@ object Logger : SubsystemBase() {
 
     fun PIDController.makeTunable(key: String): PIDController {
         val table = NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable(key)
+        // ex: SmartDashboard/DrivePID
 
+        // set this PID controller to the NT persistent values
         this.setPID(
             table.getEntry("p").getDouble(0.0),
             table.getEntry("i").getDouble(0.0),
             table.getEntry("d").getDouble(0.0),
         )
 
+        // if this is a new controller, make the values persistent (ignored otherwise)
         for (name in listOf("p", "i", "d")) {
             val entry = table.getEntry(name)
             if (entry.exists()) {
                 entry.setPersistent()
             }
         }
+        // Use the Sendable api to make a PIDController appear on the dashboard with our constants
         SmartDashboard.putData(key, this)
 
+        // return the PIDController as tuned from Glass (or elsewhere)
         return SmartDashboard.getData(key) as PIDController
     }
 }
