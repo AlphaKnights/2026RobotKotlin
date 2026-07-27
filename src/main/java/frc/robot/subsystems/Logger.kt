@@ -9,8 +9,12 @@ import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.networktables.NetworkTable
+import edu.wpi.first.networktables.NetworkTableEvent
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
+import edu.wpi.first.util.sendable.Sendable
+import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
@@ -21,6 +25,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
+import java.util.function.DoubleConsumer
+import java.util.function.DoubleSupplier
+import kotlin.reflect.KProperty
 
 /**
 Only use Logger for telemetry, not inputs or choosers!
@@ -39,17 +46,13 @@ object Logger : SubsystemBase() {
             .publish()
 
     init {
-
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
-
-        // SmartDashboard.putData("DriveSubsystem", DriveSubsystem)
     }
 
     override fun periodic() {
         field.robotPose = DriveSubsystem.getPose()
         field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath()
-        SmartDashboard.updateValues()
     }
 
     /** Initializes all logged data.
@@ -105,25 +108,74 @@ object Logger : SubsystemBase() {
                 override fun isFinished(): Boolean = true
             },
         )
+        SmartDashboard.putData("DriveSubsystem", DriveSubsystem)
     }
 
-    fun initTunablePID(
+//    fun initTunablePID(key: String) {
+//        val table =
+//            NetworkTableInstance
+//                .getDefault()
+//                .getTable("SmartDashboard")
+//                .getSubTable(key)
+//
+// //        val controller =
+// //            PIDController(
+// //                table.getEntry("p").getDouble(0.0),
+// //                table.getEntry("i").getDouble(0.0),
+// //                table.getEntry("d").getDouble(0.0),
+// //            )
+//        if (!table.subTables.contains(key)) {}
+//        SmartDashboard.putData(key, PIDController(0.0, 0.0, 0.0))
+//
+//        for (name in listOf("p", "i", "d")) {
+//            val entry = table.getEntry(name)
+//            if (entry.exists()) {
+//                entry.setPersistent()
+//            }
+//        }
+//    }
+
+    class TunablePIDController(
         key: String,
-        pid: PIDController,
-    ) {
-        SmartDashboard.putData(key, pid)
+        kp: Double = 0.0,
+        ki: Double = 0.0,
+        kd: Double = 0.0,
+    ) : PIDController(kp, ki, kd) {
+        val controller = PIDController(kp, ki, kd)
 
-        val table =
-            NetworkTableInstance
-                .getDefault()
-                .getTable("SmartDashboard")
-                .getSubTable(key)
+        init {
 
-        for (name in listOf("p", "i", "d")) {
-            val entry = table.getEntry(name)
-            if (entry.exists()) {
-                entry.setPersistent()
+            SmartDashboard.putData(key, controller)
+
+            val table = NetworkTableInstance.getDefault().getTable("SmartDashboard").getSubTable(key)
+
+            for (name in listOf("p", "i", "d")) {
+                val entry = table.getEntry(name)
+                if (entry.exists()) {
+                    entry.setPersistent()
+                }
             }
         }
     }
+
+    fun PIDController.makeTunable(key: String): PIDController {
+        val table = NetworkTableInstance.getDefault().getTable("SmartDashboard")
+        SmartDashboard.putData(key, this)
+
+        return this
+    }
 }
+
+//    class TunablePID : Sendable {
+//        fun set(name: String): DoubleSupplier {
+//            return
+//        }
+//
+//        fun get(name: String): DoubleConsumer {
+//
+//        }
+//
+//        override fun initSendable(builder: SendableBuilder?) {
+//            builder.addDoubleProperty("kP", (this::set)("kP"), (this::get)("kP"))
+//        }
+//    }

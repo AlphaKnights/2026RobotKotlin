@@ -5,6 +5,7 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -58,7 +59,6 @@ object RobotContainer {
         )
         configureAuto()
         configureBindings()
-        // LiveWindow.setEnabled(true)
     }
 
     private fun configureBindings() {
@@ -100,45 +100,45 @@ object RobotContainer {
             .driveToArc()
             .onTrue(DriveToArcCommand())
 
-        xBoxController
-            .slideLeft()
-            .whileTrue(
-                DriveCommand(
-                    { 0.0 },
-                    {
-                        ArcSlidingCalc.getYChange(
-                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
-                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
-                        )
-                    },
-                    {
-                        Constants.DriveConstants.MAX_ANGULAR_SPEED *
-                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
-                    },
-                    { false },
-                    false,
-                ),
-            )
-
-        xBoxController
-            .slideRight()
-            .whileTrue(
-                DriveCommand(
-                    { 0.0 },
-                    {
-                        ArcSlidingCalc.getYChange(
-                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
-                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
-                        )
-                    },
-                    {
-                        -Constants.DriveConstants.MAX_ANGULAR_SPEED *
-                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
-                    },
-                    { false },
-                    false,
-                ),
-            )
+//        xBoxController
+//            .slideLeft()
+//            .whileTrue(
+//                DriveCommand(
+//                    { 0.0 },
+//                    {
+//                        ArcSlidingCalc.getYChange(
+//                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
+//                        )
+//                    },
+//                    {
+//                        Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
+//                    },
+//                    { false },
+//                    false,
+//                ),
+//            )
+//
+//        xBoxController
+//            .slideRight()
+//            .whileTrue(
+//                DriveCommand(
+//                    { 0.0 },
+//                    {
+//                        ArcSlidingCalc.getYChange(
+//                            Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                                Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE,
+//                        )
+//                    },
+//                    {
+//                        -Constants.DriveConstants.MAX_ANGULAR_SPEED *
+//                            Constants.DriveConstants.MAX_SLIDING_SPEED_PERCENTAGE
+//                    },
+//                    { false },
+//                    false,
+//                ),
+//            )
 
         xBoxController.north().whileTrue(
             NorthCommand(

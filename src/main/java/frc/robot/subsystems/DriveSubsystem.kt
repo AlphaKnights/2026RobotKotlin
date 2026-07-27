@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
+import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
@@ -28,7 +29,6 @@ import frc.robot.Constants
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.PathPlannerConstants
 import frc.robot.interfaces.SwerveModule
-import frc.robot.subsystems.GyroSim.gyro
 
 interface IDriveSubsystem {
     fun getPose(): Pose2d
@@ -56,7 +56,9 @@ interface IDriveSubsystem {
     fun zeroHeading()
 }
 
-object RealDriveSubsystem : SubsystemBase(), IDriveSubsystem {
+class RealDriveSubsystem :
+    SubsystemBase(),
+    IDriveSubsystem {
     data class Swerve(
         val fl: SwerveModule,
         val fr: SwerveModule,
@@ -292,7 +294,9 @@ object RealDriveSubsystem : SubsystemBase(), IDriveSubsystem {
     }
 }
 
-object PhysicsSimDriveSubsystem : SubsystemBase(), IDriveSubsystem {
+class PhysicsSimDriveSubsystem :
+    SubsystemBase(),
+    IDriveSubsystem {
     data class Swerve(
         val fl: SwerveModule,
         val fr: SwerveModule,
@@ -463,23 +467,25 @@ object PhysicsSimDriveSubsystem : SubsystemBase(), IDriveSubsystem {
     override fun zeroHeading() {
         gyro.setState(0.0, 0.0)
     }
+
+    private object GyroSim {
+        val gyro = DCMotorSim(LinearSystemId.createDCMotorSystem(1.0, 2.0), DCMotor.getKrakenX60Foc(1))
+
+        // TODO: Tune kV and kA
+        init {
+            // SmartDashboard.putNumber("Gyro Position", Rotation2d(gyro.angularPosition).rotations)
+        }
+
+        fun update(speeds: ChassisSpeeds) {
+            gyro.inputVoltage = speeds.toTwist2d(0.20).dtheta
+            gyro.update(0.20)
+        }
+    }
 }
 
-object GyroSim : SubsystemBase() {
-    val gyro = DCMotorSim(LinearSystemId.createDCMotorSystem(1.0, 2.0), DCMotor.getKrakenX60Foc(1))
-
-    // TODO: Tune kV and kA
-    init {
-        // SmartDashboard.putNumber("Gyro Position", Rotation2d(gyro.angularPosition).rotations)
-    }
-
-    fun update(speeds: ChassisSpeeds) {
-        gyro.inputVoltage = speeds.toTwist2d(0.20).dtheta
-        gyro.update(0.20)
-    }
-}
-
-object SimpleSimDriveSubsystem : SubsystemBase(), IDriveSubsystem {
+class SimpleSimDriveSubsystem :
+    SubsystemBase(),
+    IDriveSubsystem {
     var m_pose: Pose2d = Pose2d.kZero
     var m_speeds: ChassisSpeeds = ChassisSpeeds()
 
@@ -548,14 +554,18 @@ object SimpleSimDriveSubsystem : SubsystemBase(), IDriveSubsystem {
     }
 }
 
-private val delegate by lazy {
+private val delegate: IDriveSubsystem by lazy {
     if (Constants.SomeConstants.isReal) {
-        RealDriveSubsystem
+        RealDriveSubsystem()
     } else {
-        PhysicsSimDriveSubsystem
+        PhysicsSimDriveSubsystem()
     }
 }
 
 object DriveSubsystem :
     SubsystemBase(),
-    IDriveSubsystem by delegate as IDriveSubsystem
+    IDriveSubsystem by delegate {
+    init {
+        SmartDashboard.putData(this.toString(), this)
+    }
+}

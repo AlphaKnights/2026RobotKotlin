@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.robot.Constants
 import frc.robot.Constants.ModuleConstants
 import frc.robot.interfaces.SwerveModule
-import frc.robot.subsystems.Logger.initTunablePID
+import frc.robot.subsystems.Logger.makeTunable
 
 class SwerveModuleSim : SwerveModule {
     private val DRIVE_GEARBOX: DCMotor = DCMotor.getKrakenX60Foc(1)
@@ -40,15 +40,13 @@ class SwerveModuleSim : SwerveModule {
             TURN_GEARBOX,
         )
 
-    val driveController = PIDController(1.0, 0.0, 0.0)
+    val driveController = PIDController(0.0, 0.0, 0.0).makeTunable("DrivePID")
 
-    val turnController = PIDController(1.0, 0.0, 0.0)
+    // val turnController = PIDController(0.0, 0.0, 0.0)
 
     init {
         // Enable wrapping for turn PID
-        turnController.enableContinuousInput(-Math.PI, Math.PI)
-        initTunablePID("DrivePID", driveController)
-        initTunablePID("TurnPID", turnController)
+        // turnController.enableContinuousInput(-Math.PI, Math.PI)
     }
 
     override fun getPosition(): SwerveModulePosition =
