@@ -4,12 +4,16 @@
 package frc.robot.subsystems
 
 import com.revrobotics.AbsoluteEncoder
+import com.revrobotics.PersistMode
 import com.revrobotics.RelativeEncoder
+import com.revrobotics.ResetMode
+import com.revrobotics.spark.FeedbackSensor
 import com.revrobotics.spark.SparkBase.ControlType
 import com.revrobotics.spark.SparkClosedLoopController
 import com.revrobotics.spark.SparkFlex
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkFlexConfig
 import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.math.geometry.Rotation2d
@@ -44,6 +48,59 @@ class SwerveModuleIOSparkMAX(
     private val drivingFactor = ModuleConstants.WHEEL_CIRCUMFERENCE / ModuleConstants.DRIVE_RATIO
     private val turningFactor = 2 * PI
     private val drivingVelocityFeedForward = ModuleConstants.DRIVING_FF
+
+    init {
+        // Apply the respective configurations to the SPARKS. Reset parameters before
+        // applying the configuration to bring the SPARK to a known good state. Persist
+        // the settings to the SPARK to avoid losing them on a power cycle.
+        drivingConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(50) // KBRAKE IDLE
+        drivingConfig.encoder
+            .positionConversionFactor(drivingFactor) // meters
+            .velocityConversionFactor(drivingFactor / 60.0) // meters per second
+        drivingConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            // These are example gains you may need to them for your own robot!
+            .pid(0.04, 0.0, 0.0)
+            .outputRange(-1.0, 1.0)
+            .feedForward
+            .kV(drivingVelocityFeedForward)
+
+        turningConfig
+            .idleMode(IdleMode.kBrake) // kBrake
+            .smartCurrentLimit(20)
+        turningConfig.absoluteEncoder
+            // Invert the turning encoder, since the output shaft rotates in the opposite
+            // direction of the steering motor in the MAXSwerve Module.
+            .inverted(true)
+            .positionConversionFactor(turningFactor) // radians
+            .velocityConversionFactor(turningFactor / 60.0) // radians per second
+        turningConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            // These are example gains you may need to them for your own robot!
+            .pid(1.0, 0.0, 0.0)
+            .outputRange(-1.0, 1.0)
+            // Enable PID wrap around for the turning motor. This will allow the PID
+            // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
+            // to 10 degrees will go through 0 rather than the other direction which is a
+            // longer route.
+            .positionWrappingEnabled(true)
+            .positionWrappingInputRange(0.0, turningFactor)
+
+        m_drivingSpark.configure(
+            drivingConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
+        )
+        m_turningSpark.configure(
+            turningConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters,
+        )
+
+        m_chassisAngularOffset = chassisAngularOffset.radians
+        m_desiredState.angle = Rotation2d(m_turningEncoder.position)
+        m_drivingEncoder.position = 0.0
+    }
 
     override fun getState(): SwerveModuleState {
         // Apply chassis angular offset to the encoder position to get the position
