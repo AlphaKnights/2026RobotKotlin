@@ -67,64 +67,33 @@ class RealDriveSubsystem :
     private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
-    private val drive: Swerve
-        get() =
-            if (swerveTypeChooser as Constants.SomeConstants.SwerveType ==
-                Constants.SomeConstants.SwerveType.TALON
-            ) {
-                // Real robot, instantiate hardware IO implementations
-                // SwerveModuleIOTalon is intended for modules with TalonFX drive, TalonFX turn, and
-                // a CANcoder
-                Swerve(
-                    SwerveModuleIOTalon(
-                        DriveConstants.FRONT_LEFT_DRIVING_ID,
-                        DriveConstants.FRONT_LEFT_TURNING_ID,
-                        DriveConstants.FRONT_LEFT_CANCODER_ID,
-                        DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                    SwerveModuleIOTalon(
-                        DriveConstants.FRONT_RIGHT_DRIVING_ID,
-                        DriveConstants.FRONT_RIGHT_TURNING_ID,
-                        DriveConstants.FRONT_RIGHT_CANCODER_ID,
-                        DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                    SwerveModuleIOTalon(
-                        DriveConstants.REAR_LEFT_DRIVING_ID,
-                        DriveConstants.REAR_LEFT_TURNING_ID,
-                        DriveConstants.REAR_LEFT_CANCODER_ID,
-                        DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                    SwerveModuleIOTalon(
-                        DriveConstants.REAR_RIGHT_DRIVING_ID,
-                        DriveConstants.REAR_RIGHT_TURNING_ID,
-                        DriveConstants.REAR_RIGHT_CANCODER_ID,
-                        DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                )
-            } else { // TODO: Add actual robert IDs from 2025KitBot code
-                Swerve(
-                    SwerveModuleIOSparkMAX(
-                        DriveConstants.FRONT_LEFT_DRIVING_ID,
-                        DriveConstants.FRONT_LEFT_TURNING_ID,
-                        DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                    SwerveModuleIOSparkMAX(
-                        DriveConstants.FRONT_RIGHT_DRIVING_ID,
-                        DriveConstants.FRONT_RIGHT_TURNING_ID,
-                        DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                    SwerveModuleIOSparkMAX(
-                        DriveConstants.REAR_LEFT_DRIVING_ID,
-                        DriveConstants.REAR_LEFT_TURNING_ID,
-                        DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                    SwerveModuleIOSparkMAX(
-                        DriveConstants.REAR_RIGHT_DRIVING_ID,
-                        DriveConstants.REAR_RIGHT_TURNING_ID,
-                        DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
-                    ),
-                )
-            }
+    private val drive: Swerve =
+        Swerve(
+            SwerveModuleIOTalon(
+                DriveConstants.FRONT_LEFT_DRIVING_ID,
+                DriveConstants.FRONT_LEFT_TURNING_ID,
+                DriveConstants.FRONT_LEFT_CANCODER_ID,
+                DriveConstants.FRONT_LEFT_CHASSIS_ANGULAR_OFFSET,
+            ),
+            SwerveModuleIOTalon(
+                DriveConstants.FRONT_RIGHT_DRIVING_ID,
+                DriveConstants.FRONT_RIGHT_TURNING_ID,
+                DriveConstants.FRONT_RIGHT_CANCODER_ID,
+                DriveConstants.FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET,
+            ),
+            SwerveModuleIOTalon(
+                DriveConstants.REAR_LEFT_DRIVING_ID,
+                DriveConstants.REAR_LEFT_TURNING_ID,
+                DriveConstants.REAR_LEFT_CANCODER_ID,
+                DriveConstants.BACK_LEFT_CHASSIS_ANGULAR_OFFSET,
+            ),
+            SwerveModuleIOTalon(
+                DriveConstants.REAR_RIGHT_DRIVING_ID,
+                DriveConstants.REAR_RIGHT_TURNING_ID,
+                DriveConstants.REAR_RIGHT_CANCODER_ID,
+                DriveConstants.BACK_RIGHT_CHASSIS_ANGULAR_OFFSET,
+            ),
+        )
 
     private var odometry =
         SwerveDriveOdometry(
