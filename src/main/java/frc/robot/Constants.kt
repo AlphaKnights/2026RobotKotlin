@@ -69,9 +69,9 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 5.9
-        const val MAX_ANGULAR_SPEED = 5.0
-        const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
+        const val MAX_METERS_PER_SECOND = 1.0 // for kiddies
+        const val MAX_ANGULAR_SPEED = 3.25
+        const val MAX_SLIDING_SPEED_PERCENTAGE = 0.25
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)

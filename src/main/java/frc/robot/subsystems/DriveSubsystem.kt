@@ -66,12 +66,7 @@ object DriveSubsystem : SubsystemBase()
 
 
 
-    private val states: Array<SwerveModuleState> = arrayOf(
-        frontLeft.getState(),
-        frontRight.getState(),
-        rearLeft.getState(),
-        rearRight.getState(),
-    )
+
     var swervePublisher: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault()
         .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish()
     var currentPublisher: DoublePublisher = NetworkTableInstance.getDefault()
@@ -136,11 +131,22 @@ object DriveSubsystem : SubsystemBase()
 
             //println("ArcPose = ${DriveToArcPoseGenerator.generatePath()}")
             //println("AllianceRed = ${(DriverStation.getAlliance() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red}")
-      //  if(counter % 5 ==0) {
-            // swervePublisher.set(states);
-            //currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
-            //currentPublisher.set(fR.getStatorCurrent().getValueAsDouble())
-    //    }
+
+        val states: Array<SwerveModuleState> = arrayOf(
+            frontLeft.getState(),
+            frontRight.getState(),
+            rearLeft.getState(),
+            rearRight.getState(),
+        )
+
+
+        //this will make the swerve diagram much more choppier,
+        // delete the if statement if you want it to be cleaner
+
+        if(counter % 5 ==0) {
+            swervePublisher.set(states)
+            currentPublisher.set(fL.getStatorCurrent().getValueAsDouble())
+        }
 
 
 //        }

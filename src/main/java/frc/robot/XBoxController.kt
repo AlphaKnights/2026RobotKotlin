@@ -51,9 +51,9 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun heading() : Trigger {
         return Trigger { yButton }
     }
-    fun alignL() : Trigger {
-        return Trigger { xButton }
-    }
+ //   fun alignL() : Trigger {
+  //      return Trigger { xButton }
+   // }
    // fun alignR() : Trigger {
      //   return Trigger { bButton }
    // }
@@ -107,6 +107,8 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun altIndexer(): Trigger {
         return Trigger { bButton }
     }
-
+    fun shake(): Trigger{
+        return Trigger{xButton}
+    }
 
 }
