@@ -11,6 +11,7 @@ import com.pathplanner.lib.util.DriveFeedforwards
 import frc.robot.Constants
 import frc.robot.XBoxController
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
+import org.wpilib.command3.SubsystemBase
 import org.wpilib.math.geometry.Pose2d
 import org.wpilib.math.geometry.Rotation2d
 import org.wpilib.math.geometry.Transform2d
@@ -22,7 +23,6 @@ import org.wpilib.networktables.DoublePublisher
 import org.wpilib.networktables.NetworkTableInstance
 import org.wpilib.networktables.StructArrayPublisher
 import org.wpilib.wpilibj.DriverStation
-import org.wpilib.wpilibj2.command.SubsystemBase
 
 object DriveSubsystem : SubsystemBase() {
     private val xBoxController = XBoxController()

@@ -19,8 +19,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig
 import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.config.SparkMaxConfig
 import frc.robot.Constants
+import org.wpilib.command3.SubsystemBase
 import org.wpilib.wpilibj.DigitalInput
-import org.wpilib.wpilibj2.command.SubsystemBase
 
 object IntakeSubsystem : SubsystemBase() {
     private val CAN = CANBus("didy")

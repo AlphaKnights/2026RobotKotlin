@@ -4,7 +4,7 @@ import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import frc.robot.Constants.RollerConstants
-import org.wpilib.wpilibj2.command.SubsystemBase
+import org.wpilib.command3.SubsystemBase
 
 object StorageSubsystem : SubsystemBase() {
     private val CAN = CANBus("didy")

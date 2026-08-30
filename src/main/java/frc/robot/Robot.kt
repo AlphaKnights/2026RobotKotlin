@@ -6,6 +6,7 @@ package frc.robot
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import frc.robot.subsystems.aiming.AimingCalc
+import org.wpilib.command3.CommandScheduler
 import org.wpilib.driverstation.DriverStation
 import org.wpilib.framework.TimedRobot
 import org.wpilib.hardware.hal.HAL
@@ -13,7 +14,6 @@ import org.wpilib.wpilibj.RobotController
 import org.wpilib.wpilibj.TimedRobot
 import org.wpilib.wpilibj.smartdashboard.SmartDashboard
 import org.wpilib.wpilibj.util.WPILibVersion
-import org.wpilib.wpilibj2.command.CommandScheduler
 
 /**
  * The functions in this object (which basically functions as a singleton class) are called automatically

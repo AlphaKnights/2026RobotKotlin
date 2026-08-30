@@ -1,10 +1,10 @@
 package frc.robot
 
-import org.wpilib.math.MathUtil.applyDeadband
-import org.wpilib.wpilibj.XboxController
-import org.wpilib.wpilibj2.command.button.Trigger
+import org.wpilib.command3.Trigger
+import org.wpilib.command3.button.CommandGamepad
+import org.wpilib.math.util.MathUtil.applyDeadband
 
-class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
+class CommandGamepad : CommandGamepad(Constants.OperatorConstants.DRIVER_CONTROLLER_PORT) {
     private var lerpX = 0.0
     private var lerpY = 0.0
     private var lerpRot = 0.0
@@ -49,7 +49,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     fun deliveryScale(): Double = getLeftTriggerAxis()
 
-    fun heading(): Trigger = Trigger { yButton }
+    fun heading(): Trigger = Trigger { frc.robot.CommandGamepad }
 
     //   fun alignL() : Trigger {
     //      return Trigger { xButton }

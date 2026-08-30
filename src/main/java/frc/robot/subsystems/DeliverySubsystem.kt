@@ -5,8 +5,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import frc.robot.Constants.LaunchConstants
+import org.wpilib.command3.SubsystemBase
 import org.wpilib.wpilibj.Ultrasonic
-import org.wpilib.wpilibj2.command.SubsystemBase
 
 object DeliverySubsystem : SubsystemBase() {
     /*

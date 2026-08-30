@@ -7,12 +7,12 @@ import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import org.wpilib.command3.Command
+import org.wpilib.command3.InstantCommand
+import org.wpilib.command3.SequentialCommandGroup
+import org.wpilib.command3.WaitCommand
+import org.wpilib.command3.button.CommandJoystick
 import org.wpilib.wpilibj.GenericHID
-import org.wpilib.wpilibj2.command.Command
-import org.wpilib.wpilibj2.command.InstantCommand
-import org.wpilib.wpilibj2.command.SequentialCommandGroup
-import org.wpilib.wpilibj2.command.WaitCommand
-import org.wpilib.wpilibj2.command.button.CommandJoystick
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

@@ -1,9 +1,9 @@
 package frc.robot.commands
 
 import frc.robot.subsystems.DriveSubsystem
+import org.wpilib.command3.Command
 import org.wpilib.math.geometry.Pose2d
 import org.wpilib.math.geometry.Rotation2d
-import org.wpilib.wpilibj2.command.Command
 
 class ResetOdometry : Command() {
     init {

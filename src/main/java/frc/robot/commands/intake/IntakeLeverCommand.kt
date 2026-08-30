@@ -1,8 +1,8 @@
 package frc.robot.commands.intake
 
 import frc.robot.subsystems.IntakeSubsystem
+import org.wpilib.command3.Command
 import org.wpilib.wpilibj.DigitalInput
-import org.wpilib.wpilibj2.command.Command
 
 class IntakeLeverCommand(
     private val targetPosition: Double,

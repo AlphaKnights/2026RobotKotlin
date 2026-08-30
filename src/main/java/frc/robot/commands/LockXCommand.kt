@@ -1,7 +1,7 @@
 package frc.robot.commands
 
 import frc.robot.subsystems.DriveSubsystem
-import org.wpilib.wpilibj2.command.Command
+import org.wpilib.command3.Command
 
 class LockXCommand : Command() {
     init {
