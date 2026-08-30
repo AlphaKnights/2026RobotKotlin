@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "2.1.0"
-    id "edu.wpi.first.GradleRIO" version "2026.2.1"
+    id "org.wpilib.GradleRIO" version "2027.0.0-alpha-6"
     id "idea"
     id "org.jlleitschuh.gradle.ktlint" version "12.2.0"
     id "com.diffplug.spotless" version "7.0.3"
