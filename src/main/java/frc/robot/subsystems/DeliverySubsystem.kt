@@ -4,9 +4,9 @@ import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
-import edu.wpi.first.wpilibj.Ultrasonic
-import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants.LaunchConstants
+import org.wpilib.wpilibj.Ultrasonic
+import org.wpilib.wpilibj2.command.SubsystemBase
 
 object DeliverySubsystem : SubsystemBase() {
     /*
@@ -16,16 +16,19 @@ object DeliverySubsystem : SubsystemBase() {
             Constants.UltrasonicConstants.ECHO_CHANNEL,
         )
      */
-    /* Ultrasonic if we need one */
+    // Ultrasonic if we need one
     private val CAN = CANBus("didy")
     private val leftLaunchMotor =
         TalonFX(
-            LaunchConstants.LEFT_LAUNCHMOTOR_ID, CAN
+            LaunchConstants.LEFT_LAUNCHMOTOR_ID,
+            CAN,
         )
     private val rightLaunchMotor =
         TalonFX(
-            LaunchConstants.RIGHT_LAUNCHMOTOR_ID, CAN
+            LaunchConstants.RIGHT_LAUNCHMOTOR_ID,
+            CAN,
         )
+
     init {
         Ultrasonic.setAutomaticMode(true)
 
@@ -76,7 +79,7 @@ object DeliverySubsystem : SubsystemBase() {
             }
 
         rightLaunchMotor.configurator.apply(launchMotorConfig2)
-        /* rangeFinder.isEnabled = true */
+        // rangeFinder.isEnabled = true
 
 //        val launchMotorConfig =
 //            SparkMaxConfig().apply {
@@ -91,11 +94,10 @@ object DeliverySubsystem : SubsystemBase() {
     }
 
     fun forward(launchProp: Double) {
-        //leftLaunchMotor.setControl(VelocityVoltage(launchProp))
-        //rightLaunchMotor.setControl(VelocityVoltage(launchProp))
+        // leftLaunchMotor.setControl(VelocityVoltage(launchProp))
+        // rightLaunchMotor.setControl(VelocityVoltage(launchProp))
         leftLaunchMotor.set(launchProp)
         rightLaunchMotor.set(-launchProp)
-
     }
 
     fun stop() {
@@ -107,5 +109,5 @@ object DeliverySubsystem : SubsystemBase() {
     fun fuelInside(): Boolean =
     rangeFinder.rangeInches <
     Constants.UltrasonicConstants.CORAL_DISTANCE
-    */
+     */
 }

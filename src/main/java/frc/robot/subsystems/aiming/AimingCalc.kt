@@ -3,11 +3,11 @@
  */
 package frc.robot.subsystems.aiming
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.Constants.AimingConstants
+import org.wpilib.math.geometry.Pose2d
+import org.wpilib.math.geometry.Translation2d
+import org.wpilib.math.kinematics.ChassisSpeeds
+import org.wpilib.wpilibj.DriverStation
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -29,24 +29,24 @@ object AimingCalc {
         var distanceTotal: Double = sqrt(distanceX.pow(2) + distanceY.pow(2))
 
         var distanceGood: Boolean = (
-                AimingConstants.DISTANCE - AimingConstants.GOOD_DISTANCE_TOLERANCE <= distanceTotal &&
-                        distanceTotal <= AimingConstants.DISTANCE + AimingConstants.GOOD_DISTANCE_TOLERANCE
-                )
+            AimingConstants.DISTANCE - AimingConstants.GOOD_DISTANCE_TOLERANCE <= distanceTotal &&
+                distanceTotal <= AimingConstants.DISTANCE + AimingConstants.GOOD_DISTANCE_TOLERANCE
+        )
         var distanceMiddlingLow: Boolean = (
-                AimingConstants.DISTANCE - AimingConstants.MIDDLING_DISTANCE_TOLERANCE <=
-                        distanceTotal &&
-                        distanceTotal <= AimingConstants.DISTANCE &&
-                        !distanceGood
-                )
+            AimingConstants.DISTANCE - AimingConstants.MIDDLING_DISTANCE_TOLERANCE <=
+                distanceTotal &&
+                distanceTotal <= AimingConstants.DISTANCE &&
+                !distanceGood
+        )
         var distanceMiddlingHigh: Boolean = (
-                AimingConstants.DISTANCE <= distanceTotal &&
-                        distanceTotal <= AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE &&
-                        !distanceGood
-                )
+            AimingConstants.DISTANCE <= distanceTotal &&
+                distanceTotal <= AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE &&
+                !distanceGood
+        )
         var distanceBadHigh: Boolean = (
-                distanceTotal >
-                        AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE
-                )
+            distanceTotal >
+                AimingConstants.DISTANCE + AimingConstants.MIDDLING_DISTANCE_TOLERANCE
+        )
 
         if (distanceBadHigh) {
             return 1.0
@@ -89,7 +89,8 @@ object AimingCalc {
 
         return angularDistance * AimingConstants.MAX_SPEED + sign(x) * termOne * termTwo
     }
-    //claude starts here beware
+
+    // claude starts here beware
     // Returns true when targeting red hub, false for blue.
     // Reads DriverStation at runtime; falls back to the constant if DS hasn't set it.
     private fun isRedAlliance(): Boolean {
@@ -206,11 +207,11 @@ object AimingCalc {
         val angleToHub = atan2(-dy, -dx) // direction from robot toward hub
         val currentAngle = curPose.rotation.radians
         // Wrap to (−π, π] so robot always turns the short way around.
-        val angleDiff = (angleToHub - currentAngle) //+ PI).mod(2 * PI) - PI
+        val angleDiff = (angleToHub - currentAngle) // + PI).mod(2 * PI) - PI
         val rotScale =
             if (abs(angleDiff) > AimingConstants.SLOW_DISTANCE) {
                 1.0
-            } else if(abs(angleDiff) < AimingConstants.ANGLE_DEADZONE) {
+            } else if (abs(angleDiff) < AimingConstants.ANGLE_DEADZONE) {
                 0.0
             } else {
                 max(AimingConstants.MIN_SPEED, abs(angleDiff) / AimingConstants.SLOW_DISTANCE)
@@ -226,9 +227,9 @@ object AimingCalc {
         // where vx/vy are the robot's current field-relative velocities.
         val feedforwardOmega =
             (
-                    -currentSpeeds.vxMetersPerSecond * dy +
-                            currentSpeeds.vyMetersPerSecond * dx
-                    ) / distanceSq
+                -currentSpeeds.vxMetersPerSecond * dy +
+                    currentSpeeds.vyMetersPerSecond * dx
+            ) / distanceSq
 
         return ChassisSpeeds(vx, vy, proportionalOmega + feedforwardOmega)
     }

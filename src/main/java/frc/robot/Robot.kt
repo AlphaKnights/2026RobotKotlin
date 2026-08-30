@@ -3,18 +3,17 @@
  */
 package frc.robot
 
-import edu.wpi.first.hal.FRCNetComm.tInstances
-import edu.wpi.first.hal.FRCNetComm.tResourceType
-import edu.wpi.first.hal.HAL
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.RobotController
-import edu.wpi.first.wpilibj.TimedRobot
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import edu.wpi.first.wpilibj.util.WPILibVersion
-import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import frc.robot.subsystems.aiming.AimingCalc
+import org.wpilib.driverstation.DriverStation
+import org.wpilib.framework.TimedRobot
+import org.wpilib.hardware.hal.HAL
+import org.wpilib.wpilibj.RobotController
+import org.wpilib.wpilibj.TimedRobot
+import org.wpilib.wpilibj.smartdashboard.SmartDashboard
+import org.wpilib.wpilibj.util.WPILibVersion
+import org.wpilib.wpilibj2.command.CommandScheduler
 
 /**
  * The functions in this object (which basically functions as a singleton class) are called automatically
@@ -32,8 +31,7 @@ object Robot : TimedRobot() {
      * the method will set it to the value selected in
      *the  AutoChooser on the dashboard.
      */
-    init
-    {
+    init {
         // Kotlin initializer block, which effectually serves as the constructor code.
         // https://kotlinlang.org/docs/classes.html#constructors
         // This work can also be done in the inherited `robotInit()` method. But as of the 2025 season the
@@ -99,7 +97,7 @@ object Robot : TimedRobot() {
         )
         SmartDashboard.putNumber(
             "Shooting Distance",
-            AimingCalc.canShoot(DriveSubsystem.getPose())
+            AimingCalc.canShoot(DriveSubsystem.getPose()),
         )
     }
 

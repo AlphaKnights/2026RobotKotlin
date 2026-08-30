@@ -1,15 +1,13 @@
 package frc.robot.commands.intake
 
-import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.subsystems.IntakeSubsystem
 import frc.robot.Constants
+import frc.robot.subsystems.IntakeSubsystem
+import org.wpilib.wpilibj.DigitalInput
+import org.wpilib.wpilibj2.command.Command
 
 class IntakeLeverManualCommand(
     private val direction: Constants.IntakeDirection,
-) : Command(){
-
-
+) : Command() {
     init {
         addRequirements(IntakeSubsystem)
     }
@@ -17,21 +15,20 @@ class IntakeLeverManualCommand(
     override fun execute() {
         val speed =
             when (direction) {
-                Constants.IntakeDirection.IN ->
+                Constants.IntakeDirection.IN -> {
                     Constants.IntakeConstants.LEVER_SPEED
-                Constants.IntakeDirection.OUT ->
+                }
+
+                Constants.IntakeDirection.OUT -> {
                     -Constants.IntakeConstants.LEVER_SPEED
+                }
             }
         IntakeSubsystem.moveLever(speed)
     }
 
-    override fun isFinished(): Boolean {
-        return IntakeSubsystem.limitSwitchPressed()
-    }
+    override fun isFinished(): Boolean = IntakeSubsystem.limitSwitchPressed()
 
     override fun end(interrupted: Boolean) {
         IntakeSubsystem.stopIntakeLever()
-
     }
-
 }

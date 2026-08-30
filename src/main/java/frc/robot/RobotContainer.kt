@@ -1,19 +1,18 @@
 package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
-import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.InstantCommand
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
-import edu.wpi.first.wpilibj2.command.WaitCommand
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
 import frc.robot.commands.autoalign.AutoAlignManualCommand
 import frc.robot.commands.intake.*
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
-
+import org.wpilib.wpilibj.GenericHID
+import org.wpilib.wpilibj2.command.Command
+import org.wpilib.wpilibj2.command.InstantCommand
+import org.wpilib.wpilibj2.command.SequentialCommandGroup
+import org.wpilib.wpilibj2.command.WaitCommand
+import org.wpilib.wpilibj2.command.button.CommandJoystick
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,8 +31,7 @@ object RobotContainer {
 
     private val buttonBoard = CommandJoystick(Constants.OperatorConstants.BUTTON_BOARD_PORT)
 
-    init
-    {
+    init {
         LimelightSubsystem.startPolling()
 
         NamedCommands.registerCommands(
@@ -63,7 +61,10 @@ object RobotContainer {
                 x = { xBoxController.x() },
                 y = { xBoxController.y() },
                 rot = { xBoxController.rot() },
-                autoAngle = { /* xBoxController.autoAim().asBoolean */ false },
+                autoAngle = {
+                    // xBoxController.autoAim().asBoolean
+                    false
+                },
             )
 
         // Reset heading
@@ -73,20 +74,21 @@ object RobotContainer {
                 ResetHeadingCommand(),
             )
         // Auto Align
- //       xBoxController.alignL().whileTrue(
-  //          AutoAlignManualCommand(
-   //             Constants.AlignDirection.LEFT,
-    //        ),
-    //    )
-  //      xBoxController.alignR().whileTrue(
-      //      AutoAlignManualCommand(
-          //      Constants.AlignDirection.RIGHT,
-            //),
-       // )
+        //       xBoxController.alignL().whileTrue(
+        //          AutoAlignManualCommand(
+        //             Constants.AlignDirection.LEFT,
+        //        ),
+        //    )
+        //      xBoxController.alignR().whileTrue(
+        //      AutoAlignManualCommand(
+        //      Constants.AlignDirection.RIGHT,
+        // ),
+        // )
 
-        xBoxController.resetOdometry()
+        xBoxController
+            .resetOdometry()
             .whileTrue(
-                ResetOdometry()
+                ResetOdometry(),
             )
 
 //        xBoxController
@@ -120,10 +122,9 @@ object RobotContainer {
 //                )
 //            )
 
-
-
         xBoxController
-            .north().whileTrue(
+            .north()
+            .whileTrue(
                 NorthCommand(
                     x = { xBoxController.x() },
                     y = { xBoxController.y() },
@@ -131,32 +132,36 @@ object RobotContainer {
             )
 
         xBoxController
-            .XLock().whileTrue(
+            .XLock()
+            .whileTrue(
                 LockXCommand(),
             )
 
         xBoxController
-            .altDelivery().whileTrue(
+            .altDelivery()
+            .whileTrue(
                 DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
             )
 
         xBoxController
-            .altIntake().whileTrue(
-                IntakeCommand(false)
+            .altIntake()
+            .whileTrue(
+                IntakeCommand(false),
             )
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnTrue(
+        buttonBoard.button(6).multiPress(2, 1.0).toggleOnTrue(
             InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,1.0)
-            })
+                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble, 1.0)
+            }),
         )
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnFalse(
+        buttonBoard.button(6).multiPress(2, 1.0).toggleOnFalse(
             InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,0.0)
-            })
+                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble, 0.0)
+            }),
         )
 
         buttonBoard
-            .button(7).whileTrue(
+            .button(7)
+            .whileTrue(
                 SuperStorageCommand(false),
             )
 

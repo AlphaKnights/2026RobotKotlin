@@ -3,14 +3,14 @@
  */
 package frc.robot
 
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
-import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.math.kinematics.ChassisSpeeds
 import frc.robot.subsystems.AutoAlignCalc
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.wpilib.math.geometry.Pose3d
+import org.wpilib.math.geometry.Rotation3d
+import org.wpilib.math.geometry.Translation3d
+import org.wpilib.math.kinematics.ChassisSpeeds
 
 internal class AutoAlignTest {
     @Test

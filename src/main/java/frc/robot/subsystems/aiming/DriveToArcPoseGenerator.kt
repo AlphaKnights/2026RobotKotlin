@@ -4,21 +4,22 @@
  */
 package frc.robot.subsystems.aiming
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.Constants.AimingConstants
 import frc.robot.subsystems.DriveSubsystem
+import org.wpilib.math.geometry.Pose2d
+import org.wpilib.math.geometry.Rotation2d
+import org.wpilib.math.geometry.Translation2d
+import org.wpilib.wpilibj.DriverStation
 import kotlin.math.atan2
-import kotlin.math.sqrt
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 object DriveToArcPoseGenerator {
     fun generatePath(): Pose2d {
         val curpose = DriveSubsystem.getPose()
 
-        val allianceRed = (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
+        val allianceRed =
+            (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red
         val hubPos =
             if (allianceRed) {
                 Translation2d(AimingConstants.RED_HUB_X, AimingConstants.RED_HUB_Y)
@@ -31,8 +32,8 @@ object DriveToArcPoseGenerator {
 
         val angleChange =
             when {
-                atan2(distance.y,distance.x) > 0 -> atan2(distance.y,distance.x) - Math.PI
-                atan2(distance.y,distance.x) < 0 -> atan2(distance.y,distance.x) + Math.PI
+                atan2(distance.y, distance.x) > 0 -> atan2(distance.y, distance.x) - Math.PI
+                atan2(distance.y, distance.x) < 0 -> atan2(distance.y, distance.x) + Math.PI
                 else -> 0.0
             }
 
@@ -42,9 +43,6 @@ object DriveToArcPoseGenerator {
 //        val targetX = curpose.translation.x + (distanceHubX * scalar) - distanceHubX // finds the field relative position of the scaled vector
 //        val targetY = curpose.translation.y + (distanceHubY * scalar) - distanceHubY
 
-
-
-        return Pose2d(Translation2d(target.x,target.y), Rotation2d(angleChange))
-
+        return Pose2d(Translation2d(target.x, target.y), Rotation2d(angleChange))
     }
 }

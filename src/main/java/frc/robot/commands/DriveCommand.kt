@@ -3,11 +3,11 @@
  */
 package frc.robot.commands
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
-import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.DriveSubsystem
+import frc.robot.subsystems.aiming.AimingCalc
+import org.wpilib.math.kinematics.ChassisSpeeds
+import org.wpilib.wpilibj2.command.Command
 
 class DriveCommand(
     private val x: () -> Double,
@@ -27,11 +27,11 @@ class DriveCommand(
             DriveSubsystem.drive(
                 ChassisSpeeds(
                     x() *
-                            Constants.DriveConstants.MAX_METERS_PER_SECOND,
+                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
                     y() *
-                            Constants.DriveConstants.MAX_METERS_PER_SECOND,
+                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
                     rot() *
-                            Constants.DriveConstants.MAX_ANGULAR_SPEED,
+                        Constants.DriveConstants.MAX_ANGULAR_SPEED,
                 ),
                 fieldRelative = fieldRel,
             )
@@ -39,18 +39,17 @@ class DriveCommand(
             DriveSubsystem.drive(
                 ChassisSpeeds(
                     x() *
-                            Constants.DriveConstants.MAX_METERS_PER_SECOND,
+                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
                     y() *
-                            Constants.DriveConstants.MAX_METERS_PER_SECOND,
+                        Constants.DriveConstants.MAX_METERS_PER_SECOND,
                     AimingCalc.getAimingAngleChange(
                         DriveSubsystem.getPose(),
                         DriveSubsystem.getCurrentSpeeds().vxMetersPerSecond,
-                        DriveSubsystem.getCurrentSpeeds().vyMetersPerSecond
+                        DriveSubsystem.getCurrentSpeeds().vyMetersPerSecond,
                     ),
                 ),
                 fieldRelative = fieldRel,
             )
-
         }
 //        } else {
 //            DriveSubsystem.drive(

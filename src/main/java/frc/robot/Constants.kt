@@ -7,10 +7,10 @@ package frc.robot
  * `const` definitions. Other constant types should use `val` definitions.
  */
 
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.util.Units
+import org.wpilib.math.geometry.Rotation2d
+import org.wpilib.math.geometry.Translation2d
+import org.wpilib.math.kinematics.SwerveDriveKinematics
+import org.wpilib.math.util.Units
 import kotlin.math.PI
 
 object Constants {
@@ -21,12 +21,12 @@ object Constants {
 
         const val RESET_HEADING_BUTTON = 11
 
-        const val ALIGN_LEFT_BUTTON = 9 //joystick
-        const val ALIGN_RIGHT_BUTTON = 10 //joystick
+        const val ALIGN_LEFT_BUTTON = 9 // joystick
+        const val ALIGN_RIGHT_BUTTON = 10 // joystick
 
         const val BUTTON_BOARD_PORT = 2
 
-        const val ANGLE_BUTTON = 12 //joystick
+        const val ANGLE_BUTTON = 12 // joystick
 
         const val INTAKE_BUTTON = 10
         const val INTAKE_REVERSE_BUTTON = 2
@@ -60,7 +60,6 @@ object Constants {
 
         const val INTAKE_CURRENT_LIMIT = 20.0
         const val INTAKE_STATOR_LIMIT = 40.0
-
     }
 
     enum class IntakeDirection {
@@ -87,44 +86,41 @@ object Constants {
 
         val FRONT_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.831299)
         val FRONT_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.113525 + 0.5)
-        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.170166) //+ is clockwise
-        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.002686 + 0.5)//- counter-clockwise
-
+        val BACK_LEFT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(-0.170166) // + is clockwise
+        val BACK_RIGHT_CHASSIS_ANGULAR_OFFSET: Rotation2d = Rotation2d.fromRotations(0.002686 + 0.5) // - counter-clockwise
 
         //   back right - > front left
         //   back left - >front right
         //   front left -> back right
         // front right -> back left
 
+        const val FRONT_LEFT_DRIVING_ID = 8 // 8->4
+        const val REAR_LEFT_DRIVING_ID = 7 // 5->19
+        const val FRONT_RIGHT_DRIVING_ID = 19 // 19->5
+        const val REAR_RIGHT_DRIVING_ID = 4 // 4->8
 
-        const val FRONT_LEFT_DRIVING_ID = 8 //8->4
-        const val REAR_LEFT_DRIVING_ID = 7 //5->19
-        const val FRONT_RIGHT_DRIVING_ID = 19 //19->5
-        const val REAR_RIGHT_DRIVING_ID = 4  //4->8
+        const val FRONT_LEFT_TURNING_ID = 2 // 2->3
+        const val REAR_LEFT_TURNING_ID = 5 // 7->6
+        const val FRONT_RIGHT_TURNING_ID = 6 // 6->7
+        const val REAR_RIGHT_TURNING_ID = 3 // 3->2
 
-        const val FRONT_LEFT_TURNING_ID = 2 //2->3
-        const val REAR_LEFT_TURNING_ID = 5   //7->6
-        const val FRONT_RIGHT_TURNING_ID = 6 //6->7
-        const val REAR_RIGHT_TURNING_ID = 3  //3->2
-
-        const val FRONT_LEFT_CANCODER_ID = 11   //11->9
-        const val REAR_LEFT_CANCODER_ID = 12   //12->10
-        const val FRONT_RIGHT_CANCODER_ID = 10  //10->12
-        const val REAR_RIGHT_CANCODER_ID = 9    //9->11
-
+        const val FRONT_LEFT_CANCODER_ID = 11 // 11->9
+        const val REAR_LEFT_CANCODER_ID = 12 // 12->10
+        const val FRONT_RIGHT_CANCODER_ID = 10 // 10->12
+        const val REAR_RIGHT_CANCODER_ID = 9 // 9->11
     }
 
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
         val WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0) * PI
 
-        //const val WHEEL_CIRCUMFERENCE = 0.5 // meters
+        // const val WHEEL_CIRCUMFERENCE = 0.5 // meters
 
         const val DRIVING_P = 0.8
         const val DRIVING_I = 0.0
         const val DRIVING_D = 0.0
         const val DRIVING_FF = 1.0
-        const val DRIVING_V = 0.12 //0.12*DRIVE_RATIO
+        const val DRIVING_V = 0.12 // 0.12*DRIVE_RATIO
         const val DRIVING_A = 1.5
         const val TURNING_P = 40.0
         const val TURNING_I = 0.0
@@ -169,7 +165,6 @@ object Constants {
         const val ROLLER_MOTOR_STATOR_LIMITS = 40.0
         const val BUTTON = 11
     }
-
 
     object AlignConstants {
         const val ALIGN_DEADZONE = 0.03
@@ -225,8 +220,8 @@ object Constants {
         const val SLOW_DISTANCE = 1.0
         const val MIN_SPEED = 0.2
 
-        const val DIST_DEADZONE = 0.1 //m
-        const val ANGLE_DEADZONE = 1.0 //degrees
+        const val DIST_DEADZONE = 0.1 // m
+        const val ANGLE_DEADZONE = 1.0 // degrees
     }
 
     object PathPlannerConstants {
@@ -239,6 +234,3 @@ object Constants {
         const val ROTATION_D = 0.0
     }
 }
-
-
-

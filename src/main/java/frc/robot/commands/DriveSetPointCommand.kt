@@ -1,22 +1,20 @@
 package frc.robot.commands
 
-import edu.wpi.first.math.MathUtil.clamp
-import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.Constants
 import frc.robot.subsystems.DriveSubsystem
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj2.command.WrapperCommand
-
+import org.wpilib.math.MathUtil.clamp
+import org.wpilib.math.controller.PIDController
+import org.wpilib.math.geometry.Pose2d
+import org.wpilib.math.geometry.Rotation2d
+import org.wpilib.math.kinematics.ChassisSpeeds
+import org.wpilib.wpilibj2.command.Command
+import org.wpilib.wpilibj2.command.WrapperCommand
 
 class DriveSetPointCommand(
-    private val X: () ->  Double,
+    private val X: () -> Double,
     private val Y: () -> Double,
-    private val Angle: () -> Double
+    private val Angle: () -> Double,
 ) : Command() {
-
     init {
         addRequirements(DriveSubsystem)
     }
@@ -44,7 +42,6 @@ class DriveSetPointCommand(
         rotateController.enableContinuousInput(-Math.PI, Math.PI)
 
         driveController.setTolerance(0.05) // meters
-
 
         // calculate rotational speed using PID controller, making sure max speed is respected
         val rotSpeed =
@@ -78,7 +75,6 @@ class DriveSetPointCommand(
         )
     }
 
-
     override fun isFinished(): Boolean {
         val curpose = DriveSubsystem.getPose()
         return if (
@@ -92,7 +88,8 @@ class DriveSetPointCommand(
 //            curpose.rotation.radians < Angle() - 0.1
         ) {
             true
-        } else false
+        } else {
+            false
+        }
     }
-
 }

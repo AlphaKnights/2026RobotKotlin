@@ -11,10 +11,10 @@ import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.SwerveModulePosition
-import edu.wpi.first.math.kinematics.SwerveModuleState
 import frc.robot.Constants.ModuleConstants
+import org.wpilib.math.geometry.Rotation2d
+import org.wpilib.math.kinematics.SwerveModulePosition
+import org.wpilib.math.kinematics.SwerveModuleState
 
 class TalonSwerveModule(
     driveMotorId: Int,
@@ -125,8 +125,8 @@ class TalonSwerveModule(
 
     fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
-            //driveMotor.rotor
-            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.position.valueAsDouble,
+            // driveMotor.rotor
+            ModuleConstants.WHEEL_CIRCUMFERENCE * driveMotor.position.valueAsDouble,
             Rotation2d.fromRotations(
                 turnMotor.position.valueAsDouble,
             ) +
@@ -135,13 +135,12 @@ class TalonSwerveModule(
 
     fun getState(): SwerveModuleState =
         SwerveModuleState(
-            ModuleConstants.WHEEL_CIRCUMFERENCE*driveMotor.velocity.valueAsDouble,
+            ModuleConstants.WHEEL_CIRCUMFERENCE * driveMotor.velocity.valueAsDouble,
             Rotation2d.fromRotations(
                 turnMotor.position.valueAsDouble,
             ) +
                 offset,
         )
-
 
     fun setDesiredState(desiredState: SwerveModuleState) {
         val correctedState =
@@ -157,7 +156,7 @@ class TalonSwerveModule(
 
         driveMotor.setControl(
             VelocityVoltage(
-                correctedState.speedMetersPerSecond/ModuleConstants.WHEEL_CIRCUMFERENCE,
+                correctedState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE,
             ),
         )
         turnMotor.setControl(

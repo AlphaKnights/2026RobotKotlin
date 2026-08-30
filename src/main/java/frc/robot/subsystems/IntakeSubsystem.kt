@@ -18,10 +18,9 @@ import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig
 import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
-
+import org.wpilib.wpilibj.DigitalInput
+import org.wpilib.wpilibj2.command.SubsystemBase
 
 object IntakeSubsystem : SubsystemBase() {
     private val CAN = CANBus("didy")
@@ -39,12 +38,11 @@ object IntakeSubsystem : SubsystemBase() {
             CAN,
         )
 
-    //val limitUp: DigitalInput = DigitalInput(2)
-    //val limitDown: DigitalInput = DigitalInput(3)
-
+    // val limitUp: DigitalInput = DigitalInput(2)
+    // val limitDown: DigitalInput = DigitalInput(3)
 
     init {
-        val intakeMotorConfig=
+        val intakeMotorConfig =
             TalonFXConfiguration().apply {
                 CurrentLimits.apply {
                     SupplyCurrentLimitEnable = true
@@ -53,7 +51,7 @@ object IntakeSubsystem : SubsystemBase() {
                     StatorCurrentLimit = Constants.IntakeConstants.INTAKE_STATOR_LIMIT
                 }
 
-                MotorOutput.apply{
+                MotorOutput.apply {
                     NeutralMode = NeutralModeValue.Brake
                 }
             }
@@ -109,10 +107,6 @@ object IntakeSubsystem : SubsystemBase() {
         intakeMotor.configurator.apply(intakeMotorConfig)
         leftLeverMotor.configurator.apply(globalConfig)
         rightleverMotor.configurator.apply(globalConfig)
-
-
-
-
     }
 
     override fun periodic() {
@@ -129,24 +123,16 @@ object IntakeSubsystem : SubsystemBase() {
 
         rightleverMotor.setControl(m_request.withPosition(-position))
         leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Opposed))
-
-
-
     }
 
-    fun isInPosition(deadzone: Double): Boolean {
-        return (rightleverMotor.getClosedLoopError().valueAsDouble < deadzone)
-    }
+    fun isInPosition(deadzone: Double): Boolean = (rightleverMotor.getClosedLoopError().valueAsDouble < deadzone)
 
     fun moveLever(speed: Double) {
         rightleverMotor.set(speed)
         leftLeverMotor.set(-speed)
     }
 
-    fun getPosition(): Double {
-        return rightleverMotor.position.valueAsDouble
-    }
-
+    fun getPosition(): Double = rightleverMotor.position.valueAsDouble
 
     fun stopIntake() {
         intakeMotor.stopMotor()
@@ -156,19 +142,14 @@ object IntakeSubsystem : SubsystemBase() {
         rightleverMotor.stopMotor()
         leftLeverMotor.stopMotor()
     }
+
     fun limitSwitchPressed(): Boolean {
-        //return (limitUp.get() || limitDown.get())
+        // return (limitUp.get() || limitDown.get())
         return false
     }
+
     fun limitOutput() {
-        //print("Limit Up Pressed: "+limitUp.get())
-        //print("Limit Down Pressed: "+limitDown.get())
+        // print("Limit Up Pressed: "+limitUp.get())
+        // print("Limit Down Pressed: "+limitDown.get())
     }
 }
-
-
-
-
-
-
-
