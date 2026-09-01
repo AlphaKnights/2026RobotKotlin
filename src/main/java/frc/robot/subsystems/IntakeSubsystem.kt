@@ -12,8 +12,14 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
+import edu.wpi.first.units.VelocityUnit
+import edu.wpi.first.units.VoltageUnit
+import edu.wpi.first.units.measure.Velocity
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+
 
 object IntakeSubsystem : SubsystemBase() {
     private val CAN = Constants.ModuleConstants.CANBUS
@@ -142,4 +148,31 @@ object IntakeSubsystem : SubsystemBase() {
         // print("Limit Up Pressed: "+limitUp.get())
         // print("Limit Down Pressed: "+limitDown.get())
     }
+
+    fun setVoltage(voltage: Double) {
+        rightleverMotor.setVoltage(voltage)
+        leftLeverMotor.setVoltage(voltage)
+    }
+
+    private val sysId = SysIdRoutine(
+        SysIdRoutine.Config(
+            Velocity(0.5), // Voltage change rate for quasistatic routine
+            2.volts, // Constant voltage value for dynamic routine
+            null, // Max time before automatically ending the routine
+            {
+                // Called when a routine is begun or ended
+                // `it` contains the routine name and direction in a format parsable by SysID.
+                SignalLogger.writeString("state", it.toString())
+            }
+        ),
+        SysIdRoutine.Mechanism(
+            io::setVoltage, // Set voltage of mechanism
+            null, // Log voltage of mechanism (handled by SignalLogger already)
+            this,
+        )
+    )
+
+    val sysIdConfig = SysIdRoutine.Config()
+
+    val sysIdRoutine = SysIdRoutine()
 }
