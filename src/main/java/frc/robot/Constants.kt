@@ -82,8 +82,8 @@ object Constants {
     }
 
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 5.9
-        const val MAX_ANGULAR_SPEED = 5.0
+        const val MAX_METERS_PER_SECOND = 2.0
+        const val MAX_ANGULAR_SPEED = 2.0
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -108,20 +108,21 @@ object Constants {
         //   front left -> back right
         // front right -> back left
 
-        const val FRONT_LEFT_DRIVING_ID = 8 // 8->4
-        const val REAR_LEFT_DRIVING_ID = 7 // 5->19
-        const val FRONT_RIGHT_DRIVING_ID = 19 // 19->5
-        const val REAR_RIGHT_DRIVING_ID = 4 // 4->8
+        const val FRONT_LEFT_DRIVING_ID = 8 //8->4
+        const val REAR_LEFT_DRIVING_ID = 7 //5->19
+        const val FRONT_RIGHT_DRIVING_ID = 19 //19->5
+        const val REAR_RIGHT_DRIVING_ID = 4  //4->8
 
-        const val FRONT_LEFT_TURNING_ID = 2 // 2->3
-        const val REAR_LEFT_TURNING_ID = 5 // 7->6
-        const val FRONT_RIGHT_TURNING_ID = 6 // 6->7
-        const val REAR_RIGHT_TURNING_ID = 3 // 3->2
+        const val FRONT_LEFT_TURNING_ID = 2 //2->3
+        const val REAR_LEFT_TURNING_ID = 5   //7->6
+        const val FRONT_RIGHT_TURNING_ID = 6 //6->7
+        const val REAR_RIGHT_TURNING_ID = 3  //3->2
 
-        const val FRONT_LEFT_CANCODER_ID = 11 // 11->9
-        const val REAR_LEFT_CANCODER_ID = 12 // 12->10
-        const val FRONT_RIGHT_CANCODER_ID = 10 // 10->12
-        const val REAR_RIGHT_CANCODER_ID = 9 // 9->11
+        const val FRONT_LEFT_CANCODER_ID = 11   //11->9
+        const val REAR_LEFT_CANCODER_ID = 12   //12->10
+        const val FRONT_RIGHT_CANCODER_ID = 10  //10->12
+        const val REAR_RIGHT_CANCODER_ID = 9    //9->11
+
 
         const val ROTATE_CONTROLLER_P = 2.0
         const val ROTATE_CONTROLLER_I = 0.0

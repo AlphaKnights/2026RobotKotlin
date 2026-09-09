@@ -115,10 +115,10 @@ class RealDriveSubsystem :
 //        gyro.enableBoardlevelYawReset(false)
         gyro.reset()
 
-        for (type in Constants.SomeConstants.SwerveType.entries) {
-            swerveTypeChooser.addOption(type.name, type)
-        }
-        SmartDashboard.putData("Swerve Type Chooser", swerveTypeChooser)
+//        for (type in Constants.SomeConstants.SwerveType.entries) {
+//            swerveTypeChooser.addOption(type.name, type)
+//        }
+//        SmartDashboard.putData("Swerve Type Chooser", swerveTypeChooser)
 
         AutoBuilder.configure(
             this::getPose,
