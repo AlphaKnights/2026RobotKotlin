@@ -92,7 +92,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return Trigger { startButton } // Select Button
     }
 
-    fun XLock(): Trigger {
+    fun xLock(): Trigger {
         return Trigger { leftBumperButton }
     }
 
