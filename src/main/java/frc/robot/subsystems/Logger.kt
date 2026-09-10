@@ -51,6 +51,15 @@ object Logger : SubsystemBase() {
      *  Values are updated with SmartDashboard.updateValues()
      */
     fun initLog() {
+
+        SmartDashboard.putNumber(
+            "Intake Position",
+            IntakeSubsystem.getPosition()
+        )
+        SmartDashboard.putNumber("Intake Error",
+            IntakeSubsystem.rightleverMotor.closedLoopError.valueAsDouble
+        )
+
         SmartDashboard.putNumber(
             "Match Time",
             DriverStation.getMatchTime(),

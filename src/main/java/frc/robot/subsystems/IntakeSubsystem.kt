@@ -19,13 +19,13 @@ object IntakeSubsystem : SubsystemBase() {
     private val CAN = Constants.ModuleConstants.CANBUS
     private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID, CAN)
 
-    private val rightleverMotor =
+    val rightleverMotor =
         TalonFX(
             Constants.IntakeConstants.RIGHT_LEVER_MOTOR_ID,
             CAN,
         )
 
-    private val leftLeverMotor =
+    val leftLeverMotor =
         TalonFX(
             Constants.IntakeConstants.LEFT_LEVER_MOTOR_ID,
             CAN,
