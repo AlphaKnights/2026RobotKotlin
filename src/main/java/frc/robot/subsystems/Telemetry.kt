@@ -40,14 +40,8 @@ object Telemetry : SubsystemBase() {
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
         SmartDashboard.putData("intake", IntakeSubsystem)
-    }
+        SmartDashboard.putData("shooter", DeliverySubsystem)
 
-    override fun periodic() {
-        // field.robotPose = DriveSubsystem.getPose()
-        field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath(field.robotPose)
-    }
-
-    fun initLog() {
         SmartDashboard.putNumber(
             "Intake Position",
             IntakeSubsystem.getPosition(),
@@ -106,6 +100,11 @@ object Telemetry : SubsystemBase() {
             },
         )
         SmartDashboard.putData("DriveSubsystem", DriveSubsystem)
+    }
+
+    override fun periodic() {
+        // field.robotPose = DriveSubsystem.getPose()
+        field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath(field.robotPose)
     }
 
     fun PIDController.makeTunable(key: String): PIDController {
