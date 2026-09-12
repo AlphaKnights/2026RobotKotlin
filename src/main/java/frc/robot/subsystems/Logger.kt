@@ -39,6 +39,7 @@ object Logger : SubsystemBase() {
     init {
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
+        SmartDashboard.putData("intake", IntakeSubsystem)
     }
 
     override fun periodic() {
@@ -46,18 +47,14 @@ object Logger : SubsystemBase() {
         field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath()
     }
 
-    /** Initializes all logged data.
-     *
-     *  Values are updated with SmartDashboard.updateValues()
-     */
     fun initLog() {
-
         SmartDashboard.putNumber(
             "Intake Position",
-            IntakeSubsystem.getPosition()
+            IntakeSubsystem.getPosition(),
         )
-        SmartDashboard.putNumber("Intake Error",
-            IntakeSubsystem.rightleverMotor.closedLoopError.valueAsDouble
+        SmartDashboard.putNumber(
+            "Intake Error",
+            IntakeSubsystem.rightleverMotor.closedLoopError.valueAsDouble,
         )
 
         SmartDashboard.putNumber(
