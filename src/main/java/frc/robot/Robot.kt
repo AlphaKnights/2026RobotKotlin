@@ -6,11 +6,13 @@ package frc.robot
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.wpilibj.DataLogManager
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.subsystems.Logger
+import frc.robot.subsystems.Telemetry
 
 /**
  * The functions in this object (which basically functions as a singleton class) are called automatically
@@ -41,7 +43,9 @@ object Robot : TimedRobot() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
-        Logger.initLog()
+        Telemetry.initLog()
+        DataLogManager.start()
+        DriverStation.startDataLog(DataLogManager.getLog(), true)
     }
 
     /**
@@ -57,8 +61,8 @@ object Robot : TimedRobot() {
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
-        CommandScheduler.getInstance().run()
         SmartDashboard.updateValues()
+        CommandScheduler.getInstance().run()
     }
 
     /** This autonomous runs the autonomous command selected by your [RobotContainer] class.  */

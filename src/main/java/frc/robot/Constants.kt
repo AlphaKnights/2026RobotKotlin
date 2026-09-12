@@ -59,6 +59,9 @@ object Constants {
         const val I = 0.0
         const val D = 0.01
 
+        // basically a controller deadzone, how close to the setpoint it needs to be to stop moving
+        const val GAIN_SCHEDULE_ERROR_THRESHOLD = 0.1
+
         const val LEVER_OUT_POSITION = 12.0
         const val LEVER_IN_POSITION = 0.0
 
@@ -243,10 +246,11 @@ object Constants {
         // Hub field positions (meters). Set to real field measurements before competition.
         // Red hub: robot approaches from y < RED_HUB_Y
         // Blue hub: robot approaches from y > BLUE_HUB_Y
-        const val RED_HUB_X = 3.644
-        const val RED_HUB_Y = 0.0
+        // TODO: measure using center field origin
+        const val RED_HUB_X = 4.625
+        const val RED_HUB_Y = 4.0
         const val BLUE_HUB_X = -3.644
-        const val BLUE_HUB_Y = 0.0 // placeholder — team must tune
+        const val BLUE_HUB_Y = 4.0 // placeholder — team must tune
 
         // Valid shooting-arc sector, in degrees, measured from hub center.
         //   0° = +X on field,  90° = +Y,  180° = -X,  270° = -Y (toward driver station)

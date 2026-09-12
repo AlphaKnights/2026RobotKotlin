@@ -1,6 +1,3 @@
-/*
- * (C) 2025 Galvaknights
- */
 package frc.robot
 
 import edu.wpi.first.math.MathUtil.applyDeadband
@@ -16,8 +13,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         lerpX =
             lerp(
                 -applyDeadband(
-                    getRawAxis(1),
-                    // right y
+                    getRawAxis(1), // right y
                     Constants.OperatorConstants.DRIVE_DEADBAND,
                 ) * speedScale(),
                 lerpX,
@@ -29,8 +25,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         lerpY =
             lerp(
                 -applyDeadband(
-                    getRawAxis(0),
-                    // right x
+                    getRawAxis(0), // right x
                     Constants.OperatorConstants.DRIVE_DEADBAND,
                 ) * speedScale(),
                 lerpY,
@@ -42,8 +37,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         lerpRot =
             lerp(
                 -applyDeadband(
-                    getRawAxis(2),
-                    // left x
+                    getRawAxis(4), // left x
                     Constants.OperatorConstants.DRIVE_DEADBAND,
                 ) * speedScale(),
                 lerpRot,
@@ -51,14 +45,15 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
         return lerpRot
     }
 
-    fun speedScale(): Double = ((-rightTriggerAxis + 1))
+    fun speedScale(): Double = ((-getRightTriggerAxis() + 1))
 
-    fun deliveryScale(): Double = leftTriggerAxis
+    fun deliveryScale(): Double = getLeftTriggerAxis()
 
     fun heading(): Trigger = Trigger { yButton }
 
-    fun alignL(): Trigger = Trigger { xButton }
-
+    //   fun alignL() : Trigger {
+    //      return Trigger { xButton }
+    // }
     // fun alignR() : Trigger {
     //   return Trigger { bButton }
     // }
@@ -67,31 +62,36 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun lerp(
         ref: Double,
         start: Double,
-    ): Double =
+    ): Double {
         if (ref > start) {
-            if (start + Constants.OperatorConstants.LERP_VAL > ref) {
+            return if (start + Constants.OperatorConstants.LERP_VAL > ref) {
                 ref
             } else {
                 start + Constants.OperatorConstants.LERP_VAL
             }
         } else {
-            if (start - Constants.OperatorConstants.LERP_VAL < ref) {
+            return if (start - Constants.OperatorConstants.LERP_VAL < ref) {
                 ref
             } else {
                 start - Constants.OperatorConstants.LERP_VAL
             }
         }
+    }
 
     fun resetOdometry(): Trigger = Trigger { rightStickButton }
 
-    fun driveToArc(): Trigger = Trigger { getRawButton(12) }
+    fun driveToArc(): Trigger = Trigger { startButton }
 
-    fun slideLeft(): Trigger = Trigger { leftBumperButton }
-
-    fun slideRight(): Trigger = Trigger { rightBumperButton }
+//    fun slideLeft(): Trigger {
+//        return Trigger { leftBumperButton }
+//    }
+//
+//    fun slideRight(): Trigger {
+//        return Trigger { rightBumperButton }
+//    }
 
     fun north(): Trigger {
-        return Trigger { getRawButton(11) } // Select Button
+        return Trigger { startButton } // Select Button
     }
 
     fun xLock(): Trigger = Trigger { leftBumperButton }
@@ -101,4 +101,6 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun altIntake(): Trigger = Trigger { rightBumperButton }
 
     fun altIndexer(): Trigger = Trigger { bButton }
+
+    fun shake(): Trigger = Trigger { xButton }
 }

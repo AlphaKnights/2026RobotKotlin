@@ -5,9 +5,11 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
 import frc.robot.commands.DriveToArcCommand
@@ -79,11 +81,11 @@ object RobotContainer {
             ResetHeadingCommand(),
         )
         // Auto Align
-        xBoxController.alignL().whileTrue(
-            AutoAlignManualCommand(
-                Constants.AlignDirection.LEFT,
-            ),
-        )
+//        xBoxController.alignL().whileTrue(
+//            AutoAlignManualCommand(
+//                Constants.AlignDirection.LEFT,
+//            ),
+//        )
         //      xBoxController.alignR().whileTrue(
         //      AutoAlignManualCommand(
         //      Constants.AlignDirection.RIGHT,
@@ -204,6 +206,17 @@ object RobotContainer {
                     Constants.IntakeDirection.IN,
                 ),
             )
+
+        buttonBoard.button(6).multiPress(2,1.0).toggleOnTrue(
+            InstantCommand({
+                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,1.0)
+            })
+        )
+        buttonBoard.button(6).multiPress(2,1.0).toggleOnFalse(
+            InstantCommand({
+                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,0.0)
+            })
+        )
 
         buttonBoard
             .button(
