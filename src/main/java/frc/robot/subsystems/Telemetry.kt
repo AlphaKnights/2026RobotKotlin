@@ -23,7 +23,7 @@ import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
 /**
 Only use Logger for telemetry, not inputs or choosers!
  */
-object Logger : SubsystemBase() {
+object Telemetry : SubsystemBase() {
     private val table = NetworkTableInstance.getDefault()
     private val field = Field2d()
 

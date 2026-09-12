@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.subsystems.Logger
+import frc.robot.subsystems.Telemetry
 
 /**
  * The functions in this object (which basically functions as a singleton class) are called automatically
@@ -43,7 +43,7 @@ object Robot : TimedRobot() {
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
-        Logger.initLog()
+        Telemetry.initLog()
         DataLogManager.start()
         DriverStation.startDataLog(DataLogManager.getLog(), true)
     }
