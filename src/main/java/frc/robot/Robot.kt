@@ -6,6 +6,8 @@ package frc.robot
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.wpilibj.DataLogManager
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj.util.WPILibVersion
@@ -42,6 +44,8 @@ object Robot : TimedRobot() {
         // button bindings, and put our autonomous chooser on the dashboard.
         RobotContainer
         Logger.initLog()
+        DataLogManager.start()
+        DriverStation.startDataLog(DataLogManager.getLog(), true)
     }
 
     /**
