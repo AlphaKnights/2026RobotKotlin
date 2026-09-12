@@ -14,9 +14,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 object DriveToArcPoseGenerator {
-    fun generatePath(): Pose2d {
-        val curpose = DriveSubsystem.getPose()
-
+    fun generatePath(curpose: Pose2d = DriveSubsystem.getPose()): Pose2d {
         val allianceRed =
             try {
                 (DriverStation.getAlliance().get() ?: DriverStation.Alliance.Red) == DriverStation.Alliance.Red

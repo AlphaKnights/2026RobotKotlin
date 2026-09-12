@@ -43,8 +43,8 @@ object Logger : SubsystemBase() {
     }
 
     override fun periodic() {
-        field.robotPose = DriveSubsystem.getPose()
-        field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath()
+        // field.robotPose = DriveSubsystem.getPose()
+        field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath(field.robotPose)
     }
 
     fun initLog() {
