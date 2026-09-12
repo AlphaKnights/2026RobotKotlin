@@ -58,6 +58,9 @@ object Constants {
         const val I = 0.0
         const val D = 0.01
 
+        // basically a controller deadzone, how close to the setpoint it needs to be to stop moving
+        const val GAIN_SCHEDULE_ERROR_THRESHOLD = 0.1
+
         const val LEVER_OUT_POSITION = 12.0
         const val LEVER_IN_POSITION = 0.0
 
@@ -108,21 +111,20 @@ object Constants {
         //   front left -> back right
         // front right -> back left
 
-        const val FRONT_LEFT_DRIVING_ID = 8 //8->4
-        const val REAR_LEFT_DRIVING_ID = 7 //5->19
-        const val FRONT_RIGHT_DRIVING_ID = 19 //19->5
-        const val REAR_RIGHT_DRIVING_ID = 4  //4->8
+        const val FRONT_LEFT_DRIVING_ID = 8 // 8->4
+        const val REAR_LEFT_DRIVING_ID = 7 // 5->19
+        const val FRONT_RIGHT_DRIVING_ID = 19 // 19->5
+        const val REAR_RIGHT_DRIVING_ID = 4 // 4->8
 
-        const val FRONT_LEFT_TURNING_ID = 2 //2->3
-        const val REAR_LEFT_TURNING_ID = 5   //7->6
-        const val FRONT_RIGHT_TURNING_ID = 6 //6->7
-        const val REAR_RIGHT_TURNING_ID = 3  //3->2
+        const val FRONT_LEFT_TURNING_ID = 2 // 2->3
+        const val REAR_LEFT_TURNING_ID = 5 // 7->6
+        const val FRONT_RIGHT_TURNING_ID = 6 // 6->7
+        const val REAR_RIGHT_TURNING_ID = 3 // 3->2
 
-        const val FRONT_LEFT_CANCODER_ID = 11   //11->9
-        const val REAR_LEFT_CANCODER_ID = 12   //12->10
-        const val FRONT_RIGHT_CANCODER_ID = 10  //10->12
-        const val REAR_RIGHT_CANCODER_ID = 9    //9->11
-
+        const val FRONT_LEFT_CANCODER_ID = 11 // 11->9
+        const val REAR_LEFT_CANCODER_ID = 12 // 12->10
+        const val FRONT_RIGHT_CANCODER_ID = 10 // 10->12
+        const val REAR_RIGHT_CANCODER_ID = 9 // 9->11
 
         const val ROTATE_CONTROLLER_P = 2.0
         const val ROTATE_CONTROLLER_I = 0.0

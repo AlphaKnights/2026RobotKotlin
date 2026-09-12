@@ -3,16 +3,19 @@
  */
 package frc.robot.subsystems
 
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionDutyCycle
 import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.signals.GainSchedBehaviorValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.MotorAlignmentValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
+import com.revrobotics.spark.config.ClosedLoopConfig
 import edu.wpi.first.networktables.NTSendable
 import edu.wpi.first.networktables.NTSendableBuilder
 import edu.wpi.first.util.sendable.Sendable
@@ -62,6 +65,8 @@ object IntakeSubsystem : SubsystemBase() {
                 kP = Constants.IntakeConstants.P
                 kD = Constants.IntakeConstants.D
             }
+            Slot0.GainSchedBehavior = GainSchedBehaviorValue.ZeroOutput
+            ClosedLoopGeneral.GainSchedErrorThreshold = Constants.IntakeConstants.GAIN_SCHEDULE_ERROR_THRESHOLD
 
             MotorOutput.apply {
                 InvertedValue.CounterClockwise_Positive
