@@ -64,7 +64,7 @@ class RealDriveSubsystem :
 
     val swerveTypeChooser = SendableChooser<Constants.SomeConstants.SwerveType>()
 
-    private var gyro: Pigeon2 = Pigeon2(DriveConstants.)
+    private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     private val drive: Swerve =

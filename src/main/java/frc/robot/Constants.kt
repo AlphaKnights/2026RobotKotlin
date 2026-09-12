@@ -154,6 +154,8 @@ object Constants {
         // const val REAR_LEFT_CANCODER_ID = 4
         // const val FRONT_RIGHT_CANCODER_ID = 2
         // const val REAR_RIGHT_CANCODER_ID = 1
+
+        const val PIDGEON_ID = 20
     }
 
     object ModuleConstants {
