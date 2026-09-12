@@ -45,9 +45,9 @@ class SwerveModuleIOSparkMAX(
     private val turningConfig: SparkMaxConfig = SparkMaxConfig()
 
     // Use module constants to calculate conversion factors and feed forward gain.
-    private val drivingFactor = ModuleConstants.kWheelCircumferenceMeters / ModuleConstants.DRIVE_RATIO
+    private val drivingFactor = ModuleConstants.WHEEL_CIRCUMFERENCE_METERS / ModuleConstants.DRIVE_RATIO
     private val turningFactor = 2 * PI
-    private val drivingVelocityFeedForward = 1 / ModuleConstants.kDriveWheelFreeSpeedRps
+    private val drivingVelocityFeedForward = 1 / ModuleConstants.DRIVE_WHEEL_FREE_SPEED_RPS
 
     init {
         // Apply the respective configurations to the SPARKS. Reset parameters before

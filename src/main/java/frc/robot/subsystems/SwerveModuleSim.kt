@@ -50,7 +50,7 @@ class SwerveModuleSim : SwerveModule {
 
     override fun getPosition(): SwerveModulePosition =
         SwerveModulePosition(
-            driveSim.angularPositionRotations * ModuleConstants.kWheelCircumferenceMeters,
+            driveSim.angularPositionRotations * ModuleConstants.WHEEL_CIRCUMFERENCE_METERS,
             Rotation2d.fromRotations(
                 turnSim.angularPositionRotations,
             ),
@@ -58,7 +58,7 @@ class SwerveModuleSim : SwerveModule {
 
     override fun getState(): SwerveModuleState =
         SwerveModuleState(
-            ModuleConstants.kWheelCircumferenceMeters * driveSim.angularVelocityRPM / 60,
+            ModuleConstants.WHEEL_CIRCUMFERENCE_METERS * driveSim.angularVelocityRPM / 60,
             Rotation2d.fromRotations(
                 turnSim.angularPositionRotations,
             ),
@@ -74,7 +74,7 @@ class SwerveModuleSim : SwerveModule {
         val driveAppliedVolts: Double =
             driveController.calculate(
                 driveSim.angularVelocityRPM / 60,
-                desiredState.speedMetersPerSecond / ModuleConstants.kWheelCircumferenceMeters,
+                desiredState.speedMetersPerSecond / ModuleConstants.WHEEL_CIRCUMFERENCE_METERS,
             )
         SmartDashboard.putNumber("driveAppliedVolts", driveAppliedVolts)
 //        val turnAppliedVolts: Double =

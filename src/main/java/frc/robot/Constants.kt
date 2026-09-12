@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.RobotBase
-import kotlin.math.PI
 
 object Constants {
     object OperatorConstants {
@@ -58,9 +57,6 @@ object Constants {
         const val P = 0.1
         const val I = 0.0
         const val D = 0.01
-
-        // basically a controller deadzone, how close to the setpoint it needs to be to stop moving
-        const val GAIN_SCHEDULE_ERROR_THRESHOLD = 0.1
 
         const val LEVER_OUT_POSITION = 12.0
         const val LEVER_IN_POSITION = 0.0
@@ -162,22 +158,22 @@ object Constants {
 
     object ModuleConstants {
         const val DRIVE_RATIO = 5.36
-        const val kDrivingMotorPinionTeeth: Int = 14
+        const val DRIVING_MOTOR_PINION_TEETH: Int = 14
 
         // Calculations required for driving motor conversion factors and feed forward
-        const val kDrivingMotorFreeSpeedRps: Double = 5676.0 / 60
-        const val kWheelDiameterMeters: Double = 0.0762
-        const val kWheelCircumferenceMeters: Double = kWheelDiameterMeters * Math.PI
+        const val DRIVING_MOTOR_FREE_SPEED_RPS: Double = 5676.0 / 60
+        const val WHEEL_DIAMETER_METERS: Double = 0.0762
+        const val WHEEL_CIRCUMFERENCE_METERS: Double = WHEEL_DIAMETER_METERS * Math.PI
 
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
         // teeth on the bevel pinion
-        const val kDrivingMotorReduction: Double = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15)
+        const val DRIVING_MOTOR_REDUCTION: Double = (45.0 * 22) / (DRIVING_MOTOR_PINION_TEETH * 15)
 
-        val kDriveWheelFreeSpeedRps: Double = (
-            (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) /
-                kDrivingMotorReduction
+        const val DRIVE_WHEEL_FREE_SPEED_RPS: Double = (
+            (DRIVING_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE_METERS) /
+                DRIVING_MOTOR_REDUCTION
         )
-        val CANBUS: CANBus = CANBus("didy") // TODO: Rename the CanBUS
+        val CANBUS: CANBus = CANBus("didy")
     }
 
     object LimelightConstants {
@@ -246,11 +242,10 @@ object Constants {
         // Hub field positions (meters). Set to real field measurements before competition.
         // Red hub: robot approaches from y < RED_HUB_Y
         // Blue hub: robot approaches from y > BLUE_HUB_Y
-        // TODO: measure using center field origin
-        const val RED_HUB_X = 4.625
-        const val RED_HUB_Y = 4.0
+        const val RED_HUB_X = 3.644
+        const val RED_HUB_Y = 0.0
         const val BLUE_HUB_X = -3.644
-        const val BLUE_HUB_Y = 4.0 // placeholder — team must tune
+        const val BLUE_HUB_Y = 0.0 // placeholder — team must tune
 
         // Valid shooting-arc sector, in degrees, measured from hub center.
         //   0° = +X on field,  90° = +Y,  180° = -X,  270° = -Y (toward driver station)
