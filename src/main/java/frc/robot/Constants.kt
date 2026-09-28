@@ -155,6 +155,16 @@ object Constants {
         // const val FRONT_RIGHT_CANCODER_ID = 2
         // const val REAR_RIGHT_CANCODER_ID = 1
 
+        const val ROTATE_CONTROLLER_P = 2.0
+        const val ROTATE_CONTROLLER_I = 0.0
+        const val ROTATE_CONTROLLER_D = 0.01
+        const val TRANSLATION_CONTROLLER_P = 5.0
+        const val TRANSLATION_CONTROLLER_I = 0.0
+        const val TRANSLATION_CONTROLLER_D = 0.01
+
+        const val DRIVE_SETPOINT_TOLERANCE = 0.05
+        const val ROTATE_SETPOINT_TOLERANCE = 0.08
+
         const val PIDGEON_ID = 20
     }
 
