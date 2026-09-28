@@ -2,7 +2,6 @@ package frc.robot.subsystems
 
 import com.ctre.phoenix6.CANBus
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.configs.TalonFXConfigurator
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionDutyCycle
 import com.ctre.phoenix6.hardware.TalonFX
@@ -11,21 +10,13 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
-import com.revrobotics.spark.FeedbackSensor
-import com.revrobotics.spark.SparkBase
-import com.revrobotics.spark.SparkLowLevel
-import com.revrobotics.spark.SparkMax
-import com.revrobotics.spark.config.ClosedLoopConfig
-import com.revrobotics.spark.config.SparkBaseConfig
-import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 
 
 object IntakeSubsystem : SubsystemBase() {
     private val CAN = CANBus("didy")
-    private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID, CAN)
+    private val intakeMotor =
 
     private val rightleverMotor =
         TalonFX(
@@ -39,8 +30,6 @@ object IntakeSubsystem : SubsystemBase() {
             CAN,
         )
 
-    //val limitUp: DigitalInput = DigitalInput(2)
-    //val limitDown: DigitalInput = DigitalInput(3)
 
 
     init {
@@ -115,14 +104,7 @@ object IntakeSubsystem : SubsystemBase() {
 
     }
 
-    override fun periodic() {
-        super.periodic()
-        println("Lever Position = ${leftLeverMotor.position}")
-    }
 
-    fun runIntake(speed: Double) {
-        intakeMotor.set(-speed)
-    }
 
     fun setPosition(position: Double) {
         var m_request = PositionDutyCycle(0.0).withSlot(0)
@@ -147,23 +129,11 @@ object IntakeSubsystem : SubsystemBase() {
         return rightleverMotor.position.valueAsDouble
     }
 
-
-    fun stopIntake() {
-        intakeMotor.stopMotor()
-    }
-
     fun stopIntakeLever() {
         rightleverMotor.stopMotor()
         leftLeverMotor.stopMotor()
     }
-    fun limitSwitchPressed(): Boolean {
-        //return (limitUp.get() || limitDown.get())
-        return false
-    }
-    fun limitOutput() {
-        //print("Limit Up Pressed: "+limitUp.get())
-        //print("Limit Down Pressed: "+limitDown.get())
-    }
+
 }
 
 
