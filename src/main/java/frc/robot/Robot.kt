@@ -25,6 +25,8 @@ import frc.robot.subsystems.Telemetry
  * object or package, it will get changed everywhere.)
  */
 object Robot : TimedRobot() {
+    val isReallyReal = isReal()
+
     init {
         // Kotlin initializer block, which effectually serves as the constructor code.
         // https://kotlinlang.org/docs/classes.html#constructors

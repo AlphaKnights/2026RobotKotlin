@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.DriveConstants
 import frc.robot.Constants.PathPlannerConstants
+import frc.robot.Robot
 import frc.robot.interfaces.SwerveModule
 
 interface IDriveSubsystem {
@@ -67,7 +68,7 @@ class RealDriveSubsystem :
     private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON2_ID)
 //    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
-    private val drive: Swerve =
+    private val driveTrain: Swerve =
         Swerve(
             SwerveModuleIOTalon(
                 DriveConstants.FRONT_LEFT_DRIVING_ID,
@@ -101,10 +102,10 @@ class RealDriveSubsystem :
             Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
             // gyro.rotation3d.x
             arrayOf(
-                drive.fl.getPosition(),
-                drive.fr.getPosition(),
-                drive.bl.getPosition(),
-                drive.br.getPosition(),
+                driveTrain.fl.getPosition(),
+                driveTrain.fr.getPosition(),
+                driveTrain.bl.getPosition(),
+                driveTrain.br.getPosition(),
             ),
         )
 
@@ -115,36 +116,59 @@ class RealDriveSubsystem :
 //        gyro.enableBoardlevelYawReset(false)
         gyro.reset()
 
+        SmartDashboard.putData("fl", driveTrain.fl)
+        SmartDashboard.putData("fr", driveTrain.fr)
+        SmartDashboard.putData("bl", driveTrain.bl)
+        SmartDashboard.putData("br", driveTrain.br)
+
 //        for (type in Constants.SomeConstants.SwerveType.entries) {
 //            swerveTypeChooser.addOption(type.name, type)
 //        }
 //        SmartDashboard.putData("Swerve Type Chooser", swerveTypeChooser)
-
-        AutoBuilder.configure(
-            this::getPose,
-            this::resetPose,
-            this::getCurrentSpeeds,
-            { speeds: ChassisSpeeds, _: DriveFeedforwards ->
-                drive(speeds, fieldRelative = false)
-            },
-            PPHolonomicDriveController(
-                PIDConstants(
-                    PathPlannerConstants.TRANSLATION_P,
-                    PathPlannerConstants.TRANSLATION_I,
-                    PathPlannerConstants.TRANSLATION_D,
+        AutoBuilder
+            .configure(
+                this::getPose,
+                this::resetPose,
+                this::getCurrentSpeeds,
+                { speeds: ChassisSpeeds, _: DriveFeedforwards ->
+                    drive(speeds, fieldRelative = false)
+                },
+                PPHolonomicDriveController(
+                    PIDConstants(
+                        PathPlannerConstants.TRANSLATION_P,
+                        PathPlannerConstants.TRANSLATION_I,
+                        PathPlannerConstants.TRANSLATION_D,
+                    ),
+                    PIDConstants(
+                        PathPlannerConstants.ROTATION_P,
+                        PathPlannerConstants.ROTATION_I,
+                        PathPlannerConstants.ROTATION_D,
+                    ),
+                    1.0,
                 ),
-                PIDConstants(
-                    PathPlannerConstants.ROTATION_P,
-                    PathPlannerConstants.ROTATION_I,
-                    PathPlannerConstants.ROTATION_D,
-                ),
-                1.0,
-            ),
-            config,
-            this::shouldFlipPath,
-            this,
-        )
+                config,
+                this::shouldFlipPath,
+                this,
+            )
     }
+
+//    override fun initSendable(builder: SendableBuilder?) {
+//        super.initSendable(builder)
+//
+//
+//        fun SendableBuilder.addMotorStats(vararg motors: Pair<String, TalonFX>) {
+//            motors.forEach { m ->
+//                val name = m.first
+//                val motor = m.second
+//                builder?.apply {
+//                    addDoubleProperty("$name motor voltage", { motor.motorVoltage.valueAsDouble }, null)
+//                    addDoubleProperty("$name stator current", { motor.statorCurrent.valueAsDouble }, null)
+//                }
+//            }
+//        }
+//
+//        builder?.addMotorStats(drive.fl.)
+//    }
 
     override fun periodic() {
         // This method will be called once per scheduler run
@@ -153,10 +177,10 @@ class RealDriveSubsystem :
         odometry.update(
             Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
             arrayOf(
-                drive.fl.getPosition(),
-                drive.fr.getPosition(),
-                drive.bl.getPosition(),
-                drive.br.getPosition(),
+                driveTrain.fl.getPosition(),
+                driveTrain.fr.getPosition(),
+                driveTrain.bl.getPosition(),
+                driveTrain.br.getPosition(),
             ),
         )
 
@@ -169,10 +193,10 @@ class RealDriveSubsystem :
 
     override fun getStates(): Array<SwerveModuleState> =
         arrayOf(
-            drive.fl.getState(),
-            drive.fr.getState(),
-            drive.bl.getState(),
-            drive.br.getState(),
+            driveTrain.fl.getState(),
+            driveTrain.fr.getState(),
+            driveTrain.bl.getState(),
+            driveTrain.br.getState(),
         )
 
     override fun getPose(): Pose2d = odometry.poseMeters
@@ -181,10 +205,10 @@ class RealDriveSubsystem :
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
     override fun getCurrentSpeeds(): ChassisSpeeds =
         DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(
-            drive.fl.getState(),
-            drive.fr.getState(),
-            drive.bl.getState(),
-            drive.br.getState(),
+            driveTrain.fl.getState(),
+            driveTrain.fr.getState(),
+            driveTrain.bl.getState(),
+            driveTrain.br.getState(),
         )
 
     override fun resetOdometry(pose: Pose2d) {
@@ -192,10 +216,10 @@ class RealDriveSubsystem :
             Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
             // gyro.getRotation2d(),
             arrayOf(
-                drive.fl.getPosition(),
-                drive.fr.getPosition(),
-                drive.bl.getPosition(),
-                drive.br.getPosition(),
+                driveTrain.fl.getPosition(),
+                driveTrain.fr.getPosition(),
+                driveTrain.bl.getPosition(),
+                driveTrain.br.getPosition(),
             ),
             pose,
         )
@@ -221,32 +245,32 @@ class RealDriveSubsystem :
                 ) // gyro.getRotation2d()
         }
 
-        drive.fl.setDesiredState(swerveModuleStates[0])
-        drive.fr.setDesiredState(swerveModuleStates[1])
-        drive.bl.setDesiredState(swerveModuleStates[2])
-        drive.br.setDesiredState(swerveModuleStates[3])
+        driveTrain.fl.setDesiredState(swerveModuleStates[0])
+        driveTrain.fr.setDesiredState(swerveModuleStates[1])
+        driveTrain.bl.setDesiredState(swerveModuleStates[2])
+        driveTrain.br.setDesiredState(swerveModuleStates[3])
     }
 
     override fun setX() {
-        drive.fl.setDesiredState(
+        driveTrain.fl.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(45.0),
             ),
         )
-        drive.fr.setDesiredState(
+        driveTrain.fr.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(-45.0),
             ),
         )
-        drive.bl.setDesiredState(
+        driveTrain.bl.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(-45.0),
             ),
         )
-        drive.br.setDesiredState(
+        driveTrain.br.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(45.0),
@@ -273,17 +297,17 @@ class PhysicsSimDriveSubsystem :
 
     private var m_speeds: ChassisSpeeds = ChassisSpeeds()
 
-    private val drive: Swerve = Swerve(SwerveModuleSim(), SwerveModuleSim(), SwerveModuleSim(), SwerveModuleSim())
+    private val driveTrain: Swerve = Swerve(SwerveModuleSim(), SwerveModuleSim(), SwerveModuleSim(), SwerveModuleSim())
 
     private var odometry =
         SwerveDriveOdometry(
             DriveConstants.DRIVE_KINEMATICS,
             Rotation2d(gyro.angularPosition),
             arrayOf(
-                drive.fl.getPosition(),
-                drive.fr.getPosition(),
-                drive.bl.getPosition(),
-                drive.br.getPosition(),
+                driveTrain.fl.getPosition(),
+                driveTrain.fr.getPosition(),
+                driveTrain.bl.getPosition(),
+                driveTrain.br.getPosition(),
             ),
         )
 
@@ -328,10 +352,10 @@ class PhysicsSimDriveSubsystem :
         odometry.update(
             Rotation2d(gyro.angularPosition),
             arrayOf(
-                drive.fl.getPosition(),
-                drive.fr.getPosition(),
-                drive.bl.getPosition(),
-                drive.br.getPosition(),
+                driveTrain.fl.getPosition(),
+                driveTrain.fr.getPosition(),
+                driveTrain.bl.getPosition(),
+                driveTrain.br.getPosition(),
             ),
         )
 
@@ -344,10 +368,10 @@ class PhysicsSimDriveSubsystem :
 
     override fun getStates(): Array<SwerveModuleState> =
         arrayOf(
-            drive.fl.getState(),
-            drive.fr.getState(),
-            drive.bl.getState(),
-            drive.br.getState(),
+            driveTrain.fl.getState(),
+            driveTrain.fr.getState(),
+            driveTrain.bl.getState(),
+            driveTrain.br.getState(),
         )
 
     override fun getPose(): Pose2d = odometry.poseMeters
@@ -356,10 +380,10 @@ class PhysicsSimDriveSubsystem :
     @Suppress("TYPE_MISMATCH", "TOO_MANY_ARGUMENTS")
     override fun getCurrentSpeeds(): ChassisSpeeds =
         DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(
-            drive.fl.getState(),
-            drive.fr.getState(),
-            drive.bl.getState(),
-            drive.br.getState(),
+            driveTrain.fl.getState(),
+            driveTrain.fr.getState(),
+            driveTrain.bl.getState(),
+            driveTrain.br.getState(),
         )
 
     override fun resetOdometry(pose: Pose2d) {
@@ -367,10 +391,10 @@ class PhysicsSimDriveSubsystem :
             Rotation2d(gyro.angularPosition),
             // gyro.getRotation2d(),
             arrayOf(
-                drive.fl.getPosition(),
-                drive.fr.getPosition(),
-                drive.bl.getPosition(),
-                drive.br.getPosition(),
+                driveTrain.fl.getPosition(),
+                driveTrain.fr.getPosition(),
+                driveTrain.bl.getPosition(),
+                driveTrain.br.getPosition(),
             ),
             pose,
         )
@@ -396,32 +420,32 @@ class PhysicsSimDriveSubsystem :
                 )
         }
 
-        drive.fl.setDesiredState(swerveModuleStates[0])
-        drive.fr.setDesiredState(swerveModuleStates[1])
-        drive.bl.setDesiredState(swerveModuleStates[2])
-        drive.br.setDesiredState(swerveModuleStates[3])
+        driveTrain.fl.setDesiredState(swerveModuleStates[0])
+        driveTrain.fr.setDesiredState(swerveModuleStates[1])
+        driveTrain.bl.setDesiredState(swerveModuleStates[2])
+        driveTrain.br.setDesiredState(swerveModuleStates[3])
     }
 
     override fun setX() {
-        drive.fl.setDesiredState(
+        driveTrain.fl.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(45.0),
             ),
         )
-        drive.fr.setDesiredState(
+        driveTrain.fr.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(-45.0),
             ),
         )
-        drive.bl.setDesiredState(
+        driveTrain.bl.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(-45.0),
             ),
         )
-        drive.br.setDesiredState(
+        driveTrain.br.setDesiredState(
             SwerveModuleState(
                 0.0,
                 Rotation2d.fromDegrees(45.0),
@@ -517,17 +541,14 @@ class SimpleSimDriveSubsystem :
 }
 
 private val delegate: IDriveSubsystem by lazy {
-    if (Constants.SomeConstants.isReal) {
+    if (Robot.isReallyReal) {
         RealDriveSubsystem()
     } else {
-        PhysicsSimDriveSubsystem()
+        // PhysicsSimDriveSubsystem()
+        RealDriveSubsystem()
     }
 }
 
 object DriveSubsystem :
     SubsystemBase(),
-    IDriveSubsystem by delegate {
-    init {
-        SmartDashboard.putData(this.toString(), this)
-    }
-}
+    IDriveSubsystem by delegate

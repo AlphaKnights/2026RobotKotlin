@@ -14,6 +14,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.util.sendable.Sendable
+import edu.wpi.first.util.sendable.SendableBuilder
 import frc.robot.Constants.ModuleConstants
 import frc.robot.interfaces.SwerveModule
 
@@ -22,7 +24,8 @@ class SwerveModuleIOTalon(
     turnMotorId: Int,
     encoderId: Int,
     private val offset: Rotation2d,
-) : SwerveModule {
+) : SwerveModule,
+    Sendable {
     private val driveMotor = TalonFX(driveMotorId)
     private val turnMotor = TalonFX(turnMotorId)
     private val encoder = CANcoder(encoderId)
@@ -165,5 +168,14 @@ class SwerveModuleIOTalon(
         )
 
         this.desiredState = desiredState
+    }
+
+    override fun initSendable(builder: SendableBuilder?) {
+        builder?.apply {
+            addDoubleProperty("drive motor voltage", { driveMotor.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("turn motor voltage", { turnMotor.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("drive stator current", { driveMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("turn stator current", { turnMotor.statorCurrent.valueAsDouble }, null)
+        }
     }
 }

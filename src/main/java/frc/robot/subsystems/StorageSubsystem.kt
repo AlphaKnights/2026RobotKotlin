@@ -5,6 +5,7 @@ package frc.robot.subsystems
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
+import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.RollerConstants
@@ -29,6 +30,16 @@ object StorageSubsystem : SubsystemBase() {
 
         rollerMotor.configurator.apply(rollerMotorConfig)
         rollerMotor2.configurator.apply(rollerMotorConfig)
+    }
+
+    override fun initSendable(builder: SendableBuilder?) {
+        super.initSendable(builder)
+        builder?.apply {
+            addDoubleProperty("roller 1 motor voltage", { rollerMotor.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("roller 2 motor voltage", { rollerMotor2.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("roller 1 stator current", { rollerMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("roller 2 stator current", { rollerMotor2.statorCurrent.valueAsDouble }, null)
+        }
     }
 
     fun roll(rollerSpeed: Double) {

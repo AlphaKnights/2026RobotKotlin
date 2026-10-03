@@ -36,20 +36,12 @@ object Telemetry : SubsystemBase() {
             .getStructArrayTopic("limeLight pose", Pose3d.struct)
             .publish()
 
-    init {
+    fun initTelemetry() {
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
         SmartDashboard.putData("intake", IntakeSubsystem)
         SmartDashboard.putData("shooter", DeliverySubsystem)
-
-        SmartDashboard.putNumber(
-            "Intake Position",
-            IntakeSubsystem.getPosition(),
-        )
-        SmartDashboard.putNumber(
-            "Intake Error",
-            IntakeSubsystem.rightleverMotor.closedLoopError.valueAsDouble,
-        )
+        SmartDashboard.putData("drive", DriveSubsystem)
 
         SmartDashboard.putNumber(
             "Match Time",
@@ -99,7 +91,6 @@ object Telemetry : SubsystemBase() {
                 override fun isFinished(): Boolean = true
             },
         )
-        SmartDashboard.putData("DriveSubsystem", DriveSubsystem)
     }
 
     override fun periodic() {

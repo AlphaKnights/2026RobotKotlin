@@ -117,54 +117,59 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     override fun initSendable(builder: SendableBuilder) {
-        builder.setSafeState {
-            this.rightleverMotor.disable()
-            this.intakeMotor.disable()
+        builder.apply {
+            setSafeState {
+                rightleverMotor.disable()
+                intakeMotor.disable()
+            }
+            addDoubleProperty("position", ::getPosition, ::setPosition)
+            addDoubleProperty("lever motor voltage", { rightleverMotor.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("lever stator current", { rightleverMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("intake motor voltage", { intakeMotor.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("intake stator current", { intakeMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("setpoint", { rightleverMotor.closedLoopReference.valueAsDouble }, null)
+            addDoubleProperty("control error", { rightleverMotor.closedLoopError.valueAsDouble }, null)
+
+            addDoubleProperty(
+                "P",
+                {
+                    globalConfig.Slot0.kP
+                },
+                { value: Double ->
+                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKP(value))
+                },
+            )
+
+            addDoubleProperty(
+                "I",
+                {
+                    globalConfig.Slot0.kI
+                },
+                { value: Double ->
+                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKI(value))
+                },
+            )
+
+            addDoubleProperty(
+                "D",
+                {
+                    globalConfig.Slot0.kD
+                },
+                { value: Double ->
+                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKD(value))
+                },
+            )
+
+            addDoubleProperty(
+                "kG",
+                {
+                    globalConfig.Slot0.kG
+                },
+                { value: Double ->
+                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKG(value))
+                },
+            )
         }
-        builder.addDoubleProperty("position", ::getPosition, ::setPosition)
-        builder.addDoubleProperty("lever voltage", { rightleverMotor.motorVoltage.valueAsDouble }, null)
-        builder.addDoubleProperty("setpoint", { rightleverMotor.closedLoopReference.valueAsDouble }, null)
-        builder.addDoubleProperty("control error", { rightleverMotor.closedLoopError.valueAsDouble }, null)
-
-        builder.addDoubleProperty(
-            "P",
-            {
-                globalConfig.Slot0.kP
-            },
-            { value: Double ->
-                rightleverMotor.configurator.apply(globalConfig.Slot0.withKP(value))
-            },
-        )
-
-        builder.addDoubleProperty(
-            "I",
-            {
-                globalConfig.Slot0.kI
-            },
-            { value: Double ->
-                rightleverMotor.configurator.apply(globalConfig.Slot0.withKI(value))
-            },
-        )
-
-        builder.addDoubleProperty(
-            "D",
-            {
-                globalConfig.Slot0.kD
-            },
-            { value: Double ->
-                rightleverMotor.configurator.apply(globalConfig.Slot0.withKD(value))
-            },
-        )
-
-        builder.addDoubleProperty(
-            "kG",
-            {
-                globalConfig.Slot0.kG
-            },
-            { value: Double ->
-                rightleverMotor.configurator.apply(globalConfig.Slot0.withKG(value))
-            },
-        )
     }
 
     fun runIntake(speed: Double) {

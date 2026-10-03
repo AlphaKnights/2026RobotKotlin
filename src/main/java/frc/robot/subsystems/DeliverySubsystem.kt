@@ -96,21 +96,23 @@ object DeliverySubsystem : SubsystemBase() {
 //        )
     }
 
-    override fun initSendable(builder: SendableBuilder?) {
+    override fun initSendable(builder: SendableBuilder) {
         super.initSendable(builder)
 
-        builder?.addDoubleProperty("left motor voltage", {
-            leftLaunchMotor.motorVoltage.valueAsDouble
-        }, null)
-        builder?.addDoubleProperty("right motor voltage", {
-            rightLaunchMotor.motorVoltage.valueAsDouble
-        }, null)
-        builder?.addDoubleProperty("left motor current", {
-            leftLaunchMotor.statorCurrent.valueAsDouble
-        }, null)
-        builder?.addDoubleProperty("right motor current", {
-            rightLaunchMotor.statorCurrent.valueAsDouble
-        }, null)
+        builder.apply {
+            addDoubleProperty("left motor voltage", {
+                leftLaunchMotor.motorVoltage.valueAsDouble
+            }, null)
+            addDoubleProperty("right motor voltage", {
+                rightLaunchMotor.motorVoltage.valueAsDouble
+            }, null)
+            addDoubleProperty("left stator current", {
+                leftLaunchMotor.statorCurrent.valueAsDouble
+            }, null)
+            addDoubleProperty("right stator current", {
+                rightLaunchMotor.statorCurrent.valueAsDouble
+            }, null)
+        }
     }
 
     fun forward(launchProp: Double) {

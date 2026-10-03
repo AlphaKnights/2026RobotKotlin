@@ -5,6 +5,7 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -20,6 +21,7 @@ import frc.robot.commands.intake.IntakeLeverCommand
 import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
+import frc.robot.subsystems.Telemetry
 import java.io.File
 
 /**
@@ -59,6 +61,7 @@ object RobotContainer {
         )
         configureAuto()
         configureBindings()
+        Telemetry.initTelemetry()
     }
 
     private fun configureBindings() {
@@ -207,15 +210,15 @@ object RobotContainer {
                 ),
             )
 
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnTrue(
+        buttonBoard.button(6).multiPress(2, 1.0).toggleOnTrue(
             InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,1.0)
-            })
+                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble, 1.0)
+            }),
         )
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnFalse(
+        buttonBoard.button(6).multiPress(2, 1.0).toggleOnFalse(
             InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,0.0)
-            })
+                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble, 0.0)
+            }),
         )
 
         buttonBoard
