@@ -3,6 +3,7 @@
  */
 package frc.robot
 
+import com.ctre.phoenix6.Orchestra
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import edu.wpi.first.wpilibj.DriverStation
@@ -42,6 +43,8 @@ object RobotContainer {
     private val buttonBoard = CommandJoystick(Constants.OperatorConstants.BUTTON_BOARD_PORT)
 
     private val autoChooser = SendableChooser<PathPlannerAuto>()
+
+    val orchestra = Orchestra()
 
     init {
         LimelightSubsystem.startPolling()
@@ -257,4 +260,15 @@ object RobotContainer {
     }
 
     fun getAutonomousCommand(): Command = autoChooser.selected
+
+/**
+     * first, create music from midi files with PhoenixTuner
+     * make sure to add motors to the orchestra
+     * @param musicPath should point to a .chrp file
+     */
+    fun playMusic(musicPath: String) {
+        orchestra.loadMusic(musicPath)
+        orchestra.play()
+        println("ORCHERSTRA IS PLAYING ________________________")
+    }
 }

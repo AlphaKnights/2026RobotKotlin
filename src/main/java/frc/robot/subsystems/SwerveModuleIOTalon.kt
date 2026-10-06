@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VelocityVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.hardware.traits.CommonDevice
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
@@ -17,7 +18,13 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
 import frc.robot.Constants.ModuleConstants
+import frc.robot.RobotContainer
 import frc.robot.interfaces.SwerveModule
+import kotlin.reflect.KProperty
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.instanceParameter
+import kotlin.reflect.full.valueParameters
+import kotlin.reflect.jvm.javaGetter
 
 class SwerveModuleIOTalon(
     driveMotorId: Int,
@@ -125,6 +132,7 @@ class SwerveModuleIOTalon(
         turnMotor.getConfigurator().apply(turnMotorConfig)
 
         driveMotor.setPosition(0.0)
+        generateOrchestra()
     }
 
     override fun getPosition(): SwerveModulePosition =
@@ -176,6 +184,27 @@ class SwerveModuleIOTalon(
             addDoubleProperty("turn motor voltage", { turnMotor.motorVoltage.valueAsDouble }, null)
             addDoubleProperty("drive stator current", { driveMotor.statorCurrent.valueAsDouble }, null)
             addDoubleProperty("turn stator current", { turnMotor.statorCurrent.valueAsDouble }, null)
+        }
+    }
+
+    fun generateOrchestra() {
+//        val motorRefs =
+//            this::class.members.filter {
+//                it.returnType == TalonFX::class.createType() && it is KProperty<*>
+//            }
+//        println(motorRefs)
+//        if (motorRefs.isEmpty()) {
+//            println("WARNING, NO MOTORS IN ORCHESTRA")
+//        }
+//        motorRefs.forEach {
+//            val motor = it as KProperty<TalonFX>
+//            println(it.getter.call(it))
+//            RobotContainer.orchestra.addInstrument(motor as CommonDevice?)
+//            println("$motor has been added")
+//        }
+        RobotContainer.orchestra.apply {
+            addInstrument(driveMotor)
+            addInstrument(turnMotor)
         }
     }
 }
