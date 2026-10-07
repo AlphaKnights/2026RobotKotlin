@@ -26,6 +26,7 @@ import kotlin.reflect.full.instanceParameter
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.javaGetter
 import kotlin.reflect.jvm.isAccessible
+import java.io.File
 
 class SwerveModuleIOTalon(
     driveMotorId: Int,
@@ -191,20 +192,33 @@ class SwerveModuleIOTalon(
     }
 
     fun generateOrchestra() {
-        val motorRefs: List<KCallable<*>> =
-            this::class.members.filter {
-                it.returnType.classifier == TalonFX::class && it is KProperty<*>
-            }
-        motorRefs.forEach {it.isAccessible = true}
+
+//         val subsystemList =
+//             buildList {
+//                 File("src/main/java/frc/robot/subsystems").listFiles()?.filter {frc.robot.subsystems.(it.nameWithoutExtension)::class.members.forEach {
+//                 it.returnType.classifier == TalonFX::class && it is KProperty<*>
+//             }
+// }
+//             }        
+//         val motorRefs: List<KCallable<*>> =
+//             this::class.members.filter {
+//                 it.returnType.classifier == TalonFX::class && it is KProperty<*>
+//             }
+//         motorRefs.forEach {it.isAccessible = true}
         
-        println(motorRefs)
-        if (motorRefs.isEmpty()) {
-            println("WARNING, NO MOTORS IN ORCHESTRA")
-        }
-        motorRefs.forEach {
-            val motor = it.call(this)
-            RobotContainer.orchestra.addInstrument(motor as CommonDevice?)
-            println("$motor has been added")
-        }
+//         println(motorRefs)
+//         if (motorRefs.isEmpty()) {
+//             println("WARNING, NO MOTORS IN ORCHESTRA")
+//         }
+//         motorRefs.forEach {
+//             val motor = it.call(this)
+//             RobotContainer.orchestra.addInstrument(motor as CommonDevice?)
+//             println("$motor has been added")
+//         }
+
+            RobotContainer.orchestra.apply {
+                addInstrument(driveMotor)
+                addInstrument(turnMotor)
+            }
     }
 }
