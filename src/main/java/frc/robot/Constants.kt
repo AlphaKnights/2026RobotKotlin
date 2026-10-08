@@ -44,6 +44,8 @@ object Constants {
         const val RIGHT_LEVER_MOTOR_ID = 31
         const val LEFT_LEVER_MOTOR_ID = 30
         const val INTAKE_SPEED = 0.67
+        const val POSITION_DUTY_CYCLE = 0.0
+        const val SLOT = 0
 
         // Limits should be in rotations
         const val LEVER_LIMIT_FORWARD = 0.0
@@ -72,6 +74,11 @@ object Constants {
         const val MAX_METERS_PER_SECOND = 1.0 // for kiddies
         const val MAX_ANGULAR_SPEED = 3.25
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.25
+        const val NEG_ROTATION_ANGLE = -45.0
+        const val POS_ROTATION_ANGLE = 45.0
+        const val SPEED_PER_SECOND = 0.0
+
+
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
         private val WHEEL_BASE = Units.inchesToMeters(25.5)
@@ -157,6 +164,7 @@ object Constants {
         const val LAUNCH_A = 0.0
         const val LAUNCH_MOTOR_CURRENT_LIMITS = 40.0
         const val LAUNCH_MOTOR_STATOR_LIMITS = 80.0
+
     }
 
     object RollerConstants {

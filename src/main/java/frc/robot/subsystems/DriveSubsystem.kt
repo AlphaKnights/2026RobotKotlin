@@ -21,6 +21,10 @@ import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
+import frc.robot.Constants.DriveConstants.NEG_ROTATION_ANGLE
+import frc.robot.Constants.DriveConstants.POS_ROTATION_ANGLE
+import frc.robot.Constants.DriveConstants.ROTATION_ANGLE
+import frc.robot.Constants.DriveConstants.SPEED_PER_SECOND
 import frc.robot.XBoxController
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
 
@@ -218,26 +222,26 @@ object DriveSubsystem : SubsystemBase()
     fun setX() {
         frontLeft.setDesiredState(
             SwerveModuleState(
-                0.0,
-                Rotation2d.fromDegrees(45.0)
+                SPEED_PER_SECOND,
+                Rotation2d.fromDegrees(POS_ROTATION_ANGLE)
             )
         )
         frontRight.setDesiredState(
             SwerveModuleState(
-                0.0,
-                Rotation2d.fromDegrees(-45.0)
+                SPEED_PER_SECOND,
+                Rotation2d.fromDegrees(NEG_ROTATION_ANGLE)
             )
         )
         rearLeft.setDesiredState(
             SwerveModuleState(
-                0.0,
-                Rotation2d.fromDegrees(-45.0)
+            SPEED_PER_SECOND,
+                Rotation2d.fromDegrees(NEG_ROTATION_ANGLE)
             )
         )
         rearRight.setDesiredState(
             SwerveModuleState(
-                0.0,
-                Rotation2d.fromDegrees(45.0)
+                SPEED_PER_SECOND,
+                Rotation2d.fromDegrees(POS_ROTATION_ANGLE)
             )
         )
     }

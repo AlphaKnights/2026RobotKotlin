@@ -5,3 +5,4 @@ import edu.wpi.first.wpilibj2.command.Command
 class DeliveryCommand() : Command() {
 
 }
+override fun initialize() {}

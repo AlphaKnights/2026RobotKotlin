@@ -21,6 +21,8 @@ import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.wpilibj.DigitalInput
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
+import frc.robot.Constants.IntakeConstants.POSITION_DUTY_CYCLE
+import frc.robot.Constants.IntakeConstants.SLOT
 
 
 object IntakeSubsystem : SubsystemBase() {
@@ -125,7 +127,7 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun setPosition(position: Double) {
-        var m_request = PositionDutyCycle(0.0).withSlot(0)
+        var m_request = PositionDutyCycle(POSITION_DUTY_CYCLE).withSlot(SLOT)
 
         rightleverMotor.setControl(m_request.withPosition(-position))
         leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Opposed))
