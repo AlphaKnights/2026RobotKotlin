@@ -54,17 +54,22 @@ object Constants {
         const val LEVER_LIMIT_FORWARD = 0.0
         const val LEVER_LIMIT_REVERSE = 0.25
 
-        const val P = 0.1
+        const val P = 2.0
         const val I = 0.0
-        const val D = 0.01
+        const val D = 0.1
 
         // basically a controller deadzone, how close to the setpoint it needs to be to stop moving
-        const val GAIN_SCHEDULE_ERROR_THRESHOLD = 0.1
+        const val GAIN_SCHEDULE_ERROR_THRESHOLD = 0.01
 
-        const val LEVER_OUT_POSITION = 12.0
-        const val LEVER_IN_POSITION = 0.0
+        // horizontal needs to be 0
+        // 12 rotations motor = out to in
 
-        const val LEVER_SPEED = 0.2 // in rpm
+        // now in mechanism rotations
+
+        const val LEVER_OUT_POSITION = 0.0
+        const val LEVER_IN_POSITION = 0.25
+
+        const val LEVER_SPEED = 0.1 // in rpm
 
         const val INTAKE_CURRENT_LIMIT = 20.0
         const val INTAKE_STATOR_LIMIT = 40.0

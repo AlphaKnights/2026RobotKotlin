@@ -3,32 +3,22 @@
  */
 package frc.robot.subsystems
 
-import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionDutyCycle
 import com.ctre.phoenix6.hardware.TalonFX
-import com.ctre.phoenix6.signals.GainSchedBehaviorValue
-import com.ctre.phoenix6.signals.InvertedValue
-import com.ctre.phoenix6.signals.MotorAlignmentValue
-import com.ctre.phoenix6.signals.NeutralModeValue
+import com.ctre.phoenix6.signals.*
 import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
-import com.revrobotics.spark.config.ClosedLoopConfig
-import edu.wpi.first.networktables.NTSendable
-import edu.wpi.first.networktables.NTSendableBuilder
-import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
-import java.util.function.DoubleConsumer
 
 object IntakeSubsystem : SubsystemBase() {
     private val CAN = Constants.ModuleConstants.CANBUS
     private val intakeMotor = TalonFX(Constants.IntakeConstants.INTAKE_MOTOR_ID, CAN)
 
-    val rightleverMotor =
+    val rightLeverMotor =
         TalonFX(
             Constants.IntakeConstants.RIGHT_LEVER_MOTOR_ID,
             CAN,
@@ -67,9 +57,13 @@ object IntakeSubsystem : SubsystemBase() {
             }
             Slot0.GainSchedBehavior = GainSchedBehaviorValue.ZeroOutput
             ClosedLoopGeneral.GainSchedErrorThreshold = Constants.IntakeConstants.GAIN_SCHEDULE_ERROR_THRESHOLD
+            Slot0.GravityType = GravityTypeValue.Arm_Cosine
+
+            Feedback.SensorToMechanismRatio = 48.0
+
 
             MotorOutput.apply {
-                InvertedValue.CounterClockwise_Positive
+                InvertedValue.Clockwise_Positive
                 NeutralMode = NeutralModeValue.Brake
             }
 
@@ -113,22 +107,29 @@ object IntakeSubsystem : SubsystemBase() {
 
         intakeMotor.configurator.apply(intakeMotorConfig)
         leftLeverMotor.configurator.apply(globalConfig)
-        rightleverMotor.configurator.apply(globalConfig)
+        rightLeverMotor.configurator.apply(globalConfig)
+
+
+        // offset the start position so that 0.0 rotations is horizontal
+        leftLeverMotor.setPosition(Constants.IntakeConstants.LEVER_IN_POSITION)
+        rightLeverMotor.setPosition(Constants.IntakeConstants.LEVER_IN_POSITION)
+        //rightLeverMotor.setControl(Constants.IntakeConstants.LEVER_IN_POSITION)
+
     }
 
     override fun initSendable(builder: SendableBuilder) {
         builder.apply {
             setSafeState {
-                rightleverMotor.disable()
+                rightLeverMotor.disable()
                 intakeMotor.disable()
             }
-            addDoubleProperty("position", ::getPosition, ::setPosition)
-            addDoubleProperty("lever motor voltage", { rightleverMotor.motorVoltage.valueAsDouble }, null)
-            addDoubleProperty("lever stator current", { rightleverMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("position", ::getPosition, null)
+            addDoubleProperty("lever motor voltage", { rightLeverMotor.motorVoltage.valueAsDouble }, null)
+            addDoubleProperty("lever stator current", { rightLeverMotor.statorCurrent.valueAsDouble }, null)
             addDoubleProperty("intake motor voltage", { intakeMotor.motorVoltage.valueAsDouble }, null)
             addDoubleProperty("intake stator current", { intakeMotor.statorCurrent.valueAsDouble }, null)
-            addDoubleProperty("setpoint", { rightleverMotor.closedLoopReference.valueAsDouble }, null)
-            addDoubleProperty("control error", { rightleverMotor.closedLoopError.valueAsDouble }, null)
+            addDoubleProperty("setpoint", { rightLeverMotor.closedLoopReference.valueAsDouble }, ::setPosition)
+            addDoubleProperty("control error", { rightLeverMotor.closedLoopError.valueAsDouble }, null)
 
             addDoubleProperty(
                 "P",
@@ -136,7 +137,7 @@ object IntakeSubsystem : SubsystemBase() {
                     globalConfig.Slot0.kP
                 },
                 { value: Double ->
-                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKP(value))
+                    rightLeverMotor.configurator.apply(globalConfig.Slot0.withKP(value))
                 },
             )
 
@@ -146,7 +147,7 @@ object IntakeSubsystem : SubsystemBase() {
                     globalConfig.Slot0.kI
                 },
                 { value: Double ->
-                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKI(value))
+                    rightLeverMotor.configurator.apply(globalConfig.Slot0.withKI(value))
                 },
             )
 
@@ -156,7 +157,7 @@ object IntakeSubsystem : SubsystemBase() {
                     globalConfig.Slot0.kD
                 },
                 { value: Double ->
-                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKD(value))
+                    rightLeverMotor.configurator.apply(globalConfig.Slot0.withKD(value))
                 },
             )
 
@@ -166,7 +167,7 @@ object IntakeSubsystem : SubsystemBase() {
                     globalConfig.Slot0.kG
                 },
                 { value: Double ->
-                    rightleverMotor.configurator.apply(globalConfig.Slot0.withKG(value))
+                    rightLeverMotor.configurator.apply(globalConfig.Slot0.withKG(value))
                 },
             )
         }
@@ -179,25 +180,25 @@ object IntakeSubsystem : SubsystemBase() {
     fun setPosition(position: Double) {
         val mRequest = PositionDutyCycle(0.0).withSlot(0)
 
-        rightleverMotor.setControl(mRequest.withPosition(-position))
-        leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Opposed))
+        rightLeverMotor.setControl(mRequest.withPosition(position))
+        leftLeverMotor.setControl(Follower(rightLeverMotor.deviceID, MotorAlignmentValue.Opposed))
     }
 
-    fun isInPosition(deadzone: Double): Boolean = (rightleverMotor.closedLoopError.valueAsDouble < deadzone)
+    fun isInPosition(deadzone: Double): Boolean = (rightLeverMotor.closedLoopError.valueAsDouble < deadzone)
 
     fun moveLever(speed: Double) {
-        rightleverMotor.set(speed)
+        rightLeverMotor.set(speed)
         leftLeverMotor.set(-speed)
     }
 
-    fun getPosition(): Double = rightleverMotor.position.valueAsDouble
+    fun getPosition(): Double = rightLeverMotor.position.valueAsDouble
 
     fun stopIntake() {
         intakeMotor.stopMotor()
     }
 
     fun stopIntakeLever() {
-        rightleverMotor.stopMotor()
+        rightLeverMotor.stopMotor()
         leftLeverMotor.stopMotor()
     }
 
