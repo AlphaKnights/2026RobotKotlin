@@ -25,10 +25,6 @@ object StorageSubsystem : SubsystemBase() {
         config2.apply {
             MotorOutputConfigs().Inverted = InvertedValue.Clockwise_Positive
         }
-
-        motor1.
-        motor2.
-
     }
 
     fun runStorage(speed: Double) {
