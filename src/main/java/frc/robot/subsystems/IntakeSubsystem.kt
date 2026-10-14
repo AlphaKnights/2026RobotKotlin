@@ -119,10 +119,10 @@ object IntakeSubsystem : SubsystemBase() {
 
     override fun initSendable(builder: SendableBuilder) {
         builder.apply {
-            setSafeState {
-                rightLeverMotor.disable()
-                intakeMotor.disable()
-            }
+//            setSafeState {
+//                rightLeverMotor.disable()
+//                intakeMotor.disable()
+//            }
             addDoubleProperty("position", ::getPosition, null)
             addDoubleProperty("lever motor voltage", { rightLeverMotor.motorVoltage.valueAsDouble }, null)
             addDoubleProperty("lever stator current", { rightLeverMotor.statorCurrent.valueAsDouble }, null)
