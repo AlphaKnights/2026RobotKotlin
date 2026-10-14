@@ -12,6 +12,7 @@ class IntakeCommand(
 ) : Command() {
     init {
         addRequirements(IntakeSubsystem)
+        println("started Intake Command")
     }
 
     override fun execute() {
@@ -22,13 +23,14 @@ class IntakeCommand(
             } else {
                 Constants.IntakeConstants.INTAKE_SPEED
             }
-
+        println("execute() on IntakeCommand with speed = $intakeSpeed")
         IntakeSubsystem.runIntake(intakeSpeed)
     }
 
     override fun isFinished(): Boolean = false
 
     override fun end(interrupted: Boolean) {
+        println("end() on IntakeCommand")
         IntakeSubsystem.stopIntake()
     }
 }

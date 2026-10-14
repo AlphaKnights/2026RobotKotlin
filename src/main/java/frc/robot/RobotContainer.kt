@@ -233,7 +233,7 @@ object RobotContainer {
         buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(
             IntakeCommand(
                 false,
-            ),
+            ).also { println("Intake Roller Button Pressed!") }
         )
         buttonBoard.button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON).whileTrue(
             IntakeCommand(

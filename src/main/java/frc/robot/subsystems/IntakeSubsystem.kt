@@ -174,6 +174,7 @@ object IntakeSubsystem : SubsystemBase() {
     }
 
     fun runIntake(speed: Double) {
+        println("Intake Subsystem: RunIntake at $speed")
         intakeMotor.set(-speed)
     }
 
@@ -194,6 +195,7 @@ object IntakeSubsystem : SubsystemBase() {
     fun getPosition(): Double = rightLeverMotor.position.valueAsDouble
 
     fun stopIntake() {
+        println("Intake Subsystem: StopIntake")
         intakeMotor.stopMotor()
     }
 
