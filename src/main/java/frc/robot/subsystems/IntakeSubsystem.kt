@@ -12,127 +12,53 @@ import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
+import frc.robot.Constants.IntakeConstants.INTAK
 
 
 object IntakeSubsystem : SubsystemBase() {
-    private val CAN = CANBus("didy")
-    private val intakeMotor =
 
-    private val rightleverMotor =
-        TalonFX(
-            Constants.IntakeConstants.RIGHT_LEVER_MOTOR_ID,
-            CAN,
-        )
+    private val intakeMotor: TalonFX = TalonFX(1)
 
-    private val leftLeverMotor =
-        TalonFX(
-            Constants.IntakeConstants.LEFT_LEVER_MOTOR_ID,
-            CAN,
-        )
+    private val rightleverMotor: TalonFX = TalonFX(2)
+
+
+    private val leftLeverMotor: TalonFX = TalonFX(3)
 
 
 
     init {
-        val intakeMotorConfig=
-            TalonFXConfiguration().apply {
-                CurrentLimits.apply {
-                    SupplyCurrentLimitEnable = true
-                    SupplyCurrentLimit = Constants.IntakeConstants.INTAKE_CURRENT_LIMIT
-                    StatorCurrentLimitEnable = true
-                    StatorCurrentLimit = Constants.IntakeConstants.INTAKE_STATOR_LIMIT
-                }
+        val config: TalonFXConfiguration = TalonFXConfiguration()
+        val leaderMotor = rightleverMotor: TalonFX = TalonFX(3)
+        val followerMotor = leftLeverMotor
+        config.apply {
 
-                MotorOutput.apply{
-                    NeutralMode = NeutralModeValue.Brake
-                }
-            }
-
-        val globalConfig =
-            TalonFXConfiguration().apply {
-                CurrentLimits.apply {
-                    SupplyCurrentLimitEnable = true
-                    SupplyCurrentLimit = Constants.IntakeConstants.INTAKE_CURRENT_LIMIT
-                    StatorCurrentLimitEnable = true
-                    StatorCurrentLimit = Constants.IntakeConstants.INTAKE_STATOR_LIMIT
-                }
-
-                SoftwareLimitSwitch.apply {
-                    ForwardSoftLimitEnable
-                    ReverseSoftLimitEnable
-
-                    ForwardSoftLimitThreshold = Constants.IntakeConstants.LEVER_LIMIT_FORWARD
-                    ReverseSoftLimitThreshold = Constants.IntakeConstants.LEVER_LIMIT_REVERSE
-                }
-
-                Slot0.apply {
-                    kI = Constants.IntakeConstants.I
-                    kP = Constants.IntakeConstants.P
-                    kD = Constants.IntakeConstants.D
-                }
-
-                MotorOutput.apply {
-                    InvertedValue.CounterClockwise_Positive
-                    NeutralMode = NeutralModeValue.Brake
-                }
-
-                ResetMode.kResetSafeParameters
-                PersistMode.kPersistParameters
-
-                /*encoder.apply {
-                    positionConversionFactor(1.0)
-                    velocityConversionFactor(1.0)
-                }
-
-                closedLoop.apply {
-                    feedbackSensor(
-                        FeedbackSensor.kPrimaryEncoder, //ClosedLoopConfig.Feedback.Sensor
-                    )
-                    pid(
-                        ClimbConstants.P,
-                        ClimbConstants.I,
-                        ClimbConstants.D,
-                    )
-                    outputRange(-1.0, 1.0)
-                    positionWrappingEnabled(false)*/
-            }
-        intakeMotor.configurator.apply(intakeMotorConfig)
-        leftLeverMotor.configurator.apply(globalConfig)
-        rightleverMotor.configurator.apply(globalConfig)
+        }
+    }
 
 
+    fun runMotor() {
+        intakeMotor.set(1.0)
+    }
 
+    fun stopMotor() {
+        intakeMotor.set(0.0)
+    }
 
+    fun moveIntake(direction: Boolean) {
+        if (direction) {
+            rightleverMotor.set(1.0)
+            leftLeverMotor.set(1.0)
+        }
+        else {
+            rightleverMotor.set(0.0)
+            leftLeverMotor.set(0.0)
+        }
     }
 
 
 
-    fun setPosition(position: Double) {
-        var m_request = PositionDutyCycle(0.0).withSlot(0)
-
-        rightleverMotor.setControl(m_request.withPosition(-position))
-        leftLeverMotor.setControl(Follower(rightleverMotor.deviceID, MotorAlignmentValue.Opposed))
 
 
-
-    }
-
-    fun isInPosition(deadzone: Double): Boolean {
-        return (rightleverMotor.getClosedLoopError().valueAsDouble < deadzone)
-    }
-
-    fun moveLever(speed: Double) {
-        rightleverMotor.set(speed)
-        leftLeverMotor.set(-speed)
-    }
-
-    fun getPosition(): Double {
-        return rightleverMotor.position.valueAsDouble
-    }
-
-    fun stopIntakeLever() {
-        rightleverMotor.stopMotor()
-        leftLeverMotor.stopMotor()
-    }
 
 }
 
