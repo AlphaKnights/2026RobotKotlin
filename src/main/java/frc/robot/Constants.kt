@@ -238,6 +238,10 @@ object Constants {
         const val ROTATION_I = 0.0
         const val ROTATION_D = 0.0
     }
+
+    object StorageConstants {
+        const val MOTOR_SPEED = 1.0
+    }
 }
 
 
