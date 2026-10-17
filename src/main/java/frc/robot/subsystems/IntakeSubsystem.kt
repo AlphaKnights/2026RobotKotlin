@@ -12,17 +12,18 @@ import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
-import frc.robot.Constants.IntakeConstants.INTAK
+import frc.robot.Constants.IntakeConstants
+import frc.robot.Constants.IntakeConstants.INTAKE_SPEED
 
 
 object IntakeSubsystem : SubsystemBase() {
 
-    private val intakeMotor: TalonFX = TalonFX(1)
+    private val intakeMotor: TalonFX = TalonFX(IntakeConstants.INTAKE_MOTOR_ID)
 
-    private val rightleverMotor: TalonFX = TalonFX(2)
+    private val rightleverMotor: TalonFX = TalonFX(IntakeConstants.RIGHT_LEVER_MOTOR_ID)
 
 
-    private val leftLeverMotor: TalonFX = TalonFX(3)
+    private val leftLeverMotor: TalonFX = TalonFX(IntakeConstants.LEFT_LEVER_MOTOR_ID)
 
 
 
@@ -37,21 +38,21 @@ object IntakeSubsystem : SubsystemBase() {
 
 
     fun runMotor() {
-        intakeMotor.set(1.0)
+        intakeMotor.set(IntakeConstants.INTAKE_SPEED)
     }
 
     fun stopMotor() {
-        intakeMotor.set(0.0)
+        intakeMotor.stopMotor()
     }
 
     fun moveIntake(direction: Boolean) {
         if (direction) {
-            rightleverMotor.set(1.0)
-            leftLeverMotor.set(1.0)
+            rightleverMotor.set()
+            leftLeverMotor.set()
         }
         else {
-            rightleverMotor.set(0.0)
-            leftLeverMotor.set(0.0)
+            rightleverMotor.set()
+            leftLeverMotor.set(0.1)
         }
     }
 
