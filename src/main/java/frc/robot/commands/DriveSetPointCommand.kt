@@ -33,7 +33,7 @@ class DriveSetPointCommand(
         addRequirements(DriveSubsystem)
 
         // configure the PID Controllers
-        rotateController.setTolerance(Rotation2d.fromRadians(1.0).radians, 0.2)
+        rotateController.setTolerance(Rotation2d.fromRadians(DriveConstants.ROTATE_SETPOINT_TOLERANCE).radians, 0.2)
         rotateController.enableContinuousInput(-Math.PI, Math.PI)
 
         driveController.setTolerance(DriveConstants.DRIVE_SETPOINT_TOLERANCE, 0.2)
@@ -85,4 +85,9 @@ class DriveSetPointCommand(
     override fun isFinished(): Boolean =
         driveController.atSetpoint() &&
             rotateController.atSetpoint()
+
+    override fun end(interrupted: Boolean) {
+        super.end(interrupted)
+        println("ENDING DRIVESETPOINT CMOMAND_________________________________")
+    }
 }

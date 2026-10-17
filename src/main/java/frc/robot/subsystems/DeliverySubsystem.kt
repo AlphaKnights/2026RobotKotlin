@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Ultrasonic
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
 import frc.robot.Constants.LaunchConstants
+import kotlin.math.absoluteValue
 
 object DeliverySubsystem : SubsystemBase() {
     /*
@@ -107,10 +108,10 @@ object DeliverySubsystem : SubsystemBase() {
                 rightLaunchMotor.motorVoltage.valueAsDouble
             }, null)
             addDoubleProperty("left stator current", {
-                leftLaunchMotor.statorCurrent.valueAsDouble
+                leftLaunchMotor.statorCurrent.valueAsDouble.takeIf { it.absoluteValue >= Constants.TelemetryConstants.MOTOR_CURRENT_MIN_RANGE } ?: 0.0
             }, null)
             addDoubleProperty("right stator current", {
-                rightLaunchMotor.statorCurrent.valueAsDouble
+                rightLaunchMotor.statorCurrent.valueAsDouble.takeIf { it.absoluteValue >= Constants.TelemetryConstants.MOTOR_CURRENT_MIN_RANGE } ?: 0.0
             }, null)
         }
     }

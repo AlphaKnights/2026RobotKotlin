@@ -16,8 +16,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.sendable.Sendable
 import edu.wpi.first.util.sendable.SendableBuilder
+import frc.robot.Constants
 import frc.robot.Constants.ModuleConstants
 import frc.robot.interfaces.SwerveModule
+import kotlin.math.absoluteValue
 
 class SwerveModuleIOTalon(
     driveMotorId: Int,
@@ -174,8 +176,8 @@ class SwerveModuleIOTalon(
         builder?.apply {
             addDoubleProperty("drive motor voltage", { driveMotor.motorVoltage.valueAsDouble }, null)
             addDoubleProperty("turn motor voltage", { turnMotor.motorVoltage.valueAsDouble }, null)
-            addDoubleProperty("drive stator current", { driveMotor.statorCurrent.valueAsDouble }, null)
-            addDoubleProperty("turn stator current", { turnMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("drive stator current", { driveMotor.statorCurrent.valueAsDouble.takeIf { it.absoluteValue >= Constants.TelemetryConstants.MOTOR_CURRENT_MIN_RANGE } ?: 0.0   }, null)
+            addDoubleProperty("turn stator current", { turnMotor.statorCurrent.valueAsDouble.takeIf { it.absoluteValue >= Constants.TelemetryConstants.MOTOR_CURRENT_MIN_RANGE } ?: 0.0   }, null)
         }
     }
 }

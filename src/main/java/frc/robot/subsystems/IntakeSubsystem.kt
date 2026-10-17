@@ -13,6 +13,7 @@ import com.revrobotics.ResetMode
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
+import kotlin.math.absoluteValue
 
 object IntakeSubsystem : SubsystemBase() {
     private val CAN = Constants.ModuleConstants.CANBUS
@@ -125,9 +126,9 @@ object IntakeSubsystem : SubsystemBase() {
 //            }
             addDoubleProperty("position", ::getPosition, null)
             addDoubleProperty("lever motor voltage", { rightLeverMotor.motorVoltage.valueAsDouble }, null)
-            addDoubleProperty("lever stator current", { rightLeverMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("lever stator current", { rightLeverMotor.statorCurrent.valueAsDouble.takeIf { it.absoluteValue >= Constants.TelemetryConstants.MOTOR_CURRENT_MIN_RANGE } ?: 0.0 }, null)
             addDoubleProperty("intake motor voltage", { intakeMotor.motorVoltage.valueAsDouble }, null)
-            addDoubleProperty("intake stator current", { intakeMotor.statorCurrent.valueAsDouble }, null)
+            addDoubleProperty("intake stator current", { intakeMotor.statorCurrent.valueAsDouble.takeIf { it.absoluteValue >= Constants.TelemetryConstants.MOTOR_CURRENT_MIN_RANGE } ?: 0.0  }, null)
             addDoubleProperty("setpoint", { rightLeverMotor.closedLoopReference.valueAsDouble }, ::setPosition)
             addDoubleProperty("control error", { rightLeverMotor.closedLoopError.valueAsDouble }, null)
 

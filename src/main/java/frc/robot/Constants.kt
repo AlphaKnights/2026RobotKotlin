@@ -89,9 +89,13 @@ object Constants {
         }
     }
 
+    object TelemetryConstants {
+        const val MOTOR_CURRENT_MIN_RANGE = 0.50 //amps
+    }
+
     object DriveConstants {
-        const val MAX_METERS_PER_SECOND = 10.0
-        const val MAX_ANGULAR_SPEED = 10.0
+        const val MAX_METERS_PER_SECOND = 5.0
+        const val MAX_ANGULAR_SPEED = 5.0
         const val MAX_SLIDING_SPEED_PERCENTAGE = 0.5
 
         private val TRACK_WIDTH = Units.inchesToMeters(25.5)
@@ -236,9 +240,9 @@ object Constants {
         // Red hub: robot approaches from y < RED_HUB_Y
         // Blue hub: robot approaches from y > BLUE_HUB_Y
         // TODO: measure using center field origin
-        const val RED_HUB_X = 4.625
+        const val RED_HUB_X = 3.625
         const val RED_HUB_Y = 4.0
-        const val BLUE_HUB_X = -3.644
+        const val BLUE_HUB_X = 3.644
         const val BLUE_HUB_Y = 4.0 // placeholder — team must tune
 
         // Valid shooting-arc sector, in degrees, measured from hub center.
