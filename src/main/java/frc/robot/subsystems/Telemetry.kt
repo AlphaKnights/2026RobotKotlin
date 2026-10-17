@@ -18,6 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants
+import frc.robot.Robot
+import frc.robot.RobotContainer
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
 
@@ -93,12 +96,22 @@ object Telemetry : SubsystemBase() {
                 }
 
                 override fun isFinished(): Boolean = true
-            },
+            }
         )
+        SmartDashboard.putData("Set Robot Pose Hub Blue",
+            object : Command() {
+                override fun execute() {
+                    DriveSubsystem.resetPose(Pose2d(Constants.AimingConstants.BLUE_HUB_X, Constants.AimingConstants.BLUE_HUB_Y, Rotation2d.kZero))
+                }
+
+                override fun isFinished(): Boolean = true
+
+            })
     }
 
     override fun periodic() {
-        // field.robotPose = DriveSubsystem.getPose()
+        println(RobotController.getBatteryVoltage())
+        field.robotPose = DriveSubsystem.getPose()
         field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath(field.robotPose)
     }
 
