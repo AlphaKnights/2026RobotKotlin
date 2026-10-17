@@ -6,29 +6,5 @@ import frc.robot.subsystems.StorageSubsystem
 
 class SuperStorageCommand (reversed: Boolean) : Command() {
 
-    val reverse = reversed
 
-    init {
-        // each subsystem used by the command must be passed into the addRequirements() method
-        addRequirements(StorageSubsystem)
-
-    }
-
-    override fun execute() {
-        if (reverse) {
-            StorageSubsystem.roll(-Constants.RollerConstants.ALT_ROLLER_SPEED)
-        }
-        else {
-            StorageSubsystem.roll(Constants.RollerConstants.ALT_ROLLER_SPEED)
-        }
-    }
-
-    override fun isFinished(): Boolean {
-        return false
-    }
-
-    override fun end(interrupted: Boolean) {
-        StorageSubsystem.rollerstop()
-        super.end(interrupted)
-    }
 }
