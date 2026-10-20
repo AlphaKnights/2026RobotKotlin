@@ -37,6 +37,8 @@ object Constants {
         const val DELIVERY_BUTTON = 12
         const val DELIVERY_REVERSE_BUTTON = 1
         const val INDEXER_REVERSE_BUTTON = 3
+        const val  MOTOR_SPEED = 0.0
+        const val  MOTOR2_SPEED = 0.0
     }
 
     object IntakeConstants {
