@@ -14,10 +14,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick
 import frc.robot.commands.*
 import frc.robot.commands.DriveToArcCommand
 import frc.robot.commands.autoalign.AutoAlignAutoCommand
-import frc.robot.commands.autoalign.AutoAlignManualCommand
-import frc.robot.commands.intake.IntakeCommand
-import frc.robot.commands.intake.IntakeLeverCommand
-import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
 import frc.robot.subsystems.LimelightSubsystem
 import java.io.File
@@ -47,14 +43,6 @@ object RobotContainer {
             mapOf(
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
-                "Delivery" to AutoDeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
-                "Supershoot" to AutoDeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
-                "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
-                "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
-                "Intake" to IntakeCommand(false),
-                "Indexer" to AutoStorageCommand(false),
-                "Intake Manual In" to IntakeLeverManualCommand(Constants.IntakeDirection.IN),
-                "Intake Manual Out" to IntakeLeverManualCommand(Constants.IntakeDirection.OUT),
             ),
         )
         configureAuto()
@@ -151,92 +139,7 @@ object RobotContainer {
             LockXCommand(),
         )
 
-        xBoxController.altDelivery().whileTrue(
-            DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
-        )
 
-        xBoxController.altIntake().whileTrue(
-            IntakeCommand(false),
-        )
-        buttonBoard.button(7).whileTrue(
-            SuperStorageCommand(false),
-        )
-
-        // Button Board
-        buttonBoard.button(Constants.RollerConstants.BUTTON).whileTrue(
-            StorageCommand(false),
-        )
-        buttonBoard.button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON).whileTrue(
-            StorageCommand(true),
-        )
-
-        buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON).whileTrue(
-            DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
-        )
-        if (xBoxController.deliveryScale() >= 0.5) { // Yo what fucking dumbass made this
-            DeliveryCommand(xBoxController.deliveryScale())
-        }
-        buttonBoard.button(Constants.OperatorConstants.DELIVERY_REVERSE_BUTTON).whileTrue(
-            DeliveryCommand(-Constants.LaunchConstants.LAUNCH_SPEED),
-        )
-
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON,
-            ).onTrue(
-                IntakeLeverCommand(
-                    Constants.IntakeConstants.LEVER_IN_POSITION,
-                ),
-            )
-
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON,
-            ).onTrue(
-                IntakeLeverCommand(
-                    Constants.IntakeConstants.LEVER_OUT_POSITION,
-                ),
-            )
-
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON,
-            ).whileTrue(
-                IntakeLeverManualCommand(
-                    Constants.IntakeDirection.IN,
-                ),
-            )
-
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnTrue(
-            InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,1.0)
-            })
-        )
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnFalse(
-            InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,0.0)
-            })
-        )
-
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON,
-            ).whileTrue(
-                IntakeLeverManualCommand(
-                    Constants.IntakeDirection.OUT,
-                ),
-            )
-
-        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(
-            IntakeCommand(
-                false,
-            ),
-        )
-        buttonBoard.button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON).whileTrue(
-            IntakeCommand(
-                true,
-            ),
-        )
     }
 
     private fun configureAuto() {

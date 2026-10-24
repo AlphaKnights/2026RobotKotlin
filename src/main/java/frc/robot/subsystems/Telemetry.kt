@@ -39,7 +39,7 @@ object Telemetry : SubsystemBase() {
     init {
         SmartDashboard.putData("Field", field)
         field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
-        SmartDashboard.putData("intake", IntakeSubsystem)
+        //SmartDashboard.putData("intake", IntakeSubsystem)
     }
 
     override fun periodic() {
@@ -48,15 +48,6 @@ object Telemetry : SubsystemBase() {
     }
 
     fun initLog() {
-        SmartDashboard.putNumber(
-            "Intake Position",
-            IntakeSubsystem.getPosition(),
-        )
-        SmartDashboard.putNumber(
-            "Intake Error",
-            IntakeSubsystem.rightleverMotor.closedLoopError.valueAsDouble,
-        )
-
         SmartDashboard.putNumber(
             "Match Time",
             DriverStation.getMatchTime(),

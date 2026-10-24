@@ -513,11 +513,7 @@ class SimpleSimDriveSubsystem :
 }
 
 private val delegate: IDriveSubsystem by lazy {
-    if (Constants.SomeConstants.isReal) {
-        RealDriveSubsystem()
-    } else {
-        PhysicsSimDriveSubsystem()
-    }
+    RealDriveSubsystem()
 }
 
 object DriveSubsystem :
