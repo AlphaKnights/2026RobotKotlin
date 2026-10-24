@@ -23,14 +23,15 @@ import frc.robot.Robot
 import frc.robot.RobotContainer
 import frc.robot.subsystems.aiming.AimingCalc
 import frc.robot.subsystems.aiming.DriveToArcPoseGenerator
+import edu.wpi.first.util.sendable.*
+import edu.wpi.first.wpilibj.RobotController.getCANStatus
 
 /**
-Only use Logger for telemetry, not inputs or choosers!
+Only use for telemetry, not inputs or choosers!
  */
 object Telemetry : SubsystemBase() {
     private val table = NetworkTableInstance.getDefault()
     private val field = Field2d()
-
     private val swervePublisher: StructArrayPublisher<SwerveModuleState?> =
         table
             .getStructArrayTopic("MyStates", SwerveModuleState.struct)
@@ -40,32 +41,70 @@ object Telemetry : SubsystemBase() {
             .getStructArrayTopic("limeLight pose", Pose3d.struct)
             .publish()
 
+    init {
+        SmartDashboard.putData(Telemetry)
+        field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
+    }
+
+
+    override fun initSendable(builder: SendableBuilder) {
+        builder.apply {
+            addDoubleProperty("Match Time", {DriverStation.getMatchTime()}, null)
+            addDoubleProperty("Battery Voltage", {RobotController.getBatteryVoltage()}, null)
+            addDoubleProperty("CAN % Utilization", {RobotController.getCANStatus().percentBusUtilization * 100}, null)
+            addBooleanProperty("Tag Detected", {LimelightSubsystem::getPose != null}, null)
+            addBooleanProperty("Aligned To Tag", {LimelightSubsystem.isAligned()}, null)
+            addDoubleProperty("Shooting Distance", {AimingCalc.canShoot(DriveSubsystem.getPose())}, null)
+            
+// SmartDashboard.putNumber(
+//             "Shooting Distance",
+//             AimingCalc.canShoot(DriveSubsystem.getPose()),
+//         )
+
+        // SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage())
+
+        // SmartDashboard.putNumber(
+        //     "CAN Utilization",
+        //  {RobotController.getCANStatus().percentBusUtilization * 100},
+        // )
+        // SmartDashboard.putBoolean(
+        //     "Tag Detected",
+        //     LimelightSubsystem.tagPose != null,
+        // )
+        // SmartDashboard.putBoolean(
+        //     "Aligned to Tag",
+        //     LimelightSubsystem.isAligned(),
+        // )
+            
+            
+        }
+    }
+
     fun initTelemetry() {
         SmartDashboard.putData("Field", field)
-        field.robotPose = Pose2d(Translation2d.kZero, Rotation2d.kZero)
         SmartDashboard.putData("intake", IntakeSubsystem)
         SmartDashboard.putData("shooter", DeliverySubsystem)
         SmartDashboard.putData("drive", DriveSubsystem)
 
-        SmartDashboard.putNumber(
-            "Match Time",
-            DriverStation.getMatchTime(),
-        )
+        // SmartDashboard.putData(
+        //     "Match Time Old",
+        //     DriverStation.getMatchTime(),
+        // )
 
-        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage())
+        // SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage())
 
-        SmartDashboard.putNumber(
-            "CAN Utilization",
-            RobotController.getCANStatus().percentBusUtilization * 100,
-        )
-        SmartDashboard.putBoolean(
-            "Tag Detected",
-            LimelightSubsystem.tagPose != null,
-        )
-        SmartDashboard.putBoolean(
-            "Aligned to Tag",
-            LimelightSubsystem.isAligned(),
-        )
+        // SmartDashboard.putNumber(
+        //     "CAN Utilization",
+        //  {RobotController.getCANStatus().percentBusUtilization * 100},
+        // )
+        // SmartDashboard.putBoolean(
+        //     "Tag Detected",
+        //     LimelightSubsystem.tagPose != null,
+        // )
+        // SmartDashboard.putBoolean(
+        //     "Aligned to Tag",
+        //     LimelightSubsystem.isAligned(),
+        // )
 //        SmartDashboard.putNumber(
 //            "limelight x",
 //            LimelightSubsystem.tagPose?.x ?: -1.0,
@@ -110,7 +149,7 @@ object Telemetry : SubsystemBase() {
     }
 
     override fun periodic() {
-        println(RobotController.getBatteryVoltage())
+        // println(RobotController.getBatteryVoltage())
         field.robotPose = DriveSubsystem.getPose()
         field.getObject("targetPose").pose = DriveToArcPoseGenerator.generatePath(field.robotPose)
     }

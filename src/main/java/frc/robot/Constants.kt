@@ -57,6 +57,7 @@ object Constants {
         const val P = 2.0
         const val I = 0.0
         const val D = 0.1
+        const val kG = 0.008
 
         // basically a controller deadzone, how close to the setpoint it needs to be to stop moving
         const val GAIN_SCHEDULE_ERROR_THRESHOLD = 0.01
