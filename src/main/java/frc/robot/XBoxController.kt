@@ -57,7 +57,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     // fun alignR() : Trigger {
     //   return Trigger { bButton }
     // }
-    fun autoAim(): Trigger = Trigger { aButton }
+    //fun autoAim(): Trigger = Trigger { aButton }
 
     fun lerp(
         ref: Double,
@@ -80,7 +80,7 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
 
     fun resetOdometry(): Trigger = Trigger { rightStickButton }
 
-    fun driveToArc(): Trigger = Trigger { startButton }
+   // fun driveToArc(): Trigger = Trigger { startButton }
 
 //    fun slideLeft(): Trigger {
 //        return Trigger { leftBumperButton }

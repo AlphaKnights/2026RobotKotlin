@@ -84,9 +84,9 @@ object RobotContainer {
             ResetOdometry(),
         )
 
-        xBoxController
-            .driveToArc()
-            .onTrue(DriveToArcCommand())
+//        xBoxController
+//            .driveToArc()
+//            .onTrue(DriveToArcCommand())
 
 //        xBoxController
 //            .slideLeft()
@@ -146,7 +146,7 @@ object RobotContainer {
         autoChooser.setDefaultOption("Default", PathPlannerAuto("Auto Deliver Only"))
         val autoList =
             buildList {
-                File("src/main/deploy/pathplanner/autos/").listFiles()?.forEach { auto ->
+                File("/home/lvuser/deploy/pathplanner/autos").listFiles()?.forEach { auto ->
                     add(PathPlannerAuto(auto.name.toString().removeSuffix(".auto")))
                 }
             }
