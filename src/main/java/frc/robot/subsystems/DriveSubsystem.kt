@@ -9,6 +9,7 @@ import com.pathplanner.lib.config.PIDConstants
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.util.DriveFeedforwards
+import com.studica.frc.AHRS
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -64,8 +65,8 @@ class RealDriveSubsystem :
 
     val swerveTypeChooser = SendableChooser<Constants.SomeConstants.SwerveType>()
 
-    private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON_ID)
-//    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
+    //private var gyro: Pigeon2 = Pigeon2(DriveConstants.PIDGEON_ID)
+    private var gyro: AHRS = AHRS(AHRS.NavXComType.kMXP_SPI)
 
     private val drive: Swerve =
         Swerve(
@@ -94,7 +95,7 @@ class RealDriveSubsystem :
     private var odometry =
         SwerveDriveOdometry(
             DriveConstants.DRIVE_KINEMATICS,
-            Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
+            Rotation2d.fromDegrees(gyro.rotation3d.x),
             // gyro.rotation3d.x
             arrayOf(
                 drive.fl.getPosition(),
@@ -147,7 +148,7 @@ class RealDriveSubsystem :
 //        if (Robot.isAutonomous()) {
 
         odometry.update(
-            Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
+            Rotation2d.fromDegrees(gyro.rotation3d.x),
             arrayOf(
                 drive.fl.getPosition(),
                 drive.fr.getPosition(),
@@ -185,7 +186,7 @@ class RealDriveSubsystem :
 
     override fun resetOdometry(pose: Pose2d) {
         odometry.resetPosition(
-            Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
+            Rotation2d.fromDegrees(gyro.rotation3d.x),
             // gyro.getRotation2d(),
             arrayOf(
                 drive.fl.getPosition(),
@@ -212,7 +213,7 @@ class RealDriveSubsystem :
                 DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
                         speeds,
-                        Rotation2d.fromDegrees(gyro.yaw.valueAsDouble),
+                        Rotation2d.fromDegrees(gyro.rotation3d.x),
                     ),
                 ) // gyro.getRotation2d()
         }
