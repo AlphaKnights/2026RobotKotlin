@@ -31,7 +31,7 @@ Only use for telemetry, not inputs or choosers!
  */
 object Telemetry : SubsystemBase() {
     private val table = NetworkTableInstance.getDefault()
-    private val field = Field2d()
+    val field = Field2d() // public so aiming code can draw its targets on the same field
     private val swervePublisher: StructArrayPublisher<SwerveModuleState?> =
         table
             .getStructArrayTopic("MyStates", SwerveModuleState.struct)

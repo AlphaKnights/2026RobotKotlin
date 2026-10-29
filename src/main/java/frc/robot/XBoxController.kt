@@ -103,4 +103,11 @@ class XBoxController : XboxController(Constants.OperatorConstants.DRIVER_CONTROL
     fun altIndexer(): Trigger = Trigger { bButton }
 
     fun shake(): Trigger = Trigger { xButton }
+
+    // Hold X: drive to the sweet spot in front of the HUB and face it.
+    fun autoAlign(): Trigger = Trigger { xButton }
+
+    // Hold B: shoot while driving (robot aims, sets flywheel speed, and feeds when the shot is good).
+    fun shootOnMove(): Trigger = Trigger { bButton }
+
 }

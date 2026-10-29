@@ -12,8 +12,8 @@ import kotlin.math.*
 
 object AimingCalc {
     fun canShoot(curPose: Pose2d): Double {
-        // in meters
-        val x: Double = -curPose.x
+        // in meters. The pose is now in the standard blue-origin frame, so no sign flip.
+        val x: Double = curPose.x
         val y: Double = curPose.y
 
         val hub = getHubPosition()
@@ -85,7 +85,7 @@ object AimingCalc {
         return angularDistance * AimingConstants.MAX_SPEED + sign(x) * termOne * termTwo
     }
 
-    // claude starts here beware
+    // Alliance and HUB position helpers
     // Returns true when targeting red hub, false for blue.
     // Reads DriverStation at runtime; falls back to the constant if DS hasn't set it.
     private fun isRedAlliance(): Boolean {

@@ -20,8 +20,8 @@ import frc.robot.commands.intake.IntakeCommand
 import frc.robot.commands.intake.IntakeLeverCommand
 import frc.robot.commands.intake.IntakeLeverManualCommand
 import frc.robot.subsystems.DriveSubsystem
-import frc.robot.subsystems.LimelightSubsystem
 import frc.robot.subsystems.Telemetry
+import frc.robot.subsystems.aiming.HubTargeting
 import java.io.File
 
 /**
@@ -44,9 +44,18 @@ object RobotContainer {
     private val autoChooser = SendableChooser<PathPlannerAuto>()
 
     init {
-        LimelightSubsystem.startPolling()
+        // Vision now goes through NetworkTables in LimelightVision (called by the drivetrain).
+        // The old HTTP JSON polling of the Limelight 50x a second is no longer started: nothing
+        // needs it, and it was extra work for a camera that already runs hot.
         NamedCommands.registerCommands(
             mapOf(
+                // Don't run these in parallel with a path: both would drive the robot.
+                "AlignToHub" to
+                    AutoAlignToHubCommand(finishWhenAligned = true)
+                        .withTimeout(Constants.ShotConstants.AUTO_ALIGN_TIMEOUT_SEC),
+                "AimAndShoot" to
+                    ShootOnTheMoveCommand({ 0.0 }, { 0.0 })
+                        .withTimeout(Constants.ShotConstants.AUTO_SHOOT_TIMEOUT_SEC),
                 "Left" to AutoAlignAutoCommand(Constants.AlignDirection.LEFT),
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
                 "Delivery" to AutoDeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
@@ -62,6 +71,7 @@ object RobotContainer {
         configureAuto()
         configureBindings()
         Telemetry.initTelemetry()
+        HubTargeting // registers it so its periodic() publishes Shot/* telemetry
     }
 
     private fun configureBindings() {
@@ -83,6 +93,7 @@ object RobotContainer {
         xBoxController.heading().whileTrue(
             ResetHeadingCommand(),
         )
+
         // Auto Align
 //        xBoxController.alignL().whileTrue(
 //            AutoAlignManualCommand(
@@ -97,6 +108,17 @@ object RobotContainer {
 
         xBoxController.resetOdometry().whileTrue(
             ResetOdometry(),
+        )
+
+        // Auto-align to the HUB (hold X) and shoot on the move (hold B).
+        xBoxController.autoAlign().whileTrue(
+            AutoAlignToHubCommand(finishWhenAligned = false),
+        )
+        xBoxController.shootOnMove().whileTrue(
+            ShootOnTheMoveCommand(
+                driverForward = { xBoxController.x() },
+                driverLeft = { xBoxController.y() },
+            ),
         )
 
         xBoxController
@@ -246,7 +268,7 @@ object RobotContainer {
         autoChooser.setDefaultOption("Default", PathPlannerAuto("Auto Deliver Only"))
         val autoList =
             buildList {
-                File("src/main/deploy/pathplanner/autos/").listFiles()?.forEach { auto ->
+                File(edu.wpi.first.wpilibj.Filesystem.getDeployDirectory(), "pathplanner/autos").listFiles()?.forEach { auto ->
                     add(PathPlannerAuto(auto.name.toString().removeSuffix(".auto")))
                 }
             }

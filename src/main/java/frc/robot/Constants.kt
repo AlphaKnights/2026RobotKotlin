@@ -186,11 +186,14 @@ object Constants {
         const val RIGHT_LAUNCHMOTOR_ID = 28
         const val LAUNCH_SPEED = 0.65
         const val ALT_LAUNCH_SPEED = 0.85
-        const val LAUNCH_P = 0.1
+
+        // Slot0 gains, only used by closed-loop velocity (DeliverySubsystem.setVelocity).
+        // The duty-cycle buttons (forward()) ignore these. Units are Phoenix 6: volts per rotation/s.
+        const val LAUNCH_P = 0.2 // TUNE: raise until the flywheel recovers fast after each FUEL
         const val LAUNCH_I = 0.0
         const val LAUNCH_D = 0.0
-        const val LAUNCH_FF = 0.0
-        const val LAUNCH_V = 0.0071
+        const val LAUNCH_FF = 0.15 // kS: volts to overcome friction
+        const val LAUNCH_V = 0.12 // kV: ~12 V / 100 rps free speed for a Kraken X60. TUNE
         const val LAUNCH_A = 0.0
         const val LAUNCH_MOTOR_CURRENT_LIMITS = 40.0
         const val LAUNCH_MOTOR_STATOR_LIMITS = 80.0
@@ -237,14 +240,12 @@ object Constants {
         const val GOOD_DISTANCE_TOLERANCE = 0.5
         const val MIDDLING_DISTANCE_TOLERANCE = 1.0
 
-        // Hub field positions (meters). Set to real field measurements before competition.
-        // Red hub: robot approaches from y < RED_HUB_Y
-        // Blue hub: robot approaches from y > BLUE_HUB_Y
-        // TODO: measure using center field origin
-        const val RED_HUB_X = 3.625
-        const val RED_HUB_Y = 4.0
-        const val BLUE_HUB_X = 3.644
-        const val BLUE_HUB_Y = 4.0 // placeholder — team must tune
+        // HUB centers in the WPILib blue-origin field frame (same frame as PathPlanner and the
+        // pose estimator). Values come from FieldConstants, which reads them off the official layout.
+        const val RED_HUB_X = FieldConstants.RED_HUB_X
+        const val RED_HUB_Y = FieldConstants.HUB_Y
+        const val BLUE_HUB_X = FieldConstants.BLUE_HUB_X
+        const val BLUE_HUB_Y = FieldConstants.HUB_Y
 
         // Valid shooting-arc sector, in degrees, measured from hub center.
         //   0° = +X on field,  90° = +Y,  180° = -X,  270° = -Y (toward driver station)
@@ -264,6 +265,136 @@ object Constants {
 
         const val DIST_DEADZONE = 0.1 // m
         const val ANGLE_DEADZONE = 1.0 // degrees
+    }
+
+    /** 2026 REBUILT field in the WPILib blue-origin frame (meters), from 2026-rebuilt-welded.json. */
+    object FieldConstants {
+        const val FIELD_LENGTH = 16.541
+        const val FIELD_WIDTH = 8.069
+
+        // HUB center = midpoint of the centered AprilTags on opposite HUB faces
+        // (blue: tags 18/21 and 20/26, red: tags 2/5 and 4/10).
+        const val BLUE_HUB_X = 4.6256
+        const val RED_HUB_X = 11.9154
+        const val HUB_Y = 4.0346
+
+        // Game manual 5.3: the ALLIANCE ZONE is 158.6 in deep, measured from the ALLIANCE WALL.
+        const val ALLIANCE_ZONE_DEPTH = 4.028
+
+        // Half the robot length with bumpers (PathPlanner settings: 0.914 m square).
+        const val ROBOT_HALF_LENGTH = 0.457
+    }
+
+    object VisionConstants {
+        // Must match the Limelight's hostname in its web UI (default "limelight").
+        const val LIMELIGHT_NAME = "limelight"
+
+        // Frames the Limelight skips between processed frames. Limelight recommends 100-200 while
+        // disabled to keep it cool. 0 = process every frame while enabled.
+        const val THROTTLE_DISABLED = 100
+        const val THROTTLE_ENABLED = 0
+
+        // Ignore MegaTag2 while spinning fast or when the tags are far away.
+        const val MAX_YAW_RATE_DEG_PER_SEC = 360.0
+        const val MAX_TAG_DISTANCE_M = 6.0
+
+        // How much to trust vision: XY std dev = XY_STD_DEV_PER_M2 * avgTagDist^2 / tagCount, never below MIN.
+        const val XY_STD_DEV_PER_M2 = 0.1
+        const val MIN_XY_STD_DEV = 0.05
+
+        // While disabled, a MegaTag1 solve with at least this many tags resets the whole pose,
+        // including heading. MegaTag2 needs a correct field heading to work.
+        const val SEED_MIN_TAGS = 2
+        const val SEED_MAX_TAG_DISTANCE_M = 4.0
+    }
+
+    object ShotConstants {
+        // ---- Lookup tables: THE thing to tune. Distance = shooter exit point to HUB center (m). ----
+        // Flywheel motor speed (rotations/s) that scores from a STANDING robot at that distance.
+        // Placeholders! Fill these in using "Shot/TuningMode" (see ShootOnTheMoveCommand).
+        @Suppress("MagicNumber")
+        val FLYWHEEL_RPS_BY_DISTANCE =
+            listOf(
+                1.0 to 58.0,
+                2.0 to 64.0,
+                3.0 to 71.0,
+                4.0 to 78.0,
+                5.0 to 85.0,
+                6.0 to 90.0,
+            )
+
+        // FUEL time of flight (s) from leaving the shooter to dropping into the HUB, at that distance.
+        // Only matters while moving (it sets how far to lead). Measure with slow-motion video.
+        @Suppress("MagicNumber")
+        val TIME_OF_FLIGHT_BY_DISTANCE =
+            listOf(
+                1.0 to 0.55,
+                2.0 to 0.90,
+                3.0 to 1.15,
+                4.0 to 1.35,
+                5.0 to 1.55,
+                6.0 to 1.70,
+            )
+
+        // Where FUEL leaves the robot, measured from robot center (m): +x forward, +y left.
+        const val SHOOTER_OFFSET_X = 0.0 // MEASURE
+        const val SHOOTER_OFFSET_Y = 0.0 // MEASURE
+
+        // Which way the shooter points relative to the robot front: 0 = out the front, PI = out the back.
+        // The autos start at heading 0 facing the HUB, so the shooter is assumed to face forward.
+        const val SHOOTER_FACING_RAD = 0.0
+
+        // Predict the robot this far ahead: loop delay + time for FUEL to travel from indexer to exit.
+        const val LOOKAHEAD_SEC = 0.10 // TUNE
+
+        // Multiplies the time-of-flight table. Moving shots land ahead of your travel: raise it. Behind: lower it.
+        const val TOF_SCALE = 1.0
+
+        // How far sideways from HUB center a shot can land and still go in (the opening is 1.06 m wide).
+        const val ALLOWED_LATERAL_ERROR_M = 0.25
+
+        const val FLYWHEEL_TOLERANCE_RPS = 2.0
+        const val FEED_SPEED = 0.65 // indexer duty cycle while firing
+        const val FEED_DEBOUNCE_SEC = 0.06 // must be ready this long before the indexer starts
+
+        // The driver keeps translation while shooting, capped for accuracy.
+        const val MAX_DRIVE_SPEED_WHILE_SHOOTING = 2.0 // m/s
+
+        // Heading controller: rad/s per rad of error, added to the solver's feedforward.
+        const val AIM_P = 5.0
+        const val AIM_D = 0.1
+        const val MAX_AIM_OMEGA = 5.0 // rad/s
+
+        // ---- Auto-align: drive to a spot SWEET_SPOT_DISTANCE from HUB center, facing it. ----
+        const val SWEET_SPOT_DISTANCE = 2.0 // m. TUNE: set to your most reliable shot distance
+
+        // Stay within this many degrees of straight in front of the HUB, so the bumpers clear the BUMPs.
+        const val MAX_ALIGN_ANGLE_DEG = 50.0
+        const val ALIGN_P = 3.0 // m/s per m of error
+        const val ALIGN_MAX_SPEED = 2.5 // m/s
+        const val ALIGN_POSITION_TOLERANCE = 0.05 // m
+        const val ALIGN_HEADING_TOLERANCE_DEG = 2.0
+
+        // G407 margin for pose error when checking that the bumpers are in the ALLIANCE ZONE.
+        const val ZONE_SAFETY_MARGIN = 0.15 // m
+
+        // Time limits for the PathPlanner named commands "AlignToHub" and "AimAndShoot".
+        const val AUTO_ALIGN_TIMEOUT_SEC = 3.0
+        const val AUTO_SHOOT_TIMEOUT_SEC = 3.0
+    }
+
+    /** Desktop simulation only (`./gradlew simulateJava`). None of this affects the real robot. */
+    object SimConstants {
+        const val LOOP_SEC = 0.02
+
+        // The sim robot starts this far from the blue wall, in line with the HUB and facing it (mirrored for red).
+        const val START_X_BLUE = 2.5
+
+        const val MAX_ACCEL = 8.0 // m/s^2
+        const val MAX_ANGULAR_ACCEL = 30.0 // rad/s^2
+
+        // Flywheel inertia (kg m^2). A guess: it only changes how fast the sim flywheel spins up.
+        const val FLYWHEEL_MOI = 0.004
     }
 
     object PathPlannerConstants {

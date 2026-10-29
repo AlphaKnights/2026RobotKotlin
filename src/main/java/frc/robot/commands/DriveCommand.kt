@@ -21,6 +21,7 @@ class DriveCommand(
     }
 
     override fun execute() {
+        if (edu.wpi.first.wpilibj.DriverStation.isAutonomous()) return
         super.execute()
 
         if (!autoAngle()) {
