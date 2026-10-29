@@ -236,6 +236,10 @@ object RobotContainer {
                     true,
                 ),
             )
+
+        buttonBoard.button(Constants.OperatorConstants.DELIVERY_BUTTON).whileTrue(
+            DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
+            )
     }
 
     fun getAutonomousCommand(): Command {

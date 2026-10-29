@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.subsystems.DeliverySubsystem
 
 class DeliveryCommand() : Command() {
+    constructor(launchSpeed: Double) : this()
 
     init {
 
