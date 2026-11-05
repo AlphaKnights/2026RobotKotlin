@@ -12,7 +12,7 @@ import com.revrobotics.PersistMode
 import com.revrobotics.ResetMode
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants
-import frc.robot.Constants.IntakeConstants.INTAK
+import frc.robot.Constants.IntakeConstants
 
 
 object IntakeSubsystem : SubsystemBase() {
@@ -28,7 +28,7 @@ object IntakeSubsystem : SubsystemBase() {
 
     init {
         val config: TalonFXConfiguration = TalonFXConfiguration()
-        val leaderMotor = rightleverMotor: TalonFX = TalonFX(3)
+        //val leaderMotor = rightleverMotor: TalonFX = TalonFX(3)
         val followerMotor = leftLeverMotor
         config.apply {
 
