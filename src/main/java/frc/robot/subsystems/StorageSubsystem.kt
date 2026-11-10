@@ -7,12 +7,13 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.Constants
 import frc.robot.Constants.RollerConstants
 
 object StorageSubsystem : SubsystemBase() {
-    val motor1: TalonFX = TalonFX(1)
+    val motor1: TalonFX = TalonFX(Constants.StorageConstants.MOTOR1_ID)
 
-    val motor2: TalonFX = TalonFX(2)
+    val motor2: TalonFX = TalonFX(Constants.StorageConstants.MOTOR2_ID)
 
     init {
         val config1: TalonFXConfiguration = TalonFXConfiguration()
