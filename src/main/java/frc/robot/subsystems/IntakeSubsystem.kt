@@ -17,19 +17,19 @@ import frc.robot.Constants.IntakeConstants
 
 object IntakeSubsystem : SubsystemBase() {
 
-    private val intakeMotor: TalonFX = TalonFX(1)
+    private val intakeMotor: TalonFX = TalonFX(IntakeConstants.INTAKE_MOTOR)
 
-    private val rightleverMotor: TalonFX = TalonFX(2)
+    private val rightleverMotor: TalonFX = TalonFX(IntakeConstants.RIGHT_LEVER_MOTOR)
 
 
-    private val leftLeverMotor: TalonFX = TalonFX(3)
+    private val leftLeverMotor: TalonFX = TalonFX(IntakeConstants.LEFT_LEVER_MOTOR)
 
 
 
     init {
         val config: TalonFXConfiguration = TalonFXConfiguration()
         //val leaderMotor = rightleverMotor: TalonFX = TalonFX(3)
-        val followerMotor = leftLeverMotor
+        //val followerMotor = leftLeverMotor
         config.apply {
 
         }
@@ -44,7 +44,7 @@ object IntakeSubsystem : SubsystemBase() {
         intakeMotor.set(0.0)
     }
 
-    fun moveIntake(direction: Boolean) {
+    /*fun moveIntake(direction: Boolean) {
         if (direction) {
             rightleverMotor.set(1.0)
             leftLeverMotor.set(1.0)
@@ -53,7 +53,7 @@ object IntakeSubsystem : SubsystemBase() {
             rightleverMotor.set(0.0)
             leftLeverMotor.set(0.0)
         }
-    }
+    } */
 
 
 

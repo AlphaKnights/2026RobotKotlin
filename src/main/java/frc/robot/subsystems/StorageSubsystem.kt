@@ -8,9 +8,9 @@ import frc.robot.Constants.RollerConstants
 
 object StorageSubsystem : SubsystemBase() {
     private val CAN = CANBus("didy")
-    private val rollerMotor =
+    //private val rollerMotor =
 
-    private val rollerMotor2 =
+    //private val rollerMotor2 =
 
     init {
 

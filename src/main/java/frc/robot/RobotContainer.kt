@@ -42,12 +42,12 @@ object RobotContainer {
                 "Right" to AutoAlignAutoCommand(Constants.AlignDirection.RIGHT),
                 "Delivery" to AutoDeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
                 "Supershoot" to AutoDeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
-                "Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
-                "Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
-                "Intake" to IntakeCommand(false),
-                "Indexer" to AutoStorageCommand(false),
-                "Intake Manual In" to IntakeLeverManualCommand(Constants.IntakeDirection.IN),
-                "Intake Manual Out" to IntakeLeverManualCommand(Constants.IntakeDirection.OUT),
+                //"Intake_Lever_In" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_IN_POSITION),
+                //"Intake_Lever_Out" to IntakeLeverCommand(Constants.IntakeConstants.LEVER_OUT_POSITION),
+//                "Intake" to IntakeCommand(false),
+//                "Indexer" to AutoStorageCommand(false),
+                //"Intake Manual In" to IntakeLeverManualCommand(Constants.IntakeDirection.IN),
+                //"Intake Manual Out" to IntakeLeverManualCommand(Constants.IntakeDirection.OUT),
             ),
         )
 
@@ -84,7 +84,7 @@ object RobotContainer {
             //),
        // )
 
-        xBoxController.resetOdometry()
+      xBoxController.resetOdometry()
             .whileTrue(
                 ResetOdometry()
             )
@@ -122,57 +122,55 @@ object RobotContainer {
 
 
 
-        xBoxController
+  /*    xBoxController
             .north().whileTrue(
                 NorthCommand(
                     x = { xBoxController.x() },
-                    y = { xBoxController.y() },
+                    y = { xBoxController.y() },)
                 ),
             )
+            */
 
+/*
         xBoxController
-            .XLock().whileTrue(
-                LockXCommand(),
+            .XLock().whileTrue
+                LockXCommand(),)
             )
-
-        xBoxController
+*/
+       xBoxController
             .altDelivery().whileTrue(
-                DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),
-            )
+                DeliveryCommand(Constants.LaunchConstants.ALT_LAUNCH_SPEED),)
 
-        xBoxController
-            .altIntake().whileTrue(
-                IntakeCommand(false)
-            )
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnTrue(
-            InstantCommand({
-                xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,1.0)
-            })
-        )
-        buttonBoard.button(6).multiPress(2,1.0).toggleOnFalse(
+
+//        xBoxController
+//            .altIntake().whileTrue(
+//                IntakeCommand(false)
+//            )
+
+
+       buttonBoard.button(6).multiPress(2,1.0).toggleOnFalse(
             InstantCommand({
                 xBoxController.setRumble(GenericHID.RumbleType.kBothRumble,0.0)
-            })
-        )
+            }))
 
-        buttonBoard
+        /*buttonBoard
             .button(7).whileTrue(
-                SuperStorageCommand(false),
+                SuperStorageCommand(false),)
             )
+        */
+//        // Button Board
+//        buttonBoard
+//            .button(Constants.RollerConstants.BUTTON)
+//            .whileTrue(
+//                StorageCommand(false),
+//            )
+//        buttonBoard
+//            .button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON)
+//            .whileTrue(
+//                StorageCommand(true),
+//            )
 
-        // Button Board
-        buttonBoard
-            .button(Constants.RollerConstants.BUTTON)
-            .whileTrue(
-                StorageCommand(false),
-            )
-        buttonBoard
-            .button(Constants.OperatorConstants.INDEXER_REVERSE_BUTTON)
-            .whileTrue(
-                StorageCommand(true),
-            )
-
-        buttonBoard
+       buttonBoard
             .button(Constants.OperatorConstants.DELIVERY_BUTTON)
             .whileTrue(
                 DeliveryCommand(Constants.LaunchConstants.LAUNCH_SPEED),
@@ -186,66 +184,61 @@ object RobotContainer {
                 DeliveryCommand(-Constants.LaunchConstants.LAUNCH_SPEED),
             )
 
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON,
-            ).onTrue(
-                IntakeLeverCommand(
-                    Constants.IntakeConstants.LEVER_IN_POSITION,
-                ),
-            )
+//        buttonBoard
+//            .button(
+//                Constants.OperatorConstants.INTAKE_LEVER_IN_AUTO_BUTTON,
+//            ).onTrue(
+//                IntakeLeverCommand(
+//                    Constants.IntakeConstants.LEVER_IN_POSITION,
+//                ),
+//            )
 
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON,
-            ).onTrue(
-                IntakeLeverCommand(
-                    Constants.IntakeConstants.LEVER_OUT_POSITION,
-                ),
-            )
+//        buttonBoard
+//            .button(
+//                Constants.OperatorConstants.INTAKE_LEVER_OUT_AUTO_BUTTON,
+//            ).onTrue(
+//                IntakeLeverCommand(
+//                    Constants.IntakeConstants.LEVER_OUT_POSITION,
+//                ),
+//            )
 
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON,
-            ).whileTrue(
-                IntakeLeverManualCommand(
-                    Constants.IntakeDirection.IN,
-                ),
-            )
+//        buttonBoard
+//            .button(
+//                Constants.OperatorConstants.INTAKE_LEVER_IN_MANUAL_BUTTON,
+//            ).whileTrue(
+//                IntakeLeverManualCommand(
+//                    Constants.IntakeDirection.IN,
+//                ),
+//            )
+//
+//        buttonBoard
+//            .button(
+//                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON,
+//            ).whileTrue(
+//                IntakeLeverManualCommand(
+//                    Constants.IntakeDirection.OUT,
+//                ),
+//            )
 
-        buttonBoard
-            .button(
-                Constants.OperatorConstants.INTAKE_LEVER_OUT_MANUAL_BUTTON,
-            ).whileTrue(
-                IntakeLeverManualCommand(
-                    Constants.IntakeDirection.OUT,
-                ),
+        buttonBoard.button(Constants.OperatorConstants.INTAKE_BUTTON).whileTrue(
+                IntakeCommand()
             )
-
-        buttonBoard
-            .button(Constants.OperatorConstants.INTAKE_BUTTON)
-            .whileTrue(
-                IntakeCommand(
-                    false,
-                ),
-            )
-        buttonBoard
-            .button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON)
-            .whileTrue(
-                IntakeCommand(
-                    true,
-                ),
-            )
+        //buttonBoard
+            //.button(Constants.OperatorConstants.INTAKE_REVERSE_BUTTON)
+            //.whileTrue(
+               // IntakeCommand(
+                   // true,
+               // ),
+          //  )
     }
 
     fun getAutonomousCommand(): Command {
         // return commands2.SequentialCommandGroup(commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(-8, 0, 0), False, False), self.robotDrive),
         //        #                                         commands2.WaitCommand(AutoConstants.kTimedTime),
         //        #                                         commands2.InstantCommand(lambda: self.robotDrive.drive(ChassisSpeeds(0, 0, 0), False, False), self.robotDrive)
-        //        #                                         )
+        //        #
+      return PathPlannerAuto(
+            "Red Depot",)
 
-        return PathPlannerAuto(
-            "Red Depot",
-        )
     }
 }
