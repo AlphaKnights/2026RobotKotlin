@@ -242,8 +242,8 @@ object Constants {
     object StorageConstants {
         const val MOTOR_SPEED = 1.0
 
-        const val MOTOR1_ID = 1
-        const val MOTOR2_ID = 2
+        const val MOTOR1_ID = 31
+        const val MOTOR2_ID = 34
     }
 }
 
